@@ -1,1 +1,10 @@
-<p>This is homepage</p>   
+{% for p in posts %}
+<ul>
+    <li>
+        <article>
+            <h2>{{ p.title }}</h2>
+            <p> {{ p.content }}</p>
+        </article>
+    </li>
+</ul>
+{% endfor %}
