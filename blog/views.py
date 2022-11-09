@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from .forms import AddPostForm
 
 
 def homepage(request):
@@ -20,3 +20,18 @@ def post_details(request, slug):
 
     context = {"post": post}
     return render(request, "blog/post_details.html", context)
+
+
+def create_post(request):
+    form = AddPostForm()
+
+    if request.method == "POST":
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            created_post = form.save(commit=False)
+            created_post.user = request.user
+            created_post.save()
+            return redirect("/")
+
+    context = {"form": form}
+    return render(request, "blog/add_post.html", context)
