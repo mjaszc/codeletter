@@ -35,3 +35,14 @@ def create_post(request):
 
     context = {"form": form}
     return render(request, "blog/add_post.html", context)
+
+
+def delete_post(request, slug):
+    post = Post.objects.filter(slug=slug)[0]
+
+    if request.method == "POST":
+        post.delete()
+        return redirect("/")
+    context = {"post": post}
+
+    return render(request, "blog/delete_post.html", context)
