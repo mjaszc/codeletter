@@ -46,3 +46,17 @@ def delete_post(request, slug):
     context = {"post": post}
 
     return render(request, "blog/delete_post.html", context)
+
+
+def edit_post(request, slug):
+    post = Post.objects.filter(slug=slug)[0]
+    form = AddPostForm(instance=post)
+
+    if request.method == "POST":
+        form = AddPostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+
+    context = {"form": form}
+    return render(request, "blog/add_post.html", context)
