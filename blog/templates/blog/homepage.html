@@ -1,6 +1,11 @@
 <a href="{% url 'blog:create_post' %}">
     <p>Add post</p>
 </a>
+
+<a href="{% url 'blog:register_user' %}">
+    <p>Register</p>
+</a>
+    
 {% for p in posts %}
 <ul>
     <li>
