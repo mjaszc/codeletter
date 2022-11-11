@@ -1,0 +1,8 @@
+<form method="POST" action="">
+    <div class="form">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </div>
+    <input type="submit" value="Submit" />
+    <a href="{% url 'blog:homepage' %}">Go to the homepage</a>
+</form>
