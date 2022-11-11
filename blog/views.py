@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Post
 from django.http import HttpResponse
 from .forms import AddPostForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 
 
 def homepage(request):
@@ -60,3 +62,36 @@ def edit_post(request, slug):
 
     context = {"form": form}
     return render(request, "blog/add_post.html", context)
+
+
+def register_user(request):
+    form = UserCreationForm()
+    context = {"form": form}
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect("/")
+        else:
+            return HttpResponse("Something went wrong, please try again")
+
+    return render(request, "blog/register_user.html", context)
+
+
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST["username"].lower()
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("/")
+        else:
+            return HttpResponse("Something went wrong.")
+
+    else:
+        return render(request, "blog/login_user.html")
