@@ -3,7 +3,8 @@ from .models import Post
 from django.http import HttpResponse
 from .forms import AddPostForm
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from .forms import UserSettingsForm
 
 
 def homepage(request):
@@ -95,3 +96,20 @@ def login_user(request):
 
     else:
         return render(request, "blog/login_user.html")
+
+
+def settings_user(request):
+    if request.method == "POST":
+        form = UserSettingsForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+    else:
+        form = UserSettingsForm(instance=request.user)
+        context = {"form": form}
+        return render(request, "blog/settings_user.html", context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect("/")
