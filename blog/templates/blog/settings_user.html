@@ -1,8 +1,11 @@
+{% block content %}
 <form method="POST" action="">
     <div class="form">
         {% csrf_token %}
         {{ form.as_p }}
+        <a href="{% url 'blog:change_password' %}">Change password</a>
     </div>
     <input type="submit" value="Submit" />
     <a href="{% url 'blog:homepage' %}">Go to the homepage</a>
 </form>
+{% endblock %}

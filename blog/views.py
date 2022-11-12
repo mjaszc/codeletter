@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Post
 from django.http import HttpResponse
 from .forms import AddPostForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from .forms import UserSettingsForm
 
 
@@ -113,3 +113,19 @@ def settings_user(request):
 def logout_user(request):
     logout(request)
     return redirect("/")
+
+
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect("/")
+        else:
+            return HttpResponse("Something went wrong, try again.")
+    else:
+        form = PasswordChangeForm(request.user)
+
+    context = {"form": form}
+    return render(request, "blog/change_password.html", context)
