@@ -1,8 +1,8 @@
 {% block content %}
-<form method="POST" action="">
+<form method="post" action="">
     {% csrf_token %}
     <p>Are you sure you want to delete post named "{{ post.title }}"?</p>
     <a href="{% url 'blog:homepage' %}">Go back</a>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit"/>
 </form>
 {% endblock %}

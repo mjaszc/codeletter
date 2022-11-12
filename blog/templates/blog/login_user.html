@@ -1,3 +1,4 @@
+{% block content %}
 <div>
     <form action="" method="POST">
         {% csrf_token %}
@@ -14,3 +15,5 @@
         <a href="{% url 'blog:register_user' %}">Register</a>
     </form>
 </div>
+{% endblock %}
+
