@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from django.utils.html import format_html
 
 
 class Post(models.Model):
@@ -23,3 +24,17 @@ class Post(models.Model):
         if not self.slug == self.title:
             self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    body = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    approve = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["created_on"]
+
+    def __str__(self):
+        return format_html(f"Comment: {self.body} <br/> by <br/> {self.user}")

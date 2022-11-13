@@ -6,4 +6,25 @@
     <p>{{ post.slug }}</p>
     <p>{{ post.user }}</p>
 </div>
-{% endblock %}    
+
+{% if request.user.is_authenticated %}
+<h3>Add a comment:</h3>
+<h4>Currently logged as {{ request.user }}</h4>
+<form method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+{% endif %}
+
+{% for comment in comments reversed %}
+<div>
+    <p>
+        {{ comment.user }}
+        <span> {{ comment.created_on }} </span>
+    </p>
+    {{ comment.body }}
+</div>
+{% endfor %}
+
+{% endblock %}
