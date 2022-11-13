@@ -1,3 +1,4 @@
+{% block content %}
 <form method="POST" action="">
     <div class="form">
         {% csrf_token %}
@@ -5,3 +6,4 @@
     </div>
     <input type="submit" value="Submit" />
 </form>
+{% endblock %}
