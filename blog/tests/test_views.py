@@ -35,7 +35,7 @@ class TestViews(TestCase):
 
         response = self.client.post(reverse("blog:create_post"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="blog/add_post.html")
+        self.assertTemplateUsed(response, template_name="blog/create_post.html")
 
     def test_view_log_in_page(self):
         response = self.client.get(reverse("blog:login_user"))

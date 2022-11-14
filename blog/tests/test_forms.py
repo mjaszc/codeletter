@@ -58,7 +58,7 @@ class TestForms(TestCase):
             reverse("blog:edit_post", kwargs={"slug": post.slug})
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="blog/add_post.html")
+        self.assertTemplateUsed(response, template_name="blog/create_post.html")
 
     def test_edit_post_form(self):
         TestForms.logInUser(self)
