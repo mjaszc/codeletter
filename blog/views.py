@@ -58,7 +58,7 @@ def create_post(request):
             return redirect("/")
 
     context = {"form": form}
-    return render(request, "blog/add_post.html", context)
+    return render(request, "blog/create_post.html", context)
 
 
 def delete_post(request, slug):
@@ -83,7 +83,7 @@ def edit_post(request, slug):
             return redirect("/")
 
     context = {"form": form}
-    return render(request, "blog/add_post.html", context)
+    return render(request, "blog/create_post.html", context)
 
 
 def register_user(request):
