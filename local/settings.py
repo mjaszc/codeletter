@@ -95,8 +95,8 @@ DATABASES = {
         "NAME": str(os.environ.get("DB_NAME")),
         "USER": str(os.environ.get("DB_USER")),
         "PASSWORD": str(os.environ.get("DB_PASSWORD")),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": config("DB_PORT"),
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 
