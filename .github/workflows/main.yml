@@ -47,9 +47,9 @@ jobs:
         DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         DB_HOST: ${{ secrets.POSTGRES_HOST }}
         DB_DATABASE: ${{ secrets.POSTGRES_DB }}
-        DB_PORT: ${{ env.POSTGRES_PORT }}
+        DB_PORT: ${{ secrets.POSTGRES_PORT }}
       run: |
-        coverage run --source='.' manage.py test
+        coverage run manage.py test
         coverage report
     - name: django test
       env:
