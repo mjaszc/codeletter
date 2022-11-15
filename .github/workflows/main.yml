@@ -13,19 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      POSTGRES_USER:marceli
-      POSTGRES_DB:blog
-      POSTGRES_PORT:5432
-      POSTGRES_HOST:127.0.0.1
-
+      POSTGRES_USER: marceli
+      POSTGRES_DB: blog
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: 127.0.0.1
     services:
       postgres_main:
         image: postgres:14.5
         env:
-          POSTGRES_USER:${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD:${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB:${{ env.POSTGRES_DB }}
-          POSTGRES_HOST:${{ env.POSTGRES_HOST }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
         ports:
           - 5432:5432
         options: >-
