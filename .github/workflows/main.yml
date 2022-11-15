@@ -43,7 +43,7 @@ jobs:
       env:
         DEBUG: "0"
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-        DB_USERNAME: ${{ secrets.POSTGRES_USER }}
+        DB_NAME: ${{ secrets.POSTGRES_USER }}
         DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         DB_HOST: ${{ secrets.POSTGRES_HOST }}
         DB_DATABASE: ${{ secrets.POSTGRES_DB }}
@@ -51,11 +51,11 @@ jobs:
       run: |
         coverage run manage.py test
         coverage report
-    - name: django test
+    - name: Django test
       env:
         DEBUG: "0"
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-        DB_USERNAME: ${{ secrets.POSTGRES_USER }}
+        DB_NAME: ${{ secrets.POSTGRES_USER }}
         DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         DB_HOST: ${{ secrets.POSTGRES_HOST }}
         DB_DATABASE: ${{ secrets.POSTGRES_DB }}
