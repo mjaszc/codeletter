@@ -266,7 +266,9 @@ urllib3==1.26.12
     #   -r requirements.txt
     #   requests
 wheel==0.38.4
-    # via pip-tools
+    # via
+    #   -r requirements.txt
+    #   pip-tools
 yarg==0.1.9
     # via -r requirements.txt
 zipp==3.10.0
