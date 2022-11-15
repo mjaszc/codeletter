@@ -44,9 +44,6 @@ jobs:
         pip3 install -r requirements.txt
         python3 -m venv env
         source env/bin/activate
-    - name: Lint with flake8
-      run: |
-        flake8
     - name: Coverage report
       env:
         DEBUG: "0"
