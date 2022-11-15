@@ -12,6 +12,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+
     services:
       postgres_main:
         image: postgres:14.5 
