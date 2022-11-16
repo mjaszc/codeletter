@@ -11,19 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import environ
-import os
+from decouple import config
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,10 +23,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = config("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -90,7 +82,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "blog",
         "USER": "marceli",
-        "PASSWORD": env("DB_PASSWORD"),
+        "PASSWORD": config("DB_PASSWORD"),
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }

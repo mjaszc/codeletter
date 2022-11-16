@@ -197,8 +197,6 @@ python-decouple==3.6
     # via -r requirements.txt
 python-dotenv==0.21.0
     # via -r requirements.txt
-python-environ==0.4.54
-    # via -r requirements.txt
 python-slugify==6.1.2
     # via
     #   -r requirements.txt
