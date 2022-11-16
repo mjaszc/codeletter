@@ -48,7 +48,6 @@ jobs:
     - name: Coverage report
       env:
         DEBUG: "0"
-        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         DB_NAME: ${{ env.POSTGRES_USER }}
         DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         DB_HOST: ${{ env.POSTGRES_HOST }}
