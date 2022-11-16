@@ -197,6 +197,8 @@ python-decouple==3.6
     # via -r requirements.txt
 python-dotenv==0.21.0
     # via -r requirements.txt
+python-environ==0.4.54
+    # via -r requirements.txt
 python-slugify==6.1.2
     # via
     #   -r requirements.txt
@@ -266,9 +268,7 @@ urllib3==1.26.12
     #   -r requirements.txt
     #   requests
 wheel==0.38.4
-    # via
-    #   -r requirements.txt
-    #   pip-tools
+    # via pip-tools
 yarg==0.1.9
     # via -r requirements.txt
 zipp==3.10.0
