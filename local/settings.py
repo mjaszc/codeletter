@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,8 +35,7 @@ def get_env_variable(var_name):
 SECRET_KEY = get_env_variable("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG")
-load_dotenv(DEBUG)
+DEBUG = get_env_variable("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -93,7 +91,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "blog",
         "USER": "marceli",
-        "PASSWORD": str(os.environ.get("DB_PASSWORD")),
+        "PASSWORD": get_env_variable("DB_PASSWORD"),
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
