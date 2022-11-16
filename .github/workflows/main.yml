@@ -44,6 +44,7 @@ jobs:
         pip3 install -r requirements.txt
         python3 -m venv env
         source env/bin/activate
+        cd local/
     - name: Coverage report
       env:
         DEBUG: "0"
@@ -54,7 +55,7 @@ jobs:
         DB_DATABASE: ${{ env.POSTGRES_DB }}
         DB_PORT: ${{ env.POSTGRES_PORT }}
       run: |
-        coverage run --source='.' manage.py test
+        coverage run --source='.' manage.py test blog
         coverage report
     - name: Django test
       env:
