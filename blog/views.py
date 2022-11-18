@@ -16,33 +16,32 @@ def homepage(request):
 def post_details(request, slug):
     post = Post.objects.filter(slug=slug)
     p = get_object_or_404(Post, slug=slug)
-    user = request.user
 
     if post.exists():
         post = post[0]
     else:
         return HttpResponse("Page not found")
 
-    # comments part
     comments = post.comments.filter(approve=True)
-    comment_author = request.user
+    user = request.user
     new_comment = None
     comment_form = AddCommentForm()
-    liked = 0
+    like_count = 0
 
     if request.method == "POST":
-        liked = Like.objects.filter(post=post, user=user).count()
+        like_count = Post.like
+        get_like = Like.objects.filter(post=post, user=user)
 
-        if request.user.is_authenticated and liked:
-            Like.objects.create(post=post, user=user)
+        if request.user.is_authenticated and get_like.exists():
+            get_like.delete()
         else:
-            Like.objects.filter(post=post, user=user).delete()
+            Like.objects.create(post=post, user=user)
 
         comment_form = AddCommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = p
-            new_comment.user = comment_author
+            new_comment.user = user
             new_comment.save()
             comment_form = AddCommentForm()
         else:
@@ -53,7 +52,7 @@ def post_details(request, slug):
         "comments": comments,
         "new_commment": new_comment,
         "comment_form": comment_form,
-        "like_count": liked,
+        "like_count": like_count,
     }
     return render(request, "blog/post_details.html", context)
 
