@@ -22,6 +22,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_go_to_post_details_page(self):
+        TestViews.logInUser(self)
         post = Post.objects.create(
             title="Test post",
             content="This is test post",
