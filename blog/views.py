@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, Like
 from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
@@ -16,17 +16,28 @@ def homepage(request):
 def post_details(request, slug):
     post = Post.objects.filter(slug=slug)
     p = get_object_or_404(Post, slug=slug)
+    user = request.user
 
     if post.exists():
         post = post[0]
     else:
         return HttpResponse("Page not found")
 
+    # comments part
     comments = post.comments.filter(approve=True)
     comment_author = request.user
     new_comment = None
+    comment_form = AddCommentForm()
+    liked = 0
 
     if request.method == "POST":
+        liked = Like.objects.filter(post=post, user=user).count()
+
+        if request.user.is_authenticated and liked:
+            Like.objects.create(post=post, user=user)
+        else:
+            Like.objects.filter(post=post, user=user).delete()
+
         comment_form = AddCommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
@@ -34,14 +45,15 @@ def post_details(request, slug):
             new_comment.user = comment_author
             new_comment.save()
             comment_form = AddCommentForm()
-    else:
-        comment_form = AddCommentForm()
+        else:
+            comment_form = AddCommentForm()
 
     context = {
         "post": post,
         "comments": comments,
         "new_commment": new_comment,
         "comment_form": comment_form,
+        "like_count": liked,
     }
     return render(request, "blog/post_details.html", context)
 

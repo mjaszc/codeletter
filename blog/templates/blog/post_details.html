@@ -5,6 +5,7 @@
     <p>{{ post.pub_date }}</p>
     <p>{{ post.slug }}</p>
     <p>{{ post.user }}</p>
+    <h3>Likes: {{ post.like.count }}</h3>
 </div>
 
 {% if request.user.is_authenticated %}
