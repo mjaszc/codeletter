@@ -14,7 +14,7 @@ class Post(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
     post_image = models.FileField(upload_to="images/", null=True, blank=True)
-    like = models.ManyToManyField(User, default=0)
+    like = models.ManyToManyField(User, related_name="like")
 
     def __str__(self):
         return self.title
@@ -43,10 +43,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return format_html(f"Comment: {self.body} <br/> by <br/> {self.user}")
-
-
-class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="like_post")
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, related_name="like_user"
-    )

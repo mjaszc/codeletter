@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Like
+from .models import Post
 from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
@@ -15,7 +15,7 @@ def homepage(request):
 
 def post_details(request, slug):
     post = Post.objects.filter(slug=slug)
-    p = get_object_or_404(Post, slug=slug)
+    get_post = get_object_or_404(Post, slug=slug)
 
     if post.exists():
         post = post[0]
@@ -26,21 +26,22 @@ def post_details(request, slug):
     user = request.user
     new_comment = None
     comment_form = AddCommentForm()
-    like_count = 0
 
     if request.method == "POST":
-        like_count = Post.like
-        get_like = Like.objects.filter(post=post, user=user)
+        if request.user.is_authenticated:
+            user = request.user
 
-        if request.user.is_authenticated and get_like.exists():
-            get_like.delete()
-        else:
-            Like.objects.create(post=post, user=user)
+            # checking does user liked actual post or not
+            if get_post.like.filter(id=user.id).exists():
+                get_post.like.remove(user.id)
+            else:
+                get_post.like.add(user.id)
 
         comment_form = AddCommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
-            new_comment.post = p
+            # when submitted, crucial info that helps trace the comment is saved
+            new_comment.post = get_post
             new_comment.user = user
             new_comment.save()
             comment_form = AddCommentForm()
@@ -52,7 +53,6 @@ def post_details(request, slug):
         "comments": comments,
         "new_commment": new_comment,
         "comment_form": comment_form,
-        "like_count": like_count,
     }
     return render(request, "blog/post_details.html", context)
 
