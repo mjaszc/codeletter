@@ -26,16 +26,26 @@ def post_details(request, slug):
     user = request.user
     new_comment = None
     comment_form = AddCommentForm()
+    liked = False
+
+    # when user enters the details section
+    # this function checks if user already liked the post
+    if request.user.is_authenticated:
+        user = request.user
+
+        if get_post.like.filter(id=user.id).exists():
+            liked = True
 
     if request.method == "POST":
         if request.user.is_authenticated:
             user = request.user
-
-            # checking does user liked actual post or not
+            # when user clicks the like button
             if get_post.like.filter(id=user.id).exists():
                 get_post.like.remove(user.id)
+                liked = False
             else:
                 get_post.like.add(user.id)
+                liked = True
 
         comment_form = AddCommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -45,14 +55,13 @@ def post_details(request, slug):
             new_comment.user = user
             new_comment.save()
             comment_form = AddCommentForm()
-        else:
-            comment_form = AddCommentForm()
 
     context = {
         "post": post,
         "comments": comments,
         "new_commment": new_comment,
         "comment_form": comment_form,
+        "liked": liked,
     }
     return render(request, "blog/post_details.html", context)
 
