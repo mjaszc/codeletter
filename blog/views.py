@@ -15,7 +15,7 @@ def homepage(request):
 
 def post_details(request, slug):
     post = Post.objects.filter(slug=slug)
-    p = get_object_or_404(Post, slug=slug)
+    get_post = get_object_or_404(Post, slug=slug)
 
     if post.exists():
         post = post[0]
@@ -23,25 +23,45 @@ def post_details(request, slug):
         return HttpResponse("Page not found")
 
     comments = post.comments.filter(approve=True)
-    comment_author = request.user
+    user = request.user
     new_comment = None
+    comment_form = AddCommentForm()
+    liked = None
+
+    # when user enters the details section
+    # this function checks if user already liked the post
+    if request.user.is_authenticated:
+        user = request.user
+
+        if get_post.like.filter(id=user.id).exists():
+            liked = True
 
     if request.method == "POST":
         comment_form = AddCommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
-            new_comment.post = p
-            new_comment.user = comment_author
+            # when submitted, crucial info that helps trace the comment is saved
+            new_comment.post = get_post
+            new_comment.user = user
             new_comment.save()
             comment_form = AddCommentForm()
-    else:
-        comment_form = AddCommentForm()
+        else:
+            if request.user.is_authenticated:
+                # when user clicks the like button
+                if get_post.like.filter(id=user.id).exists():
+                    get_post.like.remove(user.id)
+                    liked = False
+                else:
+                    get_post.like.add(user.id)
+                    liked = True
+            comment_form = AddCommentForm()
 
     context = {
         "post": post,
         "comments": comments,
         "new_commment": new_comment,
         "comment_form": comment_form,
+        "liked": liked,
     }
     return render(request, "blog/post_details.html", context)
 
