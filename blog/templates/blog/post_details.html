@@ -9,10 +9,12 @@
     <form action="" method="post" class="like-form">
         {% csrf_token %}
         <h3>Likes: <p class="like-count-num">{{ post.like.count }}</p></h3>
+        {% if request.user.is_authenticated %}
         {% if liked %}
         <button type="submit" class="like-btn">Dislike</button>
         {% else %}
         <button type="submit" class="like-btn">Like</button>
+        {% endif %}
         {% endif %}
     </form>    
 </div>
@@ -20,7 +22,7 @@
 {% if request.user.is_authenticated %}
 <h3>Add a comment:</h3>
 <h4>Currently logged as {{ request.user }}</h4>
-<form method="post">
+<form action="" method="post">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <button type="submit">Submit</button>
@@ -36,44 +38,6 @@
     {{ comment.body }}
 </div>
 {% endfor %}
-<script type="text/javascript">
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-let likeBtn = document.querySelector('.like-btn');
-let likeCountNum = document.querySelector('.like-count-num');
-const likeForm = document.querySelector('.like-form');
-const slugUrl = document.querySelector('.slugified-url');
-
-const request = new Request(
-    `/${slugUrl.innerHTML}/`,
-    {
-        method: 'POST',
-        headers: {'X-CSRFToken': csrftoken},
-        mode: 'same-origin',
-    }
-);
-
-likeForm.addEventListener("submit", event => {
-    event.preventDefault();
-    fetch(request)
-        .then(response => response.text())
-        .then(html => {
-            let parser = new DOMParser();
-            let data = parser.parseFromString(html, 'text/html');
-            console.log("Success:", data);
-
-            if(likeBtn.innerHTML === "Like") {
-                likeCountNum.innerHTML = parseInt(likeCountNum.innerHTML) + 1;
-                likeBtn.innerHTML = "Dislike";
-            } else {
-                likeCountNum.innerHTML = parseInt(likeCountNum.innerHTML) - 1;
-                likeBtn.innerHTML = "Like";
-            };
-        })
-        .catch(error => {
-        console.error('Error ocurred:', error);
-        });
-})
-</script>
-
+<script type="text/javascript" src="{% static "blog/index.js" %}"></script>
 {% endblock %}
 
