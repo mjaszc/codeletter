@@ -1,0 +1,27 @@
+<nav>
+    <a href="{% url "blog:homepage" %}">Home</a>
+
+    {% if request.user.is_authenticated %}
+    <p>Currently logged as <strong>{{ request.user }}</strong></p>
+
+    <a href="{% url 'blog:logout_user' %}">
+        <p>Logout</p>
+    </a>
+
+    <a href="{% url 'blog:settings_user' %}">
+        <p>Settings</p>
+    </a>
+    {% else %}
+    <a href="{% url 'blog:login_user' %}">
+        <p>Login</p>
+    </a>
+    {% endif %}
+
+    <a href="{% url 'blog:create_post' %}">
+        <p>Add post</p>
+    </a>
+
+    <a href="{% url 'blog:register_user' %}">
+        <p>Register</p>
+    </a>
+</nav>
