@@ -11,6 +11,7 @@
         <p>{{ post.pub_date }}</p>
         <p class="slugified-url">{{ post.slug }}</p>
         <p>{{ post.user }}</p>
+        <img src="{{ post.image.url }}" alt="" width="420px" height="240px"/>
         <form action="" method="post" class="like-form">
             {% csrf_token %}
             <h3>Likes: <p class="like-count-num">{{ post.like.count }}</p>

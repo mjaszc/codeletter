@@ -70,7 +70,7 @@ def create_post(request):
     form = AddPostForm()
 
     if request.method == "POST":
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
             created_post = form.save(commit=False)
             created_post.user = request.user
@@ -97,7 +97,7 @@ def edit_post(request, slug):
     form = AddPostForm(instance=post)
 
     if request.method == "POST":
-        form = AddPostForm(request.POST, instance=post)
+        form = AddPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
             return redirect("/")
