@@ -27,6 +27,7 @@ class TestViews(TestCase):
             title="Test post",
             content="This is test post",
             slug="test-post",
+            image="test.jpg",
         )
         response = self.client.post(reverse("blog:post_details", args=(post.slug,)))
         self.assertEqual(response.status_code, 200)

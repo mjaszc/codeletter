@@ -26,6 +26,7 @@ class TestForms(TestCase):
             title="Test post",
             content="This is test post",
             slug="test-post",
+            image="image.svg",
         )
 
         data = {"body": "This is test comment"}
