@@ -13,7 +13,7 @@ class Post(models.Model):
     content = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
-    post_image = models.FileField(upload_to="images/", null=True, blank=True)
+    image = models.FileField(upload_to="images/", null=True, blank=True)
     like = models.ManyToManyField(User, related_name="like")
 
     def __str__(self):
