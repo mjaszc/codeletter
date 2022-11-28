@@ -5,15 +5,21 @@ from .forms import AddPostForm, AddCommentForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from .forms import UserSettingsForm
+from django.db.models import Q
 
 
 def homepage(request):
-    posts = Post.objects.all()
+    q = request.POST.get("q") if request.POST.get("q") is not None else ""
+
+    lookup = Q(title__icontains=q) | Q(content__icontains=q)
+    posts = Post.objects.filter(lookup)
+
     context = {"posts": posts}
     return render(request, "blog/homepage.html", context)
 
 
 def post_details(request, slug):
+
     post = Post.objects.filter(slug=slug)
     get_post = get_object_or_404(Post, slug=slug)
 
