@@ -3,7 +3,13 @@
 {% load static %}
 
 {% block content %}
-
+<form method="post" action="{% url 'blog:homepage' %}">
+    {% csrf_token %}
+    <div>
+        <input type="text" name="q" placeholder="Search post.."/>
+        <button type="submit">Search</button>
+    </div>
+</form>
 {% for p in posts %}
 <ul>
     <li>
