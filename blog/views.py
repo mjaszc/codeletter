@@ -11,7 +11,9 @@ from django.db.models import Q
 def homepage(request):
     q = request.POST.get("q") if request.POST.get("q") is not None else ""
 
-    lookup = Q(title__icontains=q) | Q(content__icontains=q)
+    lookup = (
+        Q(title__icontains=q) | Q(content__icontains=q) | Q(category__name__icontains=q)
+    )
     posts = Post.objects.filter(lookup)
 
     context = {"posts": posts}
@@ -19,7 +21,6 @@ def homepage(request):
 
 
 def post_details(request, slug):
-
     post = Post.objects.filter(slug=slug)
     get_post = get_object_or_404(Post, slug=slug)
 

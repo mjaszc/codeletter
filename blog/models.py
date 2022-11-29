@@ -4,6 +4,13 @@ from django.contrib.auth.models import User
 from django.utils.html import format_html
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Post(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="user"
@@ -15,6 +22,9 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
     image = models.FileField(upload_to="images/", null=True, blank=True)
     like = models.ManyToManyField(User, related_name="like")
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, default=1, blank=True
+    )
 
     def __str__(self):
         return self.title
