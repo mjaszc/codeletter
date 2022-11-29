@@ -23,7 +23,10 @@ class Post(models.Model):
     image = models.FileField(upload_to="images/", null=True, blank=True)
     like = models.ManyToManyField(User, related_name="like")
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, default=1, blank=True
+        Category,
+        on_delete=models.CASCADE,
+        default=1,
+        blank=True,
     )
 
     def __str__(self):

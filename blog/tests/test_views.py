@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from blog.models import Post, User
+from blog.models import Post, User, Category
 from django.contrib import auth
 
 
@@ -23,11 +23,15 @@ class TestViews(TestCase):
 
     def test_go_to_post_details_page(self):
         TestViews.logInUser(self)
+
+        category = Category.objects.create()
+
         post = Post.objects.create(
             title="Test post",
             content="This is test post",
             slug="test-post",
             image="test.jpg",
+            category=category,
         )
         response = self.client.post(reverse("blog:post_details", args=(post.slug,)))
         self.assertEqual(response.status_code, 200)

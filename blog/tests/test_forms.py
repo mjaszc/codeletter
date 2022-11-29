@@ -1,4 +1,4 @@
-from blog.models import Post, User
+from blog.models import Post, User, Category
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -22,11 +22,14 @@ class TestForms(TestCase):
     def test_comment_form(self):
         TestForms.logInUser(self)
 
+        category = Category.objects.create()
+
         post = Post.objects.create(
             title="Test post",
             content="This is test post",
             slug="test-post",
             image="image.svg",
+            category=category,
         )
 
         data = {"body": "This is test comment"}
@@ -40,9 +43,13 @@ class TestForms(TestCase):
     def test_add_post_form(self):
         TestForms.logInUser(self)
 
+        category = Category.objects.create()
+
         data = {
             "title": "Testing post",
             "content": "This is post content",
+            "image": "image.png",
+            "category": category,
         }
 
         response = self.client.post(reverse("blog:create_post"), data)
@@ -51,8 +58,50 @@ class TestForms(TestCase):
     def test_edit_post_url(self):
         TestForms.logInUser(self)
 
+        category = Category.objects.create()
+
         post = Post.objects.create(
-            title="Test post", content="This is test post", slug="test-post"
+            title="Test post",
+            content="This is test post",
+            slug="test-post",
+            image="image.svg",
+            category=category,
+        )
+
+        data = {"body": "This is test comment"}
+
+        response = self.client.post(
+            reverse("blog:post_details", args=(post.slug,)), data
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="blog/post_details.html")
+
+    def test_add_post_form(self):
+        TestForms.logInUser(self)
+
+        category = Category.objects.create()
+
+        data = {
+            "title": "Testing post",
+            "content": "This is post content",
+            "image": "image.jpg",
+            "slug": "testing-post",
+            "category_id": category,
+        }
+
+        response = self.client.post(reverse("blog:create_post"), data)
+        self.assertEqual(response.status_code, 302)
+
+    def test_edit_post_url(self):
+        TestForms.logInUser(self)
+
+        category = Category.objects.create()
+
+        post = Post.objects.create(
+            title="Test post",
+            content="This is test post",
+            slug="test-post",
+            category=category,
         )
 
         response = self.client.get(
@@ -64,8 +113,14 @@ class TestForms(TestCase):
     def test_edit_post_form(self):
         TestForms.logInUser(self)
 
+        category = Category.objects.create()
+
         post = Post.objects.create(
-            title="Test post", content="This is test post", slug="test-post"
+            title="Test post",
+            content="This is test post",
+            slug="test-post",
+            image="image.svg",
+            category=category,
         )
 
         data = {
@@ -82,8 +137,13 @@ class TestForms(TestCase):
     def test_delete_post_url(self):
         TestForms.logInUser(self)
 
+        category = Category.objects.create()
+
         post = Post.objects.create(
-            title="Test post", content="This is test post", slug="test-post"
+            title="Test post",
+            content="This is test post",
+            slug="test-post",
+            category=category,
         )
 
         data = {
