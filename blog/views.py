@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, Category
 from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
@@ -18,6 +18,18 @@ def homepage(request):
 
     context = {"posts": posts}
     return render(request, "blog/homepage.html", context)
+
+
+def categories(request, cat):
+    category = Category.objects.filter(name=cat)
+
+    if category.exists():
+        category = category
+    else:
+        return HttpResponse("Something went wrong.")
+
+    context = {"category": category}
+    return render(request, "blog/category.html", context)
 
 
 def post_details(request, slug):
