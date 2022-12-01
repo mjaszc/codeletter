@@ -8,13 +8,13 @@ client = Client()
 
 
 class TestViews(TestCase):
-    def setUp(self):
+    def logInUser(self):
         self.user = User.objects.create_user(
-            username="testuser12_qOo15", password="yhwkWuQQ_94_yTTop."
+            username="i4u343r", password="yhwkWuQQ_94_yTTop."
         )
 
         login = self.client.login(
-            username="testuser12_qOo15", password="yhwkWuQQ_94_yTTop."
+            username="i4u343r", password="yhwkWuQQ_94_yTTop."
         )
 
         Post.objects.create(
