@@ -48,7 +48,6 @@ class TestForms(TestCase):
             "content": "This is post content",
             "image": "image.jpg",
             "slug": "testing-post",
-            "category_id": category,
         }
 
         response = self.client.post(reverse("blog:create_post"), data)
