@@ -8,12 +8,22 @@ client = Client()
 
 
 class TestViews(TestCase):
-    def logInUser(self):
+    def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", password="testpassword"
+            username="testuser12_qOo15", password="yhwkWuQQ_94_yTTop."
         )
 
-        login = self.client.login(username="testuser", password="testpassword")
+        login = self.client.login(
+            username="testuser12_qOo15", password="yhwkWuQQ_94_yTTop."
+        )
+
+        Post.objects.create(
+            title="Test post",
+            content="This is test post",
+            slug="test-post",
+            image="image.svg",
+            category=Category.objects.create(),
+        )
 
         self.assertTrue(login)
 
@@ -24,15 +34,8 @@ class TestViews(TestCase):
     def test_go_to_post_details_page(self):
         TestViews.logInUser(self)
 
-        category = Category.objects.create()
+        post = Post.objects.get(slug="test-post")
 
-        post = Post.objects.create(
-            title="Test post",
-            content="This is test post",
-            slug="test-post",
-            image="test.jpg",
-            category=category,
-        )
         response = self.client.post(reverse("blog:post_details", args=(post.slug,)))
         self.assertEqual(response.status_code, 200)
 

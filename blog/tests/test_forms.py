@@ -8,7 +8,7 @@ client = Client()
 
 
 class TestForms(TestCase):
-    def logInUser(self):
+    def setUp(self):
         self.user = User.objects.create_user(
             username="testuser12_qOo15", password="yhwkWuQQ_94_yTTop."
         )
@@ -17,20 +17,20 @@ class TestForms(TestCase):
             username="testuser12_qOo15", password="yhwkWuQQ_94_yTTop."
         )
 
-        self.assertTrue(login)
-
-    def test_comment_form(self):
-        TestForms.logInUser(self)
-
-        category = Category.objects.create()
-
-        post = Post.objects.create(
+        Post.objects.create(
             title="Test post",
             content="This is test post",
             slug="test-post",
             image="image.svg",
-            category=category,
+            category=Category.objects.create(),
         )
+
+        self.assertTrue(login)
+
+    def test_comment_form(self):
+        TestForms.setUp(self)
+
+        post = Post.objects.get(slug="test-post")
 
         data = {"body": "This is test comment"}
 
@@ -41,7 +41,7 @@ class TestForms(TestCase):
         self.assertTemplateUsed(response, template_name="blog/post_details.html")
 
     def test_add_post_form(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
         category = Category.objects.create()
 
@@ -56,17 +56,9 @@ class TestForms(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_edit_post_url(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
-        category = Category.objects.create()
-
-        post = Post.objects.create(
-            title="Test post",
-            content="This is test post",
-            slug="test-post",
-            image="image.svg",
-            category=category,
-        )
+        post = Post.objects.get(slug="test-post")
 
         data = {"body": "This is test comment"}
 
@@ -77,7 +69,7 @@ class TestForms(TestCase):
         self.assertTemplateUsed(response, template_name="blog/post_details.html")
 
     def test_add_post_form(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
         category = Category.objects.create()
 
@@ -93,16 +85,9 @@ class TestForms(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_edit_post_url(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
-        category = Category.objects.create()
-
-        post = Post.objects.create(
-            title="Test post",
-            content="This is test post",
-            slug="test-post",
-            category=category,
-        )
+        post = Post.objects.get(slug="test-post")
 
         response = self.client.get(
             reverse("blog:edit_post", kwargs={"slug": post.slug})
@@ -111,17 +96,9 @@ class TestForms(TestCase):
         self.assertTemplateUsed(response, template_name="blog/create_post.html")
 
     def test_edit_post_form(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
-        category = Category.objects.create()
-
-        post = Post.objects.create(
-            title="Test post",
-            content="This is test post",
-            slug="test-post",
-            image="image.svg",
-            category=category,
-        )
+        post = Post.objects.get(slug="test-post")
 
         data = {
             "title": "Edited post",
@@ -135,16 +112,9 @@ class TestForms(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_delete_post_url(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
-        category = Category.objects.create()
-
-        post = Post.objects.create(
-            title="Test post",
-            content="This is test post",
-            slug="test-post",
-            category=category,
-        )
+        post = Post.objects.get(slug="test-post")
 
         data = {
             "title": "Test post",
@@ -159,11 +129,9 @@ class TestForms(TestCase):
         self.assertTemplateUsed(response, template_name="blog/delete_post.html")
 
     def test_delete_post_from_profile(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
-        post = Post.objects.create(
-            title="Test post", content="This is test post", slug="test-post"
-        )
+        post = Post.objects.get(slug="test-post")
 
         data = {
             "title": "Test post",
@@ -214,7 +182,7 @@ class TestForms(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_user_settings_form(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
         data = {
             "username": "user_is_testing_555",
@@ -227,7 +195,7 @@ class TestForms(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_change_password_url(self):
-        TestForms.logInUser(self)
+        TestForms.setUp(self)
 
         response = self.client.get(reverse("blog:change_password"))
         self.assertEqual(response.status_code, 200)
