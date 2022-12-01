@@ -8,14 +8,12 @@ client = Client()
 
 
 class TestViews(TestCase):
-    def logInUser(self):
+    def setup(self):
         self.user = User.objects.create_user(
-            username="i4u343r", password="yhwkWuQQ_94_yTTop."
+            username="usertest500", password="yhwkWuQQ_94_yTTop."
         )
 
-        login = self.client.login(
-            username="i4u343r", password="yhwkWuQQ_94_yTTop."
-        )
+        login = self.client.login(username="usertest500", password="yhwkWuQQ_94_yTTop.")
 
         Post.objects.create(
             title="Test post",
@@ -32,7 +30,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_go_to_post_details_page(self):
-        TestViews.logInUser(self)
+        TestViews.setup(self)
 
         post = Post.objects.get(slug="test-post")
 
@@ -40,7 +38,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_go_to_add_post_section(self):
-        TestViews.logInUser(self)
+        TestViews.setup(self)
 
         response = self.client.post(reverse("blog:create_post"))
         self.assertEqual(response.status_code, 200)
