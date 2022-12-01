@@ -21,12 +21,11 @@ class Post(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
     image = models.FileField(upload_to="images/", null=True, blank=True)
-    like = models.ManyToManyField(User, related_name="like")
+    like = models.ManyToManyField(User, related_name="like", blank=True)
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
         default=1,
-        blank=True,
     )
 
     def __str__(self):

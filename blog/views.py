@@ -22,13 +22,15 @@ def homepage(request):
 
 def categories(request, cat):
     category = Category.objects.filter(name=cat)
+    posts = Post.objects.filter(category__name=cat)
 
     if category.exists():
         category = category
+        posts = posts
     else:
         return HttpResponse("Something went wrong.")
 
-    context = {"category": category}
+    context = {"category": category, "posts": posts}
     return render(request, "blog/category.html", context)
 
 
