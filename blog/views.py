@@ -20,7 +20,14 @@ def homepage(request):
     return render(request, "blog/homepage.html", context)
 
 
-def categories(request, cat):
+def categories_list(request):
+    categories = Category.objects.all()
+    context = {"categories": categories}
+
+    return render(request, "blog/categories_list.html", context)
+
+
+def category_details(request, cat):
     category = Category.objects.filter(name=cat)
     posts = Post.objects.filter(category__name=cat)
 
@@ -31,7 +38,7 @@ def categories(request, cat):
         return HttpResponse("Something went wrong.")
 
     context = {"category": category, "posts": posts}
-    return render(request, "blog/category.html", context)
+    return render(request, "blog/category_details.html", context)
 
 
 def post_details(request, slug):
