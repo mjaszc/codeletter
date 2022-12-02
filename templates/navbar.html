@@ -1,7 +1,13 @@
 <nav>
    
 
-    <a href="{% url "blog:homepage" %}">Home</a>
+    <a href="{% url "blog:homepage" %}">
+        <p>Home</p>
+    </a>
+
+    <a href="{% url "blog:categories_list" %}">
+        <p>Browse categories</p>
+    </a>    
 
     {% if request.user.is_authenticated %}
     <p>Currently logged as <strong>{{ request.user }}</strong></p>
