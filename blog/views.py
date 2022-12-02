@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, Category
 from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
@@ -11,15 +11,30 @@ from django.db.models import Q
 def homepage(request):
     q = request.POST.get("q") if request.POST.get("q") is not None else ""
 
-    lookup = Q(title__icontains=q) | Q(content__icontains=q)
+    lookup = (
+        Q(title__icontains=q) | Q(content__icontains=q) | Q(category__name__icontains=q)
+    )
     posts = Post.objects.filter(lookup)
 
     context = {"posts": posts}
     return render(request, "blog/homepage.html", context)
 
 
-def post_details(request, slug):
+def categories(request, cat):
+    category = Category.objects.filter(name=cat)
+    posts = Post.objects.filter(category__name=cat)
 
+    if category.exists():
+        category = category
+        posts = posts
+    else:
+        return HttpResponse("Something went wrong.")
+
+    context = {"category": category, "posts": posts}
+    return render(request, "blog/category.html", context)
+
+
+def post_details(request, slug):
     post = Post.objects.filter(slug=slug)
     get_post = get_object_or_404(Post, slug=slug)
 

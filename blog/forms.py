@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractUser
 class AddPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ("title", "content", "image")
+        fields = ("title", "content", "image", "category")
 
 
 class UserSettingsForm(forms.ModelForm):

@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from blog.models import Post, User
+from blog.models import Post, User, Category
 from django.contrib import auth
 
 
@@ -8,12 +8,20 @@ client = Client()
 
 
 class TestViews(TestCase):
-    def logInUser(self):
+    def setup(self):
         self.user = User.objects.create_user(
-            username="testuser", password="testpassword"
+            username="usertest500", password="yhwkWuQQ_94_yTTop."
         )
 
-        login = self.client.login(username="testuser", password="testpassword")
+        login = self.client.login(username="usertest500", password="yhwkWuQQ_94_yTTop.")
+
+        Post.objects.create(
+            title="Test post",
+            content="This is test post",
+            slug="test-post",
+            image="image.svg",
+            category=Category.objects.create(),
+        )
 
         self.assertTrue(login)
 
@@ -22,18 +30,15 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_go_to_post_details_page(self):
-        TestViews.logInUser(self)
-        post = Post.objects.create(
-            title="Test post",
-            content="This is test post",
-            slug="test-post",
-            image="test.jpg",
-        )
+        TestViews.setup(self)
+
+        post = Post.objects.get(slug="test-post")
+
         response = self.client.post(reverse("blog:post_details", args=(post.slug,)))
         self.assertEqual(response.status_code, 200)
 
     def test_go_to_add_post_section(self):
-        TestViews.logInUser(self)
+        TestViews.setup(self)
 
         response = self.client.post(reverse("blog:create_post"))
         self.assertEqual(response.status_code, 200)
