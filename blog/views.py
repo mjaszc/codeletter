@@ -35,11 +35,9 @@ def category_details(request, cat):
 
     if cache.get(cat):
         categ = cache.get(cat)
-        print("hit the cache")
     else:
         categ = Category.objects.get(name=cat)
         cache.set(cat, categ)
-        print("hit the db")
 
     if category.exists():
         category = category
