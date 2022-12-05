@@ -64,10 +64,13 @@ cssbeautifier==1.14.7
 django==4.1.3
     # via
     #   -r requirements.txt
+    #   django-debug-toolbar
     #   django-redis
     #   django-stubs
     #   django-stubs-ext
 django-cleanup==6.0.0
+    # via -r requirements.txt
+django-debug-toolbar==3.8.1
     # via -r requirements.txt
 django-redis==5.2.0
     # via -r requirements.txt
@@ -239,6 +242,7 @@ sqlparse==0.4.3
     # via
     #   -r requirements.txt
     #   django
+    #   django-debug-toolbar
 text-unidecode==1.3
     # via
     #   -r requirements.txt
