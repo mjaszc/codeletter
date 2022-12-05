@@ -20,9 +20,9 @@ from django.conf.urls.static import static
 import debug_toolbar
 
 urlpatterns = [
+    path("__debug__", include(debug_toolbar.urls)),
     path("admin/", admin.site.urls),
     path("", include("blog.urls")),
-    path("__debug__", include(debug_toolbar.urls)),
 ]
 
 if settings.DEBUG:
