@@ -43,8 +43,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install redis
       run: sudo apt-get install -y redis-server
-    - name: Set up redis server
-      run: redis-server
     - name: Verify that redis is up
       run: redis-cli ping    
     - name: Install Dependencies and Virtual Environment
