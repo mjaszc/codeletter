@@ -80,7 +80,6 @@ class TestViews(TestCase):
 
     def test_category_details(self):
         TestViews.setup(self)
-
         category = Category.objects.create(name="Django")
 
         response = self.client.post(
