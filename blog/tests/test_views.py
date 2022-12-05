@@ -73,3 +73,16 @@ class TestViews(TestCase):
             "/logout/", {"username": "testuser", "password": "testpassword"}
         )
         self.assertEqual(response.status_code, 302)
+
+    def test_display_categories(self):
+        response = self.client.get("/category/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_category_details(self):
+        TestViews.setup(self)
+        category = Category.objects.create(name="Django")
+
+        response = self.client.post(
+            reverse("blog:category_details", args=(category.name,))
+        )
+        self.assertEqual(response.status_code, 200)

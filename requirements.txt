@@ -12,6 +12,10 @@ asgiref==3.5.2
     # via
     #   -r requirements.txt
     #   django
+async-timeout==4.0.2
+    # via
+    #   -r requirements.txt
+    #   redis
 attrs==22.1.0
     # via
     #   -r requirements.txt
@@ -60,9 +64,15 @@ cssbeautifier==1.14.7
 django==4.1.3
     # via
     #   -r requirements.txt
+    #   django-debug-toolbar
+    #   django-redis
     #   django-stubs
     #   django-stubs-ext
 django-cleanup==6.0.0
+    # via -r requirements.txt
+django-debug-toolbar==3.8.1
+    # via -r requirements.txt
+django-redis==5.2.0
     # via -r requirements.txt
 django-stub==0.1
     # via -r requirements.txt
@@ -155,6 +165,7 @@ packaging==21.3
     # via
     #   -r requirements.txt
     #   build
+    #   redis
 pathspec==0.10.1
     # via
     #   -r requirements.txt
@@ -208,6 +219,10 @@ pyyaml==6.0
     #   -r requirements.txt
     #   cookiecutter
     #   djlint
+redis==4.3.5
+    # via
+    #   -r requirements.txt
+    #   django-redis
 regex==2022.10.31
     # via
     #   -r requirements.txt
@@ -227,6 +242,7 @@ sqlparse==0.4.3
     # via
     #   -r requirements.txt
     #   django
+    #   django-debug-toolbar
 text-unidecode==1.3
     # via
     #   -r requirements.txt

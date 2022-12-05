@@ -41,8 +41,6 @@ class TestForms(TestCase):
     def test_add_post_form(self):
         TestForms.setup(self)
 
-        category = Category.objects.create()
-
         data = {
             "title": "Testing post",
             "content": "This is post content",

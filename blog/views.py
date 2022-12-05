@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category
+from django.core.cache import cache
 from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
@@ -22,6 +23,7 @@ def homepage(request):
 
 def categories_list(request):
     categories = Category.objects.all()
+
     context = {"categories": categories}
 
     return render(request, "blog/categories_list.html", context)
@@ -30,6 +32,12 @@ def categories_list(request):
 def category_details(request, cat):
     category = Category.objects.filter(name=cat)
     posts = Post.objects.filter(category__name=cat)
+
+    if cache.get(cat):
+        categ = cache.get(cat)
+    else:
+        categ = Category.objects.get(name=cat)
+        cache.set(cat, categ)
 
     if category.exists():
         category = category
