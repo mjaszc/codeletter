@@ -18,7 +18,7 @@ class Post(models.Model):
     post_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=60)
     content = models.TextField()
-    pub_date = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField(auto_now_add=True, db_index=True)
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
     image = models.FileField(upload_to="images/", null=True, blank=True)
     like = models.ManyToManyField(User, related_name="like", blank=True)
