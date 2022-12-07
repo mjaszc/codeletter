@@ -12,6 +12,10 @@
         <p class="slugified-url">{{ post.slug }}</p>
         <p>{{ post.user }}</p>
         <p>{{ post.category }}</p>
+        {% if request.user == post.user %}
+            <a href="{% url 'blog:edit_post' post.slug %}">EDIT</a> 
+            <a href="{% url 'blog:delete_post' post.slug %}">DELETE</a>
+        {% endif %}
         {% if post.image %}
             <img src="{{ post.image.url }}" alt="" width="420px" height="240px"/>
         {% endif %}

@@ -10,7 +10,7 @@
         <button type="submit">Search</button>
     </div>
 </form>
-{% for p in posts %}
+{% for p in page_obj %}
 <ul>
     <li>
         <article>
@@ -18,10 +18,6 @@
                 <a href="{% url 'blog:homepage' %}{{p.title|slugify}}">{{ p.title }}</a>
             </h2>
             <p> {{ p.content }}</p>
-            {% if p.user == request.user %}
-                <a href="{% url 'blog:edit_post' p.slug %}">EDIT</a>
-                <a href="{% url 'blog:delete_post' p.slug %}">DELETE</a>
-            {% endif %}
             {% if p.image %}
                 <img src="{{ p.image.url }}" alt="" width="250px" height="180px"/>
             {% endif %}
@@ -29,4 +25,44 @@
     </li>
 </ul>
 {% endfor %}
+
+<ul>
+    <span>
+        {% if page_obj.has_previous %}
+        <li>
+            <a href="?page=1">first</a>
+        </li>
+        <li>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        </li>
+        {% endif %}
+
+        {% if page_obj.number|add:'-1' > 1 %}
+        <li><a href="?page={{ page_obj.number|add:'-2' }}">...</a></li>
+        {% endif %}
+            
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li>
+                <span>{{ i }}<span>(current)</span></span>
+            </li>
+            {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.paginator.num_pages > page_obj.number|add:'1' %}
+        <li><a href="?page={{ page_obj.number|add:'2' }}">...</a></li>
+        {% endif %}
+    
+        {% if page_obj.has_next %}
+        <li>
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+        </li>
+        <li>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last</a>
+        </li>
+        {% endif %}
+    </span>
+</ul>
 {% endblock %}

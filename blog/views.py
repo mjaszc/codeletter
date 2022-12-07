@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
+from django.core.paginator import Paginator
 from .forms import UserSettingsForm
 from django.db.models import Q
 
@@ -12,17 +13,22 @@ from django.db.models import Q
 def homepage(request):
     q = request.POST.get("q") if request.POST.get("q") is not None else ""
 
-    lookup = (
-        Q(title__icontains=q) | Q(content__icontains=q) | Q(category__name__icontains=q)
-    )
+    lookup = Q(title__icontains=q) | Q(content__icontains=q)
     posts = Post.objects.filter(lookup)
 
-    context = {"posts": posts}
+    post_list = Post.objects.prefetch_related().order_by("-pub_date")
+    # number of posts per page
+    paginator = Paginator(post_list, 2)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {"posts": posts, "page_obj": page_obj}
     return render(request, "blog/homepage.html", context)
 
 
 def categories_list(request):
-    categories = Category.objects.all()
+    categories = Category.objects.select_related().order_by("id")[:20]
 
     context = {"categories": categories}
 
@@ -118,7 +124,7 @@ def create_post(request):
 
 
 def delete_post(request, slug):
-    post = Post.objects.filter(slug=slug)[0]
+    post = Post.objects.filter(slug=slug)
 
     if request.method == "POST":
         post.delete()
