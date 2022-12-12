@@ -19,7 +19,7 @@ class ProfileSettingsForm(forms.ModelForm):
     class Meta:
         model = ProfileSettings
         fields = (
-            "image",
+            "profile_image",
             "bio",
             "location",
             "twitter_url",

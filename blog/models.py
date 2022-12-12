@@ -19,7 +19,7 @@ class ProfileSettings(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField()
     location = models.CharField(max_length=60, null=True, blank=True)
-    image = models.ImageField(upload_to="images/", null=True, blank=True)
+    profile_image = models.ImageField(upload_to="images/", null=True, blank=True)
     twitter_url = models.CharField(max_length=255, null=True, blank=True)
     website_url = models.CharField(max_length=255, null=True, blank=True)
     instagram_url = models.CharField(max_length=255, null=True, blank=True)
