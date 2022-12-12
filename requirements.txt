@@ -175,6 +175,8 @@ pep517==0.13.0
     # via
     #   -r requirements.txt
     #   build
+pillow==9.3.0
+    # via -r requirements.txt
 pip-tools==6.10.0
     # via -r requirements.txt
 platformdirs==2.5.3
