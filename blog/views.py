@@ -195,7 +195,13 @@ def settings_user(request):
 
 
 def profile_settings_user(request):
-    user = ProfileSettings.objects.filter(user=request.user)[0]
+    user = ProfileSettings.objects.filter(user=request.user).first()
+
+    # if user enters for the first time to the Profile Settings
+    # this function is automatically creates form for to fill
+    if not user:
+        user = ProfileSettings.objects.create(user=request.user)
+
     form = ProfileSettingsForm(instance=user)
 
     if request.method == "POST":
