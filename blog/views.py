@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Category
+from .models import Post, Category, ProfileSettings
 from django.core.cache import cache
 from django.http import HttpResponse
-from .forms import AddPostForm, AddCommentForm
+from .forms import AddPostForm, AddCommentForm, ProfileSettingsForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.core.paginator import Paginator
@@ -182,15 +182,30 @@ def login_user(request):
 
 
 def settings_user(request):
+    form = UserSettingsForm(instance=request.user)
+
     if request.method == "POST":
         form = UserSettingsForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect("/")
-    else:
-        form = UserSettingsForm(instance=request.user)
-        context = {"form": form}
-        return render(request, "blog/settings_user.html", context)
+
+    context = {"form": form}
+    return render(request, "blog/settings_user.html", context)
+
+
+def profile_settings_user(request):
+    user = ProfileSettings.objects.filter(user=request.user)[0]
+    form = ProfileSettingsForm(instance=user)
+
+    if request.method == "POST":
+        form = ProfileSettingsForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+
+    context = {"form": form}
+    return render(request, "blog/settings_profile.html", context)
 
 
 def logout_user(request):

@@ -12,6 +12,7 @@ urlpatterns = [
     path("login/", views.login_user, name="login_user"),
     path("logout/", views.logout_user, name="logout_user"),
     path("settings/", views.settings_user, name="settings_user"),
+    path("profile-settings/", views.profile_settings_user, name="profile_settings"),
     path("change-password/", views.change_password, name="change_password"),
     path("<slug:slug>/", views.post_details, name="post_details"),
     path("<slug:slug>/edit-post/", views.edit_post, name="edit_post"),

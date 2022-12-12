@@ -1,19 +1,41 @@
 from django.db import models
 from django.utils.text import slugify
-from django.contrib.auth.models import User
 from django.utils.html import format_html
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
     def __str__(self):
         return self.name
 
 
+class ProfileSettings(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    bio = models.TextField()
+    location = models.CharField(max_length=60, null=True, blank=True)
+    image = models.ImageField(upload_to="images/", null=True, blank=True)
+    twitter_url = models.CharField(max_length=255, null=True, blank=True)
+    website_url = models.CharField(max_length=255, null=True, blank=True)
+    instagram_url = models.CharField(max_length=255, null=True, blank=True)
+    linked_in_url = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Profile Setting"
+        verbose_name_plural = "Profile Settings"
+
+    def __str__(self):
+        return str(self.user)
+
+
 class Post(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name="user"
+        User, on_delete=models.CASCADE, null=True, related_name="user"
     )
     post_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=60)
@@ -49,6 +71,8 @@ class Comment(models.Model):
     approve = models.BooleanField(default=False)
 
     class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
         ordering = ["created_on"]
 
     def __str__(self):
