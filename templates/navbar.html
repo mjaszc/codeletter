@@ -1,5 +1,5 @@
 <nav>
-   
+
 
     <a href="{% url "blog:homepage" %}">
         <p>Home</p>
@@ -7,7 +7,7 @@
 
     <a href="{% url "blog:categories_list" %}">
         <p>Browse categories</p>
-    </a>    
+    </a>
 
     {% if request.user.is_authenticated %}
     <p>Currently logged as <strong>{{ request.user }}</strong></p>
@@ -17,7 +17,11 @@
     </a>
 
     <a href="{% url 'blog:settings_user' %}">
-        <p>Settings</p>
+        <p>Account Settings</p>
+    </a>
+
+    <a href="{% url 'blog:profile_settings' %}">
+        <p>Profile Settings</p>
     </a>
     {% else %}
     <a href="{% url 'blog:login_user' %}">

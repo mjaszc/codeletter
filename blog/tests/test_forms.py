@@ -161,6 +161,13 @@ class TestForms(TestCase):
         response = self.client.post(reverse("blog:settings_user"), data)
         self.assertEqual(response.status_code, 302)
 
+    def test_profile_settings_form(self):
+        TestForms.setup(self)
+
+        data = {"bio": "test bio description", "location": "test"}
+        response = self.client.post(reverse("blog:profile_settings"), data)
+        self.assertEqual(response.status_code, 302)
+
     def test_change_password_url(self):
         TestForms.setup(self)
 
