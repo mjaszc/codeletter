@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, ProfileSettings
 from django.core.cache import cache
 from django.http import HttpResponse
-from .forms import AddPostForm, AddCommentForm, ProfileSettingsForm
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from .forms import AddPostForm, AddCommentForm, ProfileSettingsForm, UserRegisterForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.core.paginator import Paginator
 from .forms import UserSettingsForm
@@ -149,11 +149,10 @@ def edit_post(request, slug):
 
 
 def register_user(request):
-    form = UserCreationForm()
-    context = {"form": form}
+    form = UserRegisterForm()
 
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -163,6 +162,7 @@ def register_user(request):
         else:
             return HttpResponse("Something went wrong, please try again")
 
+    context = {"form": form}
     return render(request, "blog/register_user.html", context)
 
 

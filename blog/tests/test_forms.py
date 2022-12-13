@@ -114,6 +114,9 @@ class TestForms(TestCase):
     def test_user_sign_up_success(self):
         data = {
             "username": "testuser50124",
+            "first_name": "test",
+            "last_name": "test",
+            "email": "test@example.com",
             "password1": 'Oo4[RpEI3k4Bf8Oo"bUl%_w0',
             "password2": 'Oo4[RpEI3k4Bf8Oo"bUl%_w0',
         }
