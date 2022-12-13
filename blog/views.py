@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .models import Post, Category, ProfileSettings
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -148,6 +149,14 @@ def edit_post(request, slug):
     return render(request, "blog/create_post.html", context)
 
 
+def verifyEmail(request, user, email):
+    return messages.success(
+        request,
+        f"Success! Dear {user}, we send activation link to the {email}. To complete registration please follow the instruction\
+        given in the email message. NOTE: Check the SPAM folder.",
+    )
+
+
 def register_user(request):
     form = UserRegisterForm()
 
@@ -156,11 +165,12 @@ def register_user(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
+            user.is_active = False
             user.save()
-            login(request, user)
+            verifyEmail(request, user, form.cleaned_data.get("email"))
             return redirect("/")
         else:
-            return HttpResponse("Something went wrong, please try again")
+            messages.error(request, "Something went wrong, please try again")
 
     context = {"form": form}
     return render(request, "blog/register_user.html", context)
