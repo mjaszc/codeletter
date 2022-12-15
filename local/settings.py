@@ -94,8 +94,8 @@ DATABASES = {
 # Email Verification Settings
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_FROM = config("EMAIL_AUTHOR")
-EMAIL_HOST_USER = config("EMAIL_AUTHOR")
+EMAIL_FROM = config("EMAIL_FROM")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 EMAIL_POST = config("EMAIL_POST")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS")
