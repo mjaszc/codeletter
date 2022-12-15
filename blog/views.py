@@ -1,13 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
 from .models import Post, Category, ProfileSettings
 from django.core.cache import cache
 from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm, ProfileSettingsForm, UserRegisterForm
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
+from django.contrib.auth import (
+    login,
+    authenticate,
+    logout,
+    update_session_auth_hash,
+    get_user_model,
+)
 from django.core.paginator import Paginator
 from .forms import UserSettingsForm
 from django.db.models import Q
+from .tokens import account_activation_token
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
 
 
 def homepage(request):
@@ -148,6 +161,60 @@ def edit_post(request, slug):
     return render(request, "blog/create_post.html", context)
 
 
+# Account verification process
+def verify(request, uidb64, token):
+    User = get_user_model()
+    try:
+        # Decoding uid and assigning to user's primary key
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    # Checking if token is valid and if user exists and activating account
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+        messages.success(
+            request,
+            "Thank you for your email confirmation. Now you can login your account.",
+        )
+        return redirect("/login")
+    else:
+        messages.error(request, "Activation link is invalid or expired.")
+
+    return redirect("/")
+
+
+# Function is called when user submits the register form with selected parameters
+def verify_email(request, user, email_address):
+    message_subject = "Activate your account"
+    message_content = render_to_string(
+        "blog/message_verify_account.html",
+        {
+            "user": user.username,
+            "domain": get_current_site(request).domain,
+            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+            "token": account_activation_token.make_token(user),
+            "protocol": "https" if request.is_secure() else "http",
+        },
+    )
+    # Specifying parameters for sending an verification email
+    email = EmailMessage(message_subject, message_content, to=[email_address])
+
+    if email.send():
+        messages.success(
+            request,
+            f"Success! Dear {user}, we send activation link to the {email_address}. To complete registration please follow the instruction\
+        given in the email message. NOTE: Check the SPAM folder.",
+        )
+    else:
+        messages.error(
+            request, f"There's a problem with sending email to {email_address}."
+        )
+
+
 def register_user(request):
     form = UserRegisterForm()
 
@@ -156,11 +223,13 @@ def register_user(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
+            # Setting the inactive user in order to set status to active after account verification
+            user.is_active = False
             user.save()
-            login(request, user)
+            verify_email(request, user, form.cleaned_data.get("email"))
             return redirect("/")
         else:
-            return HttpResponse("Something went wrong, please try again")
+            messages.error(request, "Something went wrong, please try again")
 
     context = {"form": form}
     return render(request, "blog/register_user.html", context)
