@@ -91,7 +91,7 @@ DATABASES = {
     }
 }
 
-# Email Verification Settings
+# Email Verification Setting
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_FROM = "codeletterapp@gmail.com"
