@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from .models import Post, Category, ProfileSettings
+from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponse
 from .forms import AddPostForm, AddCommentForm, ProfileSettingsForm, UserRegisterForm
@@ -162,7 +163,7 @@ def edit_post(request, slug):
 
 
 # Account verification process
-def verify(request, uidb64, token):
+def verify_email(request, uidb64, token):
     User = get_user_model()
     try:
         # Decoding uid and assigning to user's primary key
@@ -188,7 +189,7 @@ def verify(request, uidb64, token):
 
 
 # Function is called when user submits the register form with selected parameters
-def verify_email(request, user, email_address):
+def send_verify_email(request, user, email_address):
     message_subject = "Activate your account"
     message_content = render_to_string(
         "blog/message_verify_account.html",
@@ -220,16 +221,20 @@ def register_user(request):
 
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
+
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
             # Setting the inactive user in order to set status to active after account verification
             user.is_active = False
             user.save()
-            verify_email(request, user, form.cleaned_data.get("email"))
-            return redirect("/")
+            if User.objects.filter(email=user.email).exists():
+                messages.error(request, "User with that email already exists.")
+            else:
+                send_verify_email(request, user, form.cleaned_data.get("email"))
+                return redirect("/")
         else:
-            messages.error(request, "Something went wrong, please try again")
+            messages.error(request, "Something went wrong, please try again.")
 
     context = {"form": form}
     return render(request, "blog/register_user.html", context)
