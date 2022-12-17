@@ -3,5 +3,5 @@ Hello {{ user }},
 
 To complete the registration, please click the link below:
 
-http://{{ domain }}{% url 'blog:verify' uidb64=uid token=token%}
+http://{{ domain }}{% url 'blog:verify_email' uidb64=uid token=token%}
 {% endautoescape %}
