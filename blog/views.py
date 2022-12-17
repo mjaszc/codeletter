@@ -222,19 +222,20 @@ def register_user(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
 
-        if form.is_valid():
+        if (
+            form.is_valid()
+            and User.objects.filter(email=form.cleaned_data.get("email")).exists()
+            is False
+        ):
             user = form.save(commit=False)
             user.username = user.username.lower()
             # Setting the inactive user in order to set status to active after account verification
             user.is_active = False
             user.save()
-            if User.objects.filter(email=user.email).exists():
-                messages.error(request, "User with that email already exists.")
-            else:
-                send_verify_email(request, user, form.cleaned_data.get("email"))
-                return redirect("/")
+            send_verify_email(request, user, form.cleaned_data.get("email"))
+            return redirect("/")
         else:
-            messages.error(request, "Something went wrong, please try again.")
+            messages.error(request, "User with that email already exists.")
 
     context = {"form": form}
     return render(request, "blog/register_user.html", context)
