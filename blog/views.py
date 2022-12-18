@@ -5,7 +5,13 @@ from .models import Post, Category, ProfileSettings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponse
-from .forms import AddPostForm, AddCommentForm, ProfileSettingsForm, UserRegisterForm
+from .forms import (
+    AddPostForm,
+    AddCommentForm,
+    ProfileSettingsForm,
+    UserRegisterForm,
+    SetNewPasswordForm,
+)
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import (
     login,
@@ -291,6 +297,59 @@ def profile_settings_user(request):
 
 def logout_user(request):
     logout(request)
+    return redirect("/")
+
+
+def recover_password_request(request):
+    if request.method == "POST":
+        form = SetNewPasswordForm(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data.get("email")
+            get_user = get_user_model().objects.filter(email=user_email).first()
+            if get_user:
+                message_subject = "Password Reset Request"
+                message_content = render_to_string(
+                    "blog/message_recover_password.html",
+                    {
+                        "user": get_user,
+                        "domain": get_current_site(request).domain,
+                        "uid": urlsafe_base64_encode(force_bytes(get_user.pk)),
+                        "token": account_activation_token.make_token(get_user),
+                        "protocol": "https" if request.is_secure() else "http",
+                    },
+                )
+                email = EmailMessage(
+                    message_subject, message_content, to=[get_user.email]
+                )
+                if email.send():
+                    messages.success(
+                        request,
+                        """
+                        Password reset sent
+                        We've emailed you instructions for setting your password, if an account exists with the email you entered. 
+                        You should receive them shortly.If you don't receive an email, please make sure you've entered the address
+                        you registered with, and check your spam folder.
+                        """,
+                    )
+                else:
+                    messages.error(
+                        request,
+                        "Problem with resetting password, email does not exist in our database.",
+                    )
+            else:
+                messages.error(
+                    request,
+                    "Problem with resetting password, email does not exist in our database.",
+                )
+
+        return redirect("/")
+
+    form = SetNewPasswordForm()
+    context = {"form": form}
+    return render(request, "blog/recover_password.html", context)
+
+
+def recover_password_confirm(request, uidb64, token):
     return redirect("/")
 
 

@@ -11,6 +11,12 @@ urlpatterns = [
     path("register/", views.register_user, name="register_user"),
     path("verify/<uidb64>/<token>", views.verify_email, name="verify_email"),
     path("login/", views.login_user, name="login_user"),
+    path("recover", views.recover_password_request, name="recover_password"),
+    path(
+        "recover/<uidb64>/<token>",
+        views.recover_password_confirm,
+        name="recover_password_confirm",
+    ),
     path("logout/", views.logout_user, name="logout_user"),
     path("settings/", views.settings_user, name="settings_user"),
     path("profile-settings/", views.profile_settings_user, name="profile_settings"),
