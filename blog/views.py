@@ -11,6 +11,7 @@ from .forms import (
     ProfileSettingsForm,
     UserRegisterForm,
     SetNewPasswordForm,
+    PasswordResetForm,
 )
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import (
@@ -302,7 +303,7 @@ def logout_user(request):
 
 def recover_password_request(request):
     if request.method == "POST":
-        form = SetNewPasswordForm(request.POST)
+        form = PasswordResetForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data.get("email")
             get_user = get_user_model().objects.filter(email=user_email).first()
@@ -344,7 +345,7 @@ def recover_password_request(request):
 
         return redirect("/")
 
-    form = SetNewPasswordForm()
+    form = PasswordResetForm()
     context = {"form": form}
     return render(request, "blog/recover_password.html", context)
 

@@ -1,6 +1,10 @@
 from django import forms
 from .models import Post, Comment, ProfileSettings
-from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.forms import (
+    PasswordChangeForm,
+    SetPasswordForm,
+    PasswordResetForm,
+)
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, User
 from django.contrib.auth.forms import UserCreationForm
