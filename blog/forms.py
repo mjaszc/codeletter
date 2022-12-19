@@ -1,8 +1,9 @@
 from django import forms
 from .models import Post, Comment, ProfileSettings
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, User
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.contrib.auth.forms import UserCreationForm
 
 
 class UserRegisterForm(UserCreationForm):
@@ -54,7 +55,10 @@ class AddCommentForm(forms.ModelForm):
         fields = ("body",)
 
 
-class SetNewPasswordForm(PasswordResetForm):
+class SetNewPasswordForm(SetPasswordForm):
     class Meta:
         model = get_user_model()
-        fields = ("new_password1", "new_password2")
+        fields = (
+            "new_password1",
+            "new_password2",
+        )

@@ -228,20 +228,20 @@ def register_user(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
 
-        if (
-            form.is_valid()
-            and User.objects.filter(email=form.cleaned_data.get("email")).exists()
-            is False
-        ):
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            # Setting the inactive user in order to set status to active after account verification
-            user.is_active = False
-            user.save()
-            send_verify_email(request, user, form.cleaned_data.get("email"))
-            return redirect("/")
-        else:
-            messages.error(request, "User with that email already exists.")
+        if form.is_valid():
+            if (
+                User.objects.filter(email=form.cleaned_data.get("email")).exists()
+                is False
+            ):
+                user = form.save(commit=False)
+                user.username = user.username.lower()
+                # Setting the inactive user in order to set status to active after account verification
+                user.is_active = False
+                user.save()
+                send_verify_email(request, user, form.cleaned_data.get("email"))
+                return redirect("/")
+            else:
+                messages.error(request, "User with that email already exists.")
 
     context = {"form": form}
     return render(request, "blog/register_user.html", context)
@@ -334,7 +334,7 @@ def recover_password_request(request):
                 else:
                     messages.error(
                         request,
-                        "Problem with resetting password, email does not exist in our database.",
+                        "Something went wrong, it might be server error.",
                     )
             else:
                 messages.error(
@@ -350,6 +350,35 @@ def recover_password_request(request):
 
 
 def recover_password_confirm(request, uidb64, token):
+    User = get_user_model()
+
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, user.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        if request.method == "POST":
+            form = SetNewPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request,
+                    "Your password has been set. You may go ahead and log in now.",
+                )
+                return redirect("/")
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+
+        form = SetNewPasswordForm(user)
+        context = {"form": form}
+        return render(request, "blog/recover_password_confirm.html", context)
+    else:
+        messages.error(request, "Link is expired.")
+
+    messages.error(request, "Something went wrong")
     return redirect("/")
 
 
@@ -359,9 +388,11 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
+            messages.success(request, "Your password has been changed")
             return redirect("/")
         else:
-            return HttpResponse("Something went wrong, try again.")
+            for error in list(form.errors.values()):
+                messages.error(request, error)
     else:
         form = PasswordChangeForm(request.user)
 
