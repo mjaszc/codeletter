@@ -35,6 +35,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "blog",
+    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -44,6 +46,9 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "debug_toolbar",
 ]
+
+ASGI_APPLICATION = "local.asgi.application"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
