@@ -114,7 +114,6 @@ def post_details(request, slug):
                 if get_post.like.filter(id=user.id).exists():
                     get_post.like.remove(user.id)
                     liked = False
-                    print(request.body)
                 else:
                     get_post.like.add(user.id)
                     liked = True

@@ -16,8 +16,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             )
         )
 
-    async def disconnect(self):
-        await self.channel_layer.group_discard(self.group_name)
+    async def disconnect(self, code):
+        await self.channel_layer.group_discard(
+            self.group_name,
+            self.channel_name,
+        )
 
     # receive message from ws
     async def receive(self, text_data):
