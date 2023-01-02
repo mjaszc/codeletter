@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+import json
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
-from .models import Post, Category, ProfileSettings
+from .models import Post, Category, ProfileSettings, Notification
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import (
     AddPostForm,
     AddCommentForm,
@@ -21,6 +22,7 @@ from django.contrib.auth import (
     update_session_auth_hash,
     get_user_model,
 )
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from .forms import UserSettingsForm
 from django.db.models import Q
@@ -114,9 +116,11 @@ def post_details(request, slug):
                 if get_post.like.filter(id=user.id).exists():
                     get_post.like.remove(user.id)
                     liked = False
+                    print(request.body)
                 else:
                     get_post.like.add(user.id)
                     liked = True
+
             comment_form = AddCommentForm()
 
     context = {
@@ -127,6 +131,23 @@ def post_details(request, slug):
         "liked": liked,
     }
     return render(request, "blog/post_details.html", context)
+
+
+# @csrf_exempt
+# def create_notification(request, slug):
+#     data = json.loads(request.body)
+#     post = Post.objects.filter(slug=slug)
+#
+#     user = request.user
+#     try:
+#         post = Post.objects.get(id=data.get("id"))
+#         new_notification = Notification(
+#             receiver_user=post.user, provider_user=user, title=post.title, post=post
+#         )
+#         new_notification.save()
+#         return JsonResponse({"message": "success", "status": True})
+#     except Post.DoesNotExist:
+#         return JsonResponse({"error": "Something went wrong", "status": False})
 
 
 def create_post(request):
