@@ -101,6 +101,9 @@ class Notification(models.Model):
         Post, on_delete=models.CASCADE, related_name="notification_like"
     )
 
+    def __str__(self):
+        return f"Post name: {self.post_name}, Post id: {self.notification_id}, Receiver: {self.receiver_user}, Provider: {self.provider_user}"
+
     @staticmethod
     def get_notification_details(notification_id):
         instance = Notification.objects.filter(notification_id=notification_id).first()

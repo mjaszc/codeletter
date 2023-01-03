@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for notif in notifications %}
+<p><b>Notify type:</b> {{ notif.notification_type }} <b>post name:</b> {{ notif.post_name }} <b>notif id:</b> {{ notif.notification_id }}</p>  
+{% endfor %}
+{% endblock %}

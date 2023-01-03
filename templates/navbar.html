@@ -20,20 +20,28 @@
         <p>Account Settings</p>
     </a>
 
+    <a href="{% url 'blog:notifications' %}">
+        <p>Notifications</p>
+    </a>    
+
     <a href="{% url 'blog:profile_settings' %}">
         <p>Profile Settings</p>
+    </a>
+
+    <a href="{% url 'blog:create_post' %}">
+        <p>Add post</p>
     </a>
     {% else %}
     <a href="{% url 'blog:login_user' %}">
         <p>Login</p>
     </a>
-    {% endif %}
 
-    <a href="{% url 'blog:create_post' %}">
-        <p>Add post</p>
-    </a>
-
-    <a href="{% url 'blog:register_user' %}">
+     <a href="{% url 'blog:register_user' %}">
         <p>Register</p>
     </a>
-</nav>
+    {% endif %}
+
+   
+
+    
+   </nav>

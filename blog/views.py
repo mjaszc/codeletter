@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
-from .models import Post, Category, ProfileSettings
+from .models import Post, Category, ProfileSettings, Notification
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -400,3 +400,10 @@ def change_password(request):
 
     context = {"form": form}
     return render(request, "blog/change_password.html", context)
+
+
+def notifications(request):
+    notifications = Notification.objects.filter(receiver_user=request.user)
+
+    context = {"notifications": notifications}
+    return render(request, "blog/notifications.html", context)
