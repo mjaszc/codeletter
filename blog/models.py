@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from django.utils.text import slugify
 from django.utils.html import format_html
 from django.contrib.auth.models import User
@@ -91,8 +92,22 @@ class Notification(models.Model):
     provider_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="notification_provider"
     )
+    notification_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
     notification_type = models.CharField(max_length=20, choices=CHOICES)
     is_seen = models.BooleanField(default=True)
     post_name = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="notification_like"
     )
+
+    @staticmethod
+    def get_notification_details(notification_id):
+        instance = Notification.objects.filter(notification_id=notification_id).first()
+        data = {}
+        data["notification_id"] = instance.notification_id
+        data["receiver_user"] = instance.receiver_user
+        data["provider_user"] = instance.provider_user
+        data["post_name"] = instance.post_name
+        data["notification_type"] = instance.notification_type
+        return data
