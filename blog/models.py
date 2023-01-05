@@ -87,7 +87,10 @@ class Notification(models.Model):
     CHOICES = ((LIKE, "Like"), (COMMENT, "Comment"))
 
     receiver_user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="notification_receiver"
+        User,
+        on_delete=models.CASCADE,
+        related_name="notification_receiver",
+        null=True,
     )
     provider_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="notification_provider"
