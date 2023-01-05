@@ -1,15 +1,18 @@
 import json
+from .models import Notification
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.group_name = "notification"
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_group_name = "post_%s" % self.room_name
 
         # joining group
-        await self.channel_layer.group_add(self.group_name, self.channel_name)
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
         await self.accept()
+
         await self.send(
             text_data=json.dumps(
                 {"type": "connection established", "message": "connected"}
@@ -18,7 +21,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, code):
         await self.channel_layer.group_discard(
-            self.group_name,
+            self.room_group_name,
             self.channel_name,
         )
 
@@ -30,7 +33,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         event = {"type": "send_message", "message": message}
 
         # sending message to group
-        await self.channel_layer.group_send(self.group_name, event)
+        await self.channel_layer.group_send(self.room_group_name, event)
 
     # receive message from group
     async def send_message(self, event):

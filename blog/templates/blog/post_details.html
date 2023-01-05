@@ -62,7 +62,7 @@
         const likeForm = document.querySelector('.like-form');
         const slugUrl = document.querySelector('.slugified-url');
 
-        const notificationSocket = new WebSocket(`ws://${window.location.host}/ws/notification/`);
+        const notificationSocket = new WebSocket(`ws://${window.location.host}/ws/notification/{{ post.slug }}/`);
 
         notificationSocket.onmessage = (e) => {
             let data = JSON.parse(e.data)

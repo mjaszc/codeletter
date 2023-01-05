@@ -117,6 +117,13 @@ def post_details(request, slug):
                 else:
                     get_post.like.add(user.id)
                     liked = True
+                    notification = Notification.objects.create(
+                        receiver_user=get_post.user,
+                        provider_user=user,
+                        notification_type="Like",
+                        post_name=Post.objects.get(title=get_post.title),
+                    )
+                    notification.save()
 
             comment_form = AddCommentForm()
 

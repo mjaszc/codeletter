@@ -103,14 +103,3 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Post name: {self.post_name}, Post id: {self.notification_id}, Receiver: {self.receiver_user}, Provider: {self.provider_user}"
-
-    @staticmethod
-    def get_notification_details(notification_id):
-        instance = Notification.objects.filter(notification_id=notification_id).first()
-        data = {}
-        data["notification_id"] = instance.notification_id
-        data["receiver_user"] = instance.receiver_user
-        data["provider_user"] = instance.provider_user
-        data["post_name"] = instance.post_name
-        data["notification_type"] = instance.notification_type
-        return data
