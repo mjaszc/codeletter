@@ -16,6 +16,21 @@
 
         {% endblock %}
     </header>
-</body>
 
+    <script>
+
+        const notificationSocket = new WebSocket(`ws://${window.location.host}/notifications/`);
+
+        notificationSocket.onmessage = (e) => {
+            let data = JSON.parse(e.data)
+                console.log(data.message);
+        }
+
+        notificationSocket.onclose = function(){
+            console.error("Socket close unexpectedly");
+        }
+
+</script>
+
+</body>
 </html>
