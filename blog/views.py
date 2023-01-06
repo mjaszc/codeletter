@@ -114,13 +114,22 @@ def post_details(request, slug):
                 if get_post.like.filter(id=user.id).exists():
                     get_post.like.remove(user.id)
                     liked = False
+                    # deleting notification for user when user unlike the post
+                    if Notification.objects.filter(
+                        provider_user=request.user, notification_type=Notification.LIKE
+                    ).exists():
+                        Notification.objects.filter(
+                            provider_user=request.user,
+                            notification_type=Notification.LIKE,
+                        ).delete()
                 else:
                     get_post.like.add(user.id)
                     liked = True
+                    # creating notification for user
                     notification = Notification.objects.create(
                         receiver_user=get_post.user,
                         provider_user=user,
-                        notification_type="Like",
+                        notification_type=Notification.LIKE,
                         post_name=Post.objects.get(title=get_post.title),
                     )
                     notification.save()
