@@ -31,11 +31,6 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 
 
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from datetime import datetime
-
-
 def homepage(request):
     q = request.POST.get("q") if request.POST.get("q") is not None else ""
 
