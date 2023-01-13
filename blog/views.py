@@ -29,6 +29,7 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
+from django.contrib.auth.decorators import login_required
 
 
 def homepage(request):
@@ -126,7 +127,7 @@ def post_details(request, slug):
                     get_post.like.add(user.id)
                     liked = True
 
-                    # creating notification for user
+                    # creating and saving notification in db for spec user
                     notification = Notification.objects.create(
                         receiver_user=get_post.user,
                         provider_user=user,
@@ -419,8 +420,14 @@ def change_password(request):
     return render(request, "blog/change_password.html", context)
 
 
+@login_required
 def notifications(request):
     notifications = Notification.objects.filter(receiver_user=request.user)
+
+    if not request.GET.get("notifications"):
+        read_notifications = Notification.objects.filter(
+            receiver_user=request.user
+        ).update(is_seen=True)
 
     context = {"notifications": notifications}
     return render(request, "blog/notifications.html", context)
