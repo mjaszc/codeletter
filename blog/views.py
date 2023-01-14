@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
-from .models import Post, Category, ProfileSettings
+from .models import Post, Category, ProfileSettings, Notification
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -29,6 +29,7 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
+from django.contrib.auth.decorators import login_required
 
 
 def homepage(request):
@@ -114,9 +115,27 @@ def post_details(request, slug):
                 if get_post.like.filter(id=user.id).exists():
                     get_post.like.remove(user.id)
                     liked = False
+                    # deleting notification for user when user unlike the post
+                    if Notification.objects.filter(
+                        provider_user=request.user, notification_type=Notification.LIKE
+                    ).exists():
+                        Notification.objects.filter(
+                            provider_user=request.user,
+                            notification_type=Notification.LIKE,
+                        ).delete()
                 else:
                     get_post.like.add(user.id)
                     liked = True
+
+                    # creating and saving notification in db for spec user
+                    notification = Notification.objects.create(
+                        receiver_user=get_post.user,
+                        provider_user=user,
+                        notification_type=Notification.LIKE,
+                        post_name=Post.objects.get(title=get_post.title),
+                    )
+                    notification.save()
+
             comment_form = AddCommentForm()
 
     context = {
@@ -129,6 +148,7 @@ def post_details(request, slug):
     return render(request, "blog/post_details.html", context)
 
 
+@login_required
 def create_post(request):
     form = AddPostForm()
 
@@ -263,6 +283,7 @@ def login_user(request):
         return render(request, "blog/login_user.html")
 
 
+@login_required
 def settings_user(request):
     form = UserSettingsForm(instance=request.user)
 
@@ -276,6 +297,7 @@ def settings_user(request):
     return render(request, "blog/settings_user.html", context)
 
 
+@login_required
 def profile_settings_user(request):
     user = ProfileSettings.objects.filter(user=request.user).first()
 
@@ -301,6 +323,7 @@ def logout_user(request):
     return redirect("/")
 
 
+@login_required
 def recover_password_request(request):
     if request.method == "POST":
         form = PasswordResetForm(request.POST)
@@ -383,6 +406,7 @@ def recover_password_confirm(request, uidb64, token):
     return redirect("/")
 
 
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -399,3 +423,17 @@ def change_password(request):
 
     context = {"form": form}
     return render(request, "blog/change_password.html", context)
+
+
+@login_required
+def notifications(request):
+    notifications = Notification.objects.filter(receiver_user=request.user)
+
+    # checking all unread notifiactions as a read after leaving notifications section
+    if not request.GET.get("notifications"):
+        read_notifications = Notification.objects.filter(
+            receiver_user=request.user
+        ).update(is_seen=True)
+
+    context = {"notifications": notifications}
+    return render(request, "blog/notifications.html", context)

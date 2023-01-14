@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Notification list </h2>
+{% for notification in notifications %}
+    <div>
+        <p>
+            {% if notification.notification_type == "like" %}
+            <a href="{% url "blog:post_details" notification.post_name|slugify %}">
+                {{notification.provider_user}} liked your post {{notification.post_name}}
+            </a>
+            {% elif notification.notification_type == "comment" %}
+            <a href="">
+                {{notification.provider_user}} commented your post {{notification.post_name}}
+            </a>
+            {% endif %}    
+        </p>
+    </div>
+{% endfor %}
+{% endblock %}

@@ -10,7 +10,7 @@
     </a>
 
     {% if request.user.is_authenticated %}
-    <p>Currently logged as <strong>{{ request.user }}</strong></p>
+    <p>Currently logged as {{ request.user }}</p>
 
     <a href="{% url 'blog:logout_user' %}">
         <p>Logout</p>
@@ -20,20 +20,28 @@
         <p>Account Settings</p>
     </a>
 
+    <a href="{% url 'blog:notifications' %}">
+        <p>Notifications</p>
+    </a>    
+
     <a href="{% url 'blog:profile_settings' %}">
         <p>Profile Settings</p>
+    </a>
+
+    <a href="{% url 'blog:create_post' %}">
+        <p>Add post</p>
     </a>
     {% else %}
     <a href="{% url 'blog:login_user' %}">
         <p>Login</p>
     </a>
-    {% endif %}
 
-    <a href="{% url 'blog:create_post' %}">
-        <p>Add post</p>
-    </a>
-
-    <a href="{% url 'blog:register_user' %}">
+     <a href="{% url 'blog:register_user' %}">
         <p>Register</p>
     </a>
-</nav>
+    {% endif %}
+
+   
+
+    
+   </nav>
