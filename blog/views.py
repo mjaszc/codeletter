@@ -148,6 +148,7 @@ def post_details(request, slug):
     return render(request, "blog/post_details.html", context)
 
 
+@login_required
 def create_post(request):
     form = AddPostForm()
 
@@ -282,6 +283,7 @@ def login_user(request):
         return render(request, "blog/login_user.html")
 
 
+@login_required
 def settings_user(request):
     form = UserSettingsForm(instance=request.user)
 
@@ -295,6 +297,7 @@ def settings_user(request):
     return render(request, "blog/settings_user.html", context)
 
 
+@login_required
 def profile_settings_user(request):
     user = ProfileSettings.objects.filter(user=request.user).first()
 
@@ -320,6 +323,7 @@ def logout_user(request):
     return redirect("/")
 
 
+@login_required
 def recover_password_request(request):
     if request.method == "POST":
         form = PasswordResetForm(request.POST)
@@ -402,6 +406,7 @@ def recover_password_confirm(request, uidb64, token):
     return redirect("/")
 
 
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -424,6 +429,7 @@ def change_password(request):
 def notifications(request):
     notifications = Notification.objects.filter(receiver_user=request.user)
 
+    # checking all unread notifiactions as a read after leaving notifications section
     if not request.GET.get("notifications"):
         read_notifications = Notification.objects.filter(
             receiver_user=request.user
