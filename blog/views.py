@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
-from .models import Post, Category, ProfileSettings, Notification
+from .models import Post, Category, ProfileSettings, Notification, Comment
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -30,6 +30,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
+from django.template.defaultfilters import slugify
 
 
 def homepage(request):
@@ -100,6 +101,7 @@ def post_details(request, slug):
         if get_post.like.filter(id=user.id).exists():
             liked = True
 
+    # commenting post section
     if request.method == "POST":
         comment_form = AddCommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -109,6 +111,7 @@ def post_details(request, slug):
             new_comment.user = user
             new_comment.save()
             comment_form = AddCommentForm()
+        # liking post section
         else:
             if request.user.is_authenticated:
                 # when user clicks the like button
@@ -149,6 +152,36 @@ def post_details(request, slug):
 
 
 @login_required
+def edit_comment(request, id):
+    comment = Comment.objects.filter(pk=id).first()
+    form = AddCommentForm(instance=comment)
+
+    if request.method == "POST":
+        form = AddCommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            post_slug = slugify(comment.post)
+            return redirect(f"/{post_slug}")
+
+    context = {"form": form}
+    return render(request, "blog/edit_comment.html", context)
+
+
+@login_required
+def delete_comment(request, id):
+    comment = Comment.objects.filter(pk=id).first()
+
+    if request.method == "POST":
+        comment.delete()
+        post_slug = slugify(comment.post)
+        return redirect(f"/{post_slug}")
+
+    context = {"comment": comment}
+
+    return render(request, "blog/delete_comment.html", context)
+
+
+@login_required
 def create_post(request):
     form = AddPostForm()
 
@@ -164,17 +197,20 @@ def create_post(request):
     return render(request, "blog/create_post.html", context)
 
 
+@login_required
 def delete_post(request, slug):
     post = Post.objects.filter(slug=slug)
 
     if request.method == "POST":
         post.delete()
         return redirect("/")
+
     context = {"post": post}
 
     return render(request, "blog/delete_post.html", context)
 
 
+@login_required
 def edit_post(request, slug):
     post = Post.objects.filter(slug=slug)[0]
     form = AddPostForm(instance=post)

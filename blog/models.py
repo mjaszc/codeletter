@@ -104,5 +104,9 @@ class Notification(models.Model):
         Post, on_delete=models.CASCADE, related_name="notification_like"
     )
 
+    class Meta:
+        verbose_name = "Notification"
+        verbose_name_plural = "Notifications"
+
     def __str__(self):
         return f"Post name: {self.post_name}, Post id: {self.notification_id}, Receiver: {self.receiver_user}, Provider: {self.provider_user}"

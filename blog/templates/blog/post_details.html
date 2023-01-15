@@ -51,6 +51,10 @@
             <span> {{ comment.created_on }} </span>
         </p>
         {{ comment.body }}
+        {% if request.user == comment.user %}
+        <a href="{% url 'blog:edit_comment' comment.id %}">EDIT</a>
+        <a href="{% url 'blog:delete_comment' comment.id %}">DELETE</a>
+        {% endif %}
     </div>
     {% endfor %}
 
