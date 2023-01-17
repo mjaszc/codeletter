@@ -87,7 +87,7 @@ def post_details(request, slug):
     else:
         return HttpResponse("Page not found")
 
-    comments = post.comments.filter(approve=True)
+    comments = post.comments.filter(approve=True, parent__isnull=True)
     user = request.user
     new_comment = None
     comment_form = AddCommentForm()
@@ -105,12 +105,29 @@ def post_details(request, slug):
     if request.method == "POST":
         comment_form = AddCommentForm(data=request.POST)
         if comment_form.is_valid():
+            parent_obj = None
+
+            # getting id from parent comment
+            # reply comment section
+            try:
+                parent_id = request.POST.get("parent_id")
+            except None:
+                parent_id = None
+
+            # if reply has been submitted get id
+            if parent_id:
+                parent_obj = Comment.objects.get(id=parent_id)
+                if parent_obj:
+                    reply_comment = comment_form.save(commit=False)
+                    reply_comment.parent = parent_obj
+
+            # creating parent comment section
             new_comment = comment_form.save(commit=False)
             # when submitted, crucial info that helps trace the comment is saved
             new_comment.post = get_post
             new_comment.user = user
             new_comment.save()
-            comment_form = AddCommentForm()
+
         # liking post section
         else:
             if request.user.is_authenticated:

@@ -44,7 +44,9 @@
     </form>
     {% endif %}
 
+    <h1>Comments section</h1>
     {% for comment in comments reversed %}
+    <h3>comment</h3>
     <div>
         <p>
             {{ comment.user }}
@@ -56,6 +58,24 @@
         <a href="{% url 'blog:delete_comment' comment.id %}">DELETE</a>
         {% endif %}
     </div>
+
+    
+    {% for reply in comment.replies.all %}
+        {% if reply.approve == True %}
+            <p class="info">{{ reply.name }} | {{ reply.created }}</p>
+            <li>{{ reply.body }}</li>
+        {% endif %}
+    {% endfor %}
+
+    <h2>Reply</h2>
+    <form action="" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <!-- Hidden input for parent comment.id -->
+            <input type="hidden" name="parent_id" value="{{ comment.id }}"/>
+            <input  type="submit" value="Reply"/>
+    </form>
+
     {% endfor %}
 
     <script>
