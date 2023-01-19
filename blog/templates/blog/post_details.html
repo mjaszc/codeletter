@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 
 <html>
@@ -59,66 +59,28 @@
         {% endif %}
     </div>
 
-    
-    {% for reply in comment.replies.all %}
-        {% if reply.approve == True %}
-            <p class="info">{{ reply.name }} | {{ reply.created }}</p>
-            <li>{{ reply.body }}</li>
-        {% endif %}
-    {% endfor %}
+    <button onclick="commentReplyToggle('{{ comment.id }}')">Reply to comment</button>
 
-    <h2>Reply</h2>
+    <div class="reply-form hide" id="{{ comment.id }}">
     <form action="" method="post">
             {{ comment_form.as_p }}
             {% csrf_token %}
             <!-- Hidden input for parent comment.id -->
             <input type="hidden" name="parent_id" value="{{ comment.id }}"/>
-            <input  type="submit" value="Reply"/>
+            <input  type="submit" value="Reply" name="Reply"/>
     </form>
+    </div>
+
+    {% for reply in comment.replies.all %}
+        {% if reply.approve == True %}
+            <p class="info">{{ reply.user }}</p>
+            <p>{{ reply.body }}</p>
+        {% endif %}
+    {% endfor %}
 
     {% endfor %}
 
-    <script>
-
-        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        let likeBtn = document.querySelector('.like-btn');
-        let likeCountNum = document.querySelector('.like-count-num');
-        const likeForm = document.querySelector('.like-form');
-        const slugUrl = document.querySelector('.slugified-url');
-
-        const request = new Request(
-            `/${slugUrl.innerHTML}/`,
-            {
-                method: 'POST',
-                headers: {'X-CSRFToken': csrftoken},
-                mode: 'same-origin',
-            }
-        );
-
-
-        likeForm.addEventListener("submit", event => {
-            event.preventDefault();
-
-            fetch(request)
-                .then(response => response.text())
-                .then(html => {
-                    let parser = new DOMParser();
-                    let data = parser.parseFromString(html, 'text/html');
-
-                    if(likeBtn.innerHTML === "Like") {
-                        likeCountNum.innerHTML = parseInt(likeCountNum.innerHTML) + 1;
-                        likeBtn.innerHTML = "Dislike";
-                    } else {
-                        likeCountNum.innerHTML = parseInt(likeCountNum.innerHTML) - 1;
-                        likeBtn.innerHTML = "Like";
-                    };
-                })
-                .catch(error => {
-                console.error('Error ocurred:', error);
-                });
-        })
-    </script>
-
+    <script type="text/javascript" src="{% static 'blog/details.js' %}"></script>
     {% endblock %}
 </body>
 </html>
