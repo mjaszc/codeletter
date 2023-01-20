@@ -26,6 +26,8 @@ urlpatterns = [
         name="notifications",
     ),
     path("change-password/", views.change_password, name="change_password"),
+    path("<int:id>/edit-comment", views.edit_comment, name="edit_comment"),
+    path("<int:id>/delete-comment", views.delete_comment, name="delete_comment"),
     path("<slug:slug>/", views.post_details, name="post_details"),
     path("<slug:slug>/edit-post/", views.edit_post, name="edit_post"),
     path("<slug:slug>/delete-post/", views.delete_post, name="delete_post"),

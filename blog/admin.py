@@ -10,7 +10,7 @@ admin.site.register(Notification)
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("post", "body", "created_on", "approve")
+    list_display = ("post", "body", "created_on", "approve", "parent", "user")
     list_filter = ("created_on", "approve")
     search_fields = ("body", "post")
     actions = [

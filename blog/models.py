@@ -70,6 +70,12 @@ class Comment(models.Model):
         User, on_delete=models.SET_NULL, null=True, related_name="comment_user"
     )
     approve = models.BooleanField(default=False)
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        related_name="replies",
+        null=True,
+    )
 
     class Meta:
         verbose_name = "Comment"
@@ -77,7 +83,7 @@ class Comment(models.Model):
         ordering = ["created_on"]
 
     def __str__(self):
-        return format_html(f"Comment: {self.body} <br/> by <br/> {self.user}")
+        return f"Comment: {self.body} by {self.user}"
 
 
 class Notification(models.Model):
@@ -103,6 +109,10 @@ class Notification(models.Model):
     post_name = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name="notification_like"
     )
+
+    class Meta:
+        verbose_name = "Notification"
+        verbose_name_plural = "Notifications"
 
     def __str__(self):
         return f"Post name: {self.post_name}, Post id: {self.notification_id}, Receiver: {self.receiver_user}, Provider: {self.provider_user}"
