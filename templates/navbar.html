@@ -1,47 +1,44 @@
 <nav>
+    <div class="m-3 flex  flex-row">
+        <a href="{% url "blog:homepage" %}" class="font-bold">
+            Home
+        </a>
 
+        <a href="{% url "blog:categories_list" %}">
+            Browse categories
+        </a>
 
-    <a href="{% url "blog:homepage" %}">
-        <p>Home</p>
-    </a>
+        {% if request.user.is_authenticated %}
+        <p>Currently logged as {{ request.user }}</p>
 
-    <a href="{% url "blog:categories_list" %}">
-        <p>Browse categories</p>
-    </a>
+        <a href="{% url 'blog:logout_user' %}" class="">
+            Logout
+        </a>
 
-    {% if request.user.is_authenticated %}
-    <p>Currently logged as {{ request.user }}</p>
+        <a href="{% url 'blog:settings_user' %}">
+            Account Settings
+        </a>
 
-    <a href="{% url 'blog:logout_user' %}">
-        <p>Logout</p>
-    </a>
+        <a href="{% url 'blog:notifications' %}">
+            Notifications
+        </a>    
 
-    <a href="{% url 'blog:settings_user' %}">
-        <p>Account Settings</p>
-    </a>
+        <a href="{% url 'blog:profile_settings' %}">
+            Profile Settings
+        </a>
 
-    <a href="{% url 'blog:notifications' %}">
-        <p>Notifications</p>
-    </a>    
+        <a href="{% url 'blog:create_post' %}">
+            Add post
+        </a>
+        {% else %}
 
-    <a href="{% url 'blog:profile_settings' %}">
-        <p>Profile Settings</p>
-    </a>
+        <a href="{% url 'blog:login_user' %}">
+            Login
+        </a>
 
-    <a href="{% url 'blog:create_post' %}">
-        <p>Add post</p>
-    </a>
-    {% else %}
-    <a href="{% url 'blog:login_user' %}">
-        <p>Login</p>
-    </a>
-
-     <a href="{% url 'blog:register_user' %}">
-        <p>Register</p>
-    </a>
-    {% endif %}
-
-   
-
-    
-   </nav>
+        <a href="{% url 'blog:register_user' %}">
+            Register
+        </a>
+        {% endif %}
+    </div>  
+</nav>

@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  purge: [
+  content: [
         './blog/templates/blog/*.{html, js}',
-        './blog/static/blog/*.js'
+        './blog/static/blog/*.{html,js}',
   ],
   theme: {
     extend: {},

@@ -6,68 +6,76 @@
 <body>
     {% block content %}
     <div>
-        <h1 class="text-3xl font-bold underline">{{ post.title }}</h1>
-        <p >{{ post.content }}</p>
-        <p>{{ post.pub_date }}</p>
-        <p class="slugified-url">{{ post.slug }}</p>
-        <p>{{ post.user }}</p>
-        <p>{{ post.category }}</p>
-        {% if request.user == post.user %}
-            <a href="{% url 'blog:edit_post' post.slug %}">EDIT</a> 
-            <a href="{% url 'blog:delete_post' post.slug %}">DELETE</a>
-        {% endif %}
-        {% if post.image %}
-            <img src="{{ post.image.url }}" alt="" width="420px" height="240px"/>
-        {% endif %}
-        <form action="" method="post" class="like-form">
+        <div>
+            <h1>{{ post.title }}</h1>
+            <p >{{ post.content }}</p>
+            <p>{{ post.pub_date }}</p>
+            <p class="slugified-url">{{ post.slug }}</p>
+            <p>{{ post.user }}</p>
+            <p >{{ post.category }}</p>
+            {% if request.user == post.user %}
+                <a href="{% url 'blog:edit_post' post.slug %}">EDIT</a> 
+                <a href="{% url 'blog:delete_post' post.slug %}">DELETE</a>
+            {% endif %}
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="" width="420px" height="240px"/>
+            {% endif %}
+        </div>
+
+        <div>
+            <form action="" method="post" class="like-form">
             {% csrf_token %}
-            <h3>Likes: <p class="like-count-num">{{ post.like.count }}</p>
-            </h3>
+            <p>Likes: <p class="like-count-num">{{ post.like.count }}</p>
+            </p>
             {% if request.user.is_authenticated %}
-            {% if liked %}
-            <button type="submit" class="like-btn">Dislike</button>
-            {% else %}
-            <button type="submit" class="like-btn">Like</button>
+                {% if liked %}
+                    <button type="submit" class="like-btn">Dislike</button>
+                {% else %}
+                    <button type="submit" class="like-btn">Like</button>
+                {% endif %}
             {% endif %}
-            {% endif %}
-        </form>
+            </form>
+        </div>
     </div>
 
-    {% if request.user.is_authenticated %}
-    <h3>Add a comment:</h3>
-    <h4>Currently logged as {{ request.user }}</h4>
-    <form action="" method="post">
+    <div>
+        {% if request.user.is_authenticated %}
+        <h3>Add a comment:</h3>
+        <h4>Currently logged as {{ request.user }}</h4>
+        <form action="" method="post">
         {% csrf_token %}
         {{ comment_form.as_p }}
         <button type="submit">Submit</button>
-    </form>
-    {% endif %}
+        </form>
+        {% endif %}
+    </div>
 
     <h1>Comments section</h1>
     {% for comment in comments reversed %}
     <h3>comment</h3>
-    <div>
+    <div class="m-3">
         <p>
             {{ comment.user }}
             <span> {{ comment.created_on }} </span>
         </p>
         {{ comment.body }}
         {% if request.user == comment.user %}
-        <a href="{% url 'blog:edit_comment' comment.id %}">EDIT</a>
-        <a href="{% url 'blog:delete_comment' comment.id %}">DELETE</a>
+        <a href="{% url 'blog:edit_comment' comment.id %}">Edit</a>
+        <a href="{% url 'blog:delete_comment' comment.id %}" class="font-bold">Delete</a>
         {% endif %}
+        <button onclick="commentReplyToggle('{{ comment.id }}')">Reply</button>
     </div>
 
-    <button onclick="commentReplyToggle('{{ comment.id }}')">Reply to comment</button>
+    
 
-    <div class="reply-form hide" id="{{ comment.id }}">
-    <form action="" method="post">
+    <div class="reply-form hidden" id="{{ comment.id }}">
+        <form action="" method="post">
             {{ comment_form.as_p }}
             {% csrf_token %}
             <!-- Hidden input for parent comment.id -->
             <input type="hidden" name="parent_id" value="{{ comment.id }}"/>
             <input  type="submit" value="Reply" name="Reply"/>
-    </form>
+        </form>
     </div>
 
     {% for reply in comment.replies.all %}
