@@ -93,9 +93,6 @@ def post_details(request, slug):
     comment_form = AddCommentForm()
     liked = None
 
-    if request.GET.get("Reply") == "Reply":
-        print("cipa")
-
     # when user enters the details section
     # this function checks if user already liked the post
     if request.user.is_authenticated:

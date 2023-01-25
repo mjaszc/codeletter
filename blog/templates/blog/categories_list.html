@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-<hr>
-<!-- hr is for visibility on page for now     -->
 {% for cat in categories %}
 <p>
     <a href="{% url 'blog:categories_list' %}{{ cat.name }}">{{ cat.name }}</a>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,16 +6,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/styles.css' %}"/>
     <title>{% block title %}Codeletter{% endblock %}</title>
 </head>
 
 <body>
-    {% include 'navbar.html' %}
 
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'blog/base.css' %}" />
-    
+    {% block navbar %}
     <header>
+        <nav class="top-0 left-0 w-full shadow">
+            <div class="container m-auto flex justify-between items-center">
+    
+                <h1 class="py-4 text-xl font-bold">Codeletter</h1>
+    
+                <ul class="flex items-center text-base font-semibold cursor-pointer">
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url "blog:homepage" %}" >Home</a>
+                    </li>
+    
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url "blog:categories_list" %}" >Browse categories</a>
+                    </li>
+    
+                    {% if request.user.is_authenticated %}
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url 'blog:notifications' %}" >Notifications</a>    
+                    </li>
+    
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url 'blog:profile_settings' %}" >Profile Settings</a>
+                    </li>
+    
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url 'blog:create_post' %}" >Add post</a>
+                    </li>
+    
+                    <li class="py-4 px-6">
+                        <p>Currently logged as {{ request.user }}</p>
+                    </li>    
+    
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url 'blog:logout_user' %}" >Logout</a>
+                    </li>
+    
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url 'blog:settings_user' %}" >Account Settings</a>
+                    </li>
+        
+                    {% else %}
+    
+                    <li class="hover:bg-gray-200 py-4 px-6">
+                        <a href="{% url 'blog:login_user' %}" >Login</a>
+                    </li>
+                    
+                    <li class="hover:bg-gray-201 py-4 px-6">
+                        <a href="{% url 'blog:register_user' %}" >Register</a>
+                    </li>
+    
+                    {% endif %}
+                </ul>  
+            </div>
+        </nav>
+        {% endblock navbar %}
+
         {% block content %}
 
         {% endblock %}
