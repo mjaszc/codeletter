@@ -8,6 +8,8 @@ function commentReplyToggle(parent_id) {
 }
 
 
+
+
 let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 let likeBtn = document.querySelector('.like-btn');
 let likeCountNum = document.querySelector('.like-count-num');

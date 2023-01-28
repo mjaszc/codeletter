@@ -1,19 +1,18 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>Notification list </h2>
-{% for notification in notifications %}
-    <div>
-        <p>
+<div>
+    <span class="inline-flex" onclick="dropdownMenuToggle()">Notifications ({{ notifications.count }})</span>
+    <div class="absolute z-10 py-6 hidden" id="dropdown">
+        {% for notification in notifications %}
             {% if notification.notification_type == "like" %}
-            <a href="{% url "blog:post_details" notification.post_name|slugify %}">
-                {{notification.provider_user}} liked your post {{notification.post_name}}
+            <a href="{% url "blog:post_details" notification.post_name|slugify %}" class="block relative">
+                {{notification.provider_user}} liked your post
             </a>
             {% elif notification.notification_type == "comment" %}
-            <a href="">
-                {{notification.provider_user}} commented your post {{notification.post_name}}
+            <a href="" class="block relative">
+                {{notification.provider_user}} commented your post
             </a>
             {% endif %}    
-        </p>
+        {% endfor %}
     </div>
-{% endfor %}
-{% endblock %}
+</div>
+
+
