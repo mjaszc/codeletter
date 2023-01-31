@@ -46,6 +46,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
     image = models.FileField(upload_to="images/", null=True, blank=True)
     like = models.ManyToManyField(User, related_name="like", blank=True)
+    views = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, default=1, blank=True, null=True
     )
