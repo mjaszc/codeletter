@@ -20,6 +20,7 @@
             <p class="slugified-url hidden">{{ post.slug }}</p>
             <p class="text-lg">Author: <span class="font-bold">{{ post.user }}</span></p>
             <p class="text-lg">Category: <span class="font-bold">{{ post.category }}</span></p>
+                <p class="text-lg">Readtime: <span class="font-bold">{{ post.get_readtime }}</span></p>
             {% if request.user == post.user %}
             <div class="my-3">
                 <a href="{% url 'blog:edit_post' post.slug %}" class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">

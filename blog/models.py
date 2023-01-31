@@ -3,6 +3,7 @@ import uuid
 from django.utils.text import slugify
 from django.utils.html import format_html
 from django.contrib.auth.models import User
+import readtime
 
 
 class Category(models.Model):
@@ -51,6 +52,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_readtime(self):
+        result = readtime.of_text(self.content)
+        return result.text
 
     def save(self, *args, **kwargs):
         """Automatically creates slug on save when you left slug empty"""
