@@ -3,7 +3,8 @@ import uuid
 from django.utils.text import slugify
 from django.utils.html import format_html
 from django.contrib.auth.models import User
-
+import readtime
+from ckeditor.fields import RichTextField
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -40,17 +41,22 @@ class Post(models.Model):
     )
     post_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=60)
-    content = models.TextField()
+    content = RichTextField(blank=True, null=True)
     pub_date = models.DateTimeField(auto_now_add=True, db_index=True)
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
     image = models.FileField(upload_to="images/", null=True, blank=True)
     like = models.ManyToManyField(User, related_name="like", blank=True)
+    views = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, default=1, blank=True, null=True
     )
 
     def __str__(self):
         return self.title
+
+    def get_readtime(self):
+        result = readtime.of_text(self.content)
+        return result.text
 
     def save(self, *args, **kwargs):
         """Automatically creates slug on save when you left slug empty"""

@@ -7,19 +7,20 @@
     {% block content %}
     <div class="px-24 py-10">
         <div class="container mx-auto flex items-center flex-col ">
-            <h1 class="font-bold text-5xl py-16">{{ post.title }}</h1>
+            <h1 class="font-bold py-16 text-3xl">{{ post.title }}</h1>
             {% if post.image %}
                 <img src="{{ post.image.url }}" alt="" class="bg-cover object-cover w-auto h-auto"/>
             {% endif %}
-            <p class="text-lg py-10">{{ post.content }}</p>
+            <p class="py-10 mx-0">{{ post.content|linebreaksbr|safe }}</p>
         </div>
 
-        <div class="container mx-auto">
-            
-            <p class="text-lg">Post created: <span class="font-bold">{{ post.pub_date }}</span></p>
+        <div class="container mx-auto py-10">
+            <p >Post created: <span class="font-bold">{{ post.pub_date }}</span></p>
             <p class="slugified-url hidden">{{ post.slug }}</p>
-            <p class="text-lg">Author: <span class="font-bold">{{ post.user }}</span></p>
-            <p class="text-lg">Category: <span class="font-bold">{{ post.category }}</span></p>
+            <p >Author: <span class="font-bold">{{ post.user }}</span></p>
+            <p >Category: <span class="font-bold">{{ post.category }}</span></p>
+            <p >Readtime: <span class="font-bold">{{ post.get_readtime }}</span></p>
+            <p >Views: <span class="font-bold">{{ post.views }}</span></p>
             {% if request.user == post.user %}
             <div class="my-3">
                 <a href="{% url 'blog:edit_post' post.slug %}" class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
@@ -49,8 +50,8 @@
 
             {% if request.user.is_authenticated %}
             <div class="pt-14">
-                <h3 class="text-lg">Add a comment:</h3>
-                <h4 class="text-lg">Currently logged as <span class="font-bold">{{ request.user }}</span></h4>
+                <h3 >Add a comment:</h3>
+                <h4 >Currently logged as <span class="font-bold">{{ request.user }}</span></h4>
                 <form action="" method="post">
                 {% csrf_token %}
                 {{ comment_form.as_p }}
@@ -59,7 +60,7 @@
                 {% endif %}
             </div>
         
-            <h1 class="text-lg font-bold py-5">Comments section</h1>
+            <h1 class="font-bold py-5">Comments section</h1>
             {% for comment in comments reversed %}
             <div class="pt-10">
                 <p>
