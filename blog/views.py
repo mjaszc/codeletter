@@ -31,13 +31,16 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import slugify
-
+from django.utils.safestring import mark_safe
 
 def homepage(request):
     q = request.POST.get("q") if request.POST.get("q") is not None else ""
 
     lookup = Q(title__icontains=q) | Q(content__icontains=q)
     posts = Post.objects.filter(lookup)
+
+    for post in posts:
+        post.content = mark_safe(post.content)
 
     post_list = Post.objects.prefetch_related().order_by("-pub_date")
     # number of posts per page
@@ -240,7 +243,8 @@ def edit_post(request, slug):
         form = AddPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return redirect("/")
+            post_slug = slugify(post.slug)
+            return redirect(f"/{post_slug}")
 
     context = {"form": form}
     return render(request, "blog/create_post.html", context)
