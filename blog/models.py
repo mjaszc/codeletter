@@ -1,10 +1,10 @@
 from django.db import models
 import uuid
 from django.utils.text import slugify
-from django.utils.html import format_html
 from django.contrib.auth.models import User
 import readtime
 from ckeditor.fields import RichTextField
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)

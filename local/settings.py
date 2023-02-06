@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "blog",
     "ckeditor",
     "debug_toolbar",
-
 ]
 
 MIDDLEWARE = [
@@ -146,17 +145,48 @@ DEBUG_TOOLBAR_PANELS = [
 
 
 CKEDITOR_CONFIGS = {
-    'default': {
-        'width': '80vw',
-        'height': '500',
-        'toolbar': 'Custom',
-        'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline'],
-            ['BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Link', 'Unlink'],
-            ['Image', 'SpecialChar'],
-            ['Source']
-        ]
+    "default": {
+        "removePlugins": "exportpdf",
+        "width": "80vw",
+        "height": "500",
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Bold", "Italic", "Underline"],
+            ["Format"],
+            [
+                "BulletedList",
+                "-",
+                "Outdent",
+                "Indent",
+                "-",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+            ],
+            ["Link", "Unlink"],
+            ["Image", "SpecialChar"],
+            ["Source"],
+        ],
+        "format_tags": "h1;h2;h3",
+        "format_h1": {
+            "element": "h1",
+            "attributes": {
+                "class": "text-6xl font-bold",
+            },
+        },
+        "format_h2": {
+            "element": "h2",
+            "attributes": {
+                "class": "text-5xl font-bold",
+            },
+        },
+        "format_h3": {
+            "element": "h3",
+            "attributes": {
+                "class": "text-4xl font-bold",
+            },
+        },
     }
 }
 
