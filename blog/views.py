@@ -33,6 +33,7 @@ from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 
+
 def homepage(request):
     q = request.POST.get("q") if request.POST.get("q") is not None else ""
 
@@ -411,7 +412,7 @@ def recover_password_request(request):
                         request,
                         """
                         Password reset sent
-                        We've emailed you instructions for setting your password, if an account exists with the email you entered. 
+                        We've emailed you instructions for setting your password, if an account exists with the email you entered.
                         You should receive them shortly.If you don't receive an email, please make sure you've entered the address
                         you registered with, and check your spam folder.
                         """,

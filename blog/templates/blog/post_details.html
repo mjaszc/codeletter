@@ -3,63 +3,69 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 <html>
+
 <body>
     {% block content %}
     <div class="px-24 py-10">
         <div class="container mx-auto flex items-center flex-col ">
             <h1 class="font-bold py-16 text-3xl">{{ post.title }}</h1>
             {% if post.image %}
-                <img src="{{ post.image.url }}" alt="" class="bg-cover object-cover w-auto h-auto"/>
+            <img src="{{ post.image.url }}" alt="" class="bg-cover object-cover w-auto h-auto" />
             {% endif %}
-            <p class="py-10 mx-0">{{ post.content|linebreaksbr|safe }}</p>
+            <p class="py-10 mx-0">{{ post.content|safe }}</p>
         </div>
 
         <div class="container mx-auto py-10">
-            <p >Post created: <span class="font-bold">{{ post.pub_date }}</span></p>
+            <p>Post created: <span class="font-bold">{{ post.pub_date }}</span></p>
             <p class="slugified-url hidden">{{ post.slug }}</p>
-            <p >Author: <span class="font-bold">{{ post.user }}</span></p>
-            <p >Category: <span class="font-bold">{{ post.category }}</span></p>
-            <p >Readtime: <span class="font-bold">{{ post.get_readtime }}</span></p>
-            <p >Views: <span class="font-bold">{{ post.views }}</span></p>
+            <p>Author: <span class="font-bold">{{ post.user }}</span></p>
+            <p>Category: <span class="font-bold">{{ post.category }}</span></p>
+            <p>Readtime: <span class="font-bold">{{ post.get_readtime }}</span></p>
+            <p>Views: <span class="font-bold">{{ post.views }}</span></p>
             {% if request.user == post.user %}
             <div class="my-3">
-                <a href="{% url 'blog:edit_post' post.slug %}" class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                <a href="{% url 'blog:edit_post' post.slug %}"
+                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
                     Edit
                 </a>
-    
-                <a href="{% url 'blog:delete_post' post.slug %}" class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+
+                <a href="{% url 'blog:delete_post' post.slug %}"
+                    class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
                     Delete
                 </a>
             </div>
             {% endif %}
-            
+
 
             <div>
                 <form action="" method="post" class="like-form">
-                {% csrf_token %}
-                <p class="py-2">Likes: <span class="like-count-num">{{ post.like.count }}</span></p>
-                {% if request.user.is_authenticated %}
+                    {% csrf_token %}
+                    <p class="py-2">Likes: <span class="like-count-num">{{ post.like.count }}</span></p>
+                    {% if request.user.is_authenticated %}
                     {% if liked %}
-                        <button type="submit" class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Dislike</button>
+                    <button type="submit"
+                        class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Dislike</button>
                     {% else %}
-                        <button type="submit" class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Like</button>
+                    <button type="submit"
+                        class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Like</button>
                     {% endif %}
-                {% endif %}
+                    {% endif %}
                 </form>
             </div>
 
             {% if request.user.is_authenticated %}
             <div class="pt-14">
-                <h3 >Add a comment:</h3>
-                <h4 >Currently logged as <span class="font-bold">{{ request.user }}</span></h4>
+                <h3>Add a comment:</h3>
+                <h4>Currently logged as <span class="font-bold">{{ request.user }}</span></h4>
                 <form action="" method="post">
-                {% csrf_token %}
-                {{ comment_form.as_p }}
-                <button type="submit" class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Submit</button>
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit"
+                        class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Submit</button>
                 </form>
                 {% endif %}
             </div>
-        
+
             <h1 class="font-bold py-5">Comments section</h1>
             {% for comment in comments reversed %}
             <div class="pt-10">
@@ -71,46 +77,50 @@
 
                 <div class="py-4">
                     {% if request.user == comment.user %}
-                    <a href="{% url 'blog:edit_comment' comment.id %}" class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    <a href="{% url 'blog:edit_comment' comment.id %}"
+                        class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
                         Edit
                     </a>
-        
-                    <a href="{% url 'blog:delete_comment' comment.id %}" class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+
+                    <a href="{% url 'blog:delete_comment' comment.id %}"
+                        class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
                         Delete
                     </a>
                     {% endif %}
-                    <button onclick="commentReplyToggle('{{ comment.id }}')" type="submit" class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Reply</button>
+                    <button onclick="commentReplyToggle('{{ comment.id }}')" type="submit"
+                        class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Reply</button>
                 </div>
 
             </div>
-        
-            
-        
+
+
+
             <div class="reply-form hidden" id="{{ comment.id }}">
                 <form action="" method="post">
                     {{ comment_form.as_p }}
                     {% csrf_token %}
                     <!-- Hidden input for parent comment.id -->
-                    <input type="hidden" name="parent_id" value="{{ comment.id }}"/>
-                    <input  type="submit" value="Reply" name="Reply"/>
+                    <input type="hidden" name="parent_id" value="{{ comment.id }}" />
+                    <input type="submit" value="Reply" name="Reply" />
                 </form>
             </div>
-        
+
             {% for reply in comment.replies.all %}
-                {% if reply.approve == True %}
-                <div class="ml-10">
-                    <p><span class="font-bold">{{ reply.user }}</span> replied:</p>
-                    <p class="py-2">{{ reply.body }}</p>
-                </div>
-                {% endif %}
-            {% endfor %}
-        
+            {% if reply.approve == True %}
+            <div class="ml-10">
+                <p><span class="font-bold">{{ reply.user }}</span> replied:</p>
+                <p class="py-2">{{ reply.body }}</p>
+            </div>
+            {% endif %}
             {% endfor %}
 
-        </div>        
+            {% endfor %}
+
+        </div>
     </div>
 
     <script type="text/javascript" src="{% static 'blog/details.js' %}"></script>
     {% endblock %}
 </body>
+
 </html>
