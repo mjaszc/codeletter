@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Profile Dashboard{% endblock %}
+
+{% block content %}
+
+<p>Posts written by {{ request.user }}: {{ posts_count }}</p>
+
+<p>Comments written by other users: {{ comments_count }}</p>
+
+<p>Likes count from other users: {{ likes_count }}</p>
+
+{% endblock %}

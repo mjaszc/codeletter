@@ -81,6 +81,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name="replies",
         null=True,
+        blank=True,
     )
 
     class Meta:

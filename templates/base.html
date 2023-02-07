@@ -42,7 +42,7 @@
                     </li>
 
                     <li class="py-4 px-6">
-                        <a href="">Currently logged as {{ request.user }}</a>
+                        <a href="{% url 'blog:profile_dashboard' %}">Currently logged as {{ request.user }}</a>
                     </li>
 
                     <li class="hover:bg-gray-200 py-4 px-6">

@@ -18,6 +18,7 @@ urlpatterns = [
         name="recover_password_confirm",
     ),
     path("logout/", views.logout_user, name="logout_user"),
+    path("dashboard/", views.profile_dashboard, name="profile_dashboard"),
     path("settings/", views.settings_user, name="settings_user"),
     path("profile-settings/", views.profile_settings_user, name="profile_settings"),
     path(

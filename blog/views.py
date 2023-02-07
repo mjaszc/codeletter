@@ -499,3 +499,36 @@ def notifications(request):
 
     context = {"notifications": notifications}
     return render(request, "blog/notifications.html", context)
+
+
+@login_required
+def profile_dashboard(request):
+    current_user = request.user
+
+    # counting the posts written by the logged in user
+    posts = Post.objects.filter(user=current_user)
+    posts_count = posts.count()
+
+    # counting added comments written by users under
+    # the posts that were created by currently logged in user
+    comments = (
+        Comment.objects.filter(post__in=posts)
+        .exclude(user=current_user)
+        .filter(approve=True)
+    )
+    comments_count = comments.count()
+
+    # counting all of the likes under the posts that were created by currently logged in user
+    likes_count = 0
+    for post in posts:
+        likes_count += post.like.count()
+
+    return render(
+        request,
+        "blog/profile_dashboard.html",
+        {
+            "posts_count": posts_count,
+            "comments_count": comments_count,
+            "likes_count": likes_count,
+        },
+    )
