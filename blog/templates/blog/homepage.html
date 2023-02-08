@@ -8,8 +8,8 @@
 {% if messages %}
 <ul>
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
 </ul>
 {% endif %}
 
@@ -18,11 +18,13 @@
     <form method="post" action="{% url 'blog:homepage' %}" class="py-10">
         {% csrf_token %}
         <div>
-            <input type="text" name="q" placeholder="Search post.." class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"/>
-            <button type="submit" class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Search</button>
+            <input type="text" name="q" placeholder="Search post.."
+                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5" />
+            <button type="submit"
+                class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Search</button>
         </div>
     </form>
-    
+
     {% for p in page_obj %}
     <article class="py-5">
         <h2 class="font-bold text-3xl pb-5">
@@ -30,12 +32,11 @@
         </h2>
         <p class="line-clamp-2"> {{ p.content|striptags|safe }}</p>
         {% if p.image %}
-            <img src="{{ p.image.url }}" alt="" class="w-96 h-46 py-5"/>
+        <img src="{{ p.image.url }}" alt="" class="w-96 h-46 py-5" />
         {% endif %}
     </article>
-
     {% endfor %}
-    
+
     <ul>
         <span class="flex">
             {% if page_obj.has_previous %}
@@ -46,35 +47,35 @@
                 <a href="?page={{ page_obj.previous_page_number }}">previous</a>
             </li>
             {% endif %}
-    
+
             {% if page_obj.number|add:'-1' > 1 %}
             <li><a href="?page={{ page_obj.number|add:'-2' }}">...</a></li>
             {% endif %}
-                
+
             {% for i in page_obj.paginator.page_range %}
-                {% if page_obj.number == i %}
-                <li>
-                    <span class="font-bold px-3">{{ i }}</span>
-                </li>
-                {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %}
-                <li class="px-3"><a href="?page={{ i }}">{{ i }}</a></li>
+            {% if page_obj.number == i %}
+            <li>
+                <span class="font-bold px-3">{{ i }}</span>
+            </li>
+            {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %} <li class="px-3"><a
+                    href="?page={{ i }}">{{ i }}</a></li>
                 {% endif %}
-            {% endfor %}
-    
-            {% if page_obj.paginator.num_pages > page_obj.number|add:'1' %}
-            <li><a href="?page={{ page_obj.number|add:'2' }}">...</a></li>
-            {% endif %}
-        
-            {% if page_obj.has_next %}
-            <li class="px-3">
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-            </li>
-            <li class="px-3">
-                <a href="?page={{ page_obj.paginator.num_pages }}">last</a>
-            </li>
-            {% endif %}
+                {% endfor %}
+
+                {% if page_obj.paginator.num_pages > page_obj.number|add:'1' %}
+                <li><a href="?page={{ page_obj.number|add:'2' }}">...</a></li>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                <li class="px-3">
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                </li>
+                <li class="px-3">
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last</a>
+                </li>
+                {% endif %}
         </span>
     </ul>
     {% endblock %}
-    
+
 </div>

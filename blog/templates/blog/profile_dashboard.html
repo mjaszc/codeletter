@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Profile Dashboard{% endblock %}
+
+{% block content %}
+
+<p>Posts written by {{ request.user }}: {{ posts_count }}</p>
+
+<p>Comments written by other users: {{ comments_count }}</p>
+
+<p>Likes count from other users: {{ likes_count }}</p>
+
+<h1 class="font-bold text-2xl pt-5">Most Liked Posts:</h1>
+
+{% for post in most_liked_posts %}
+<article class="pt-3">
+    <h2 class="font-bold text-xl">
+        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
+    </h2>
+    <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+    {% endif %}
+</article>
+{% endfor %}
+
+<h1 class="font-bold text-2xl pt-5">Most Commented Posts:</h1>
+
+{% for post in most_commented_posts %}
+<article class="pt-3">
+    <h2 class="font-bold text-xl">
+        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
+    </h2>
+    <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+    {% endif %}
+</article>
+{% endfor %}
+
+<h1 class="font-bold text-2xl pt-5">Most Viewed Posts:</h1>
+
+{% for post in most_viewed_posts %}
+<article class="pt-3">
+    <h2 class="font-bold text-xl">
+        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
+    </h2>
+    <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+    {% endif %}
+</article>
+{% endfor %}
+
+
+
+{% endblock %}
