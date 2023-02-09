@@ -1,176 +1,125 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
-from .models import Post, Category, ProfileSettings, Notification, Comment
-from django.views.generic import TemplateView, ListView
-from django.contrib.auth.models import User
-from django.core.cache import cache
-from django.http import HttpResponse
-from .forms import (
-    AddPostForm,
-    AddCommentForm,
-    ProfileSettingsForm,
-    UserRegisterForm,
-    SetNewPasswordForm,
-    PasswordResetForm,
-)
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import (
-    login,
     authenticate,
+    get_user_model,
+    login,
     logout,
     update_session_auth_hash,
-    get_user_model,
 )
-from django.core.paginator import Paginator
-from .forms import UserSettingsForm
-from django.db.models import Q, Count
-from .tokens import account_activation_token
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.models import User
+from django.core.cache import cache
+from django.core.mail import EmailMessage
+from django.core.paginator import Paginator
+from django.db.models import Count, Q
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaultfilters import slugify
-from django.utils.safestring import mark_safe
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from .forms import (
+    AddCommentForm,
+    AddPostForm,
+    PasswordResetForm,
+    ProfileSettingsForm,
+    SetNewPasswordForm,
+    UserRegisterForm,
+    UserSettingsForm,
+)
+from .models import Category, Comment, Notification, Post, ProfileSettings
+from .tokens import account_activation_token
 
 
 def homepage(request):
-    q = request.POST.get("q") if request.POST.get("q") is not None else ""
+    q = request.POST.get("q", "")
 
-    lookup = Q(title__icontains=q) | Q(content__icontains=q)
-    posts = Post.objects.filter(lookup)
+    post_list = (
+        Post.objects.filter(Q(title__icontains=q) | Q(content__icontains=q))
+        .prefetch_related()
+        .order_by("-pub_date")
+    )
 
-    for post in posts:
-        post.content = mark_safe(post.content)
-
-    post_list = Post.objects.prefetch_related().order_by("-pub_date")
     # number of posts per page
     paginator = Paginator(post_list, 2)
 
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    page_obj = paginator.get_page(request.GET.get("page"))
 
-    context = {"posts": posts, "page_obj": page_obj}
+    context = {"page_obj": page_obj}
     return render(request, "blog/homepage.html", context)
 
 
 def categories_list(request):
     categories = Category.objects.select_related().order_by("id")[:20]
 
-    context = {"categories": categories}
-
-    return render(request, "blog/categories_list.html", context)
+    return render(request, "blog/categories_list.html", {"categories": categories})
 
 
 def category_details(request, cat):
-    category = Category.objects.filter(name=cat)
-    posts = Post.objects.filter(category__name=cat)
-
-    if cache.get(cat):
-        categ = cache.get(cat)
-    else:
-        categ = Category.objects.get(name=cat)
-        cache.set(cat, categ)
-
-    if category.exists():
-        category = category
-        posts = posts
-    else:
-        return HttpResponse("Something went wrong.")
+    category = cache.get(cat)
+    if not category:
+        category = Category.objects.get(name=cat)
+        cache.set(cat, category)
+        posts = Post.objects.filter(category=category)
+    if not posts:
+        return HttpResponse("Category does not exist.")
 
     context = {"category": category, "posts": posts}
     return render(request, "blog/category_details.html", context)
 
 
 def post_details(request, slug):
-    post = Post.objects.filter(slug=slug)
-    get_post = get_object_or_404(Post, slug=slug)
-
-    if post.exists():
-        post = post[0]
-    else:
-        return HttpResponse("Page not found")
-
+    post = get_object_or_404(Post, slug=slug)
     comments = post.comments.filter(approve=True, parent__isnull=True)
-    user = request.user
-    new_comment = None
     comment_form = AddCommentForm()
-    liked = None
+    liked = False
 
-    get_post.views += 1
-    get_post.save()
-
-    # when user enters the details section
-    # this function checks if user already liked the post
     if request.user.is_authenticated:
         user = request.user
-
-        if get_post.like.filter(id=user.id).exists():
+        if post.like.filter(id=user.id).exists():
             liked = True
 
-    # commenting post section
     if request.method == "POST":
-        comment_form = AddCommentForm(data=request.POST)
+        comment_form = AddCommentForm(request.POST)
         if comment_form.is_valid():
+            parent_id = request.POST.get("parent_id", None)
             parent_obj = None
-
-            # getting id from parent comment
-            # reply comment section
-            try:
-                parent_id = request.POST.get("parent_id")
-            except None:
-                parent_id = None
-
-            # if reply has been submitted get id
             if parent_id:
                 parent_obj = Comment.objects.get(id=parent_id)
-                if parent_obj:
-                    reply_comment = comment_form.save(commit=False)
-                    reply_comment.parent = parent_obj
 
-            # creating parent comment section
             new_comment = comment_form.save(commit=False)
-            # when submitted, crucial info that helps trace the comment is saved
-            new_comment.post = get_post
+            new_comment.post = post
             new_comment.user = user
+            new_comment.parent = parent_obj
             new_comment.save()
             comment_form = AddCommentForm()
-
-        # liking post section
         else:
             if request.user.is_authenticated:
-                # when user clicks the like button
-                if get_post.like.filter(id=user.id).exists():
-                    get_post.like.remove(user.id)
+                if post.like.filter(id=user.id).exists():
+                    post.like.remove(user.id)
                     liked = False
-                    # deleting notification for user when user unlike the post
-                    if Notification.objects.filter(
-                        provider_user=request.user, notification_type=Notification.LIKE
-                    ).exists():
-                        Notification.objects.filter(
-                            provider_user=request.user,
-                            notification_type=Notification.LIKE,
-                        ).delete()
+                    Notification.objects.filter(
+                        provider_user=user, notification_type=Notification.LIKE
+                    ).delete()
                 else:
-                    get_post.like.add(user.id)
+                    post.like.add(user.id)
                     liked = True
-
-                    # creating and saving notification in db for spec user
-                    notification = Notification.objects.create(
-                        receiver_user=get_post.user,
+                    Notification.objects.create(
+                        receiver_user=post.user,
                         provider_user=user,
                         notification_type=Notification.LIKE,
-                        post_name=Post.objects.get(title=get_post.title),
+                        post_name=post,
                     )
-                    notification.save()
-
             comment_form = AddCommentForm()
+
+    post.views += 1
+    post.save()
 
     context = {
         "post": post,
         "comments": comments,
-        "new_commment": new_comment,
         "comment_form": comment_form,
         "liked": liked,
     }
@@ -179,14 +128,14 @@ def post_details(request, slug):
 
 @login_required
 def edit_comment(request, id):
-    comment = Comment.objects.filter(pk=id).first()
+    comment = get_object_or_404(Comment, pk=id)
     form = AddCommentForm(instance=comment)
 
     if request.method == "POST":
         form = AddCommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
-            post_slug = slugify(comment.post)
+            post_slug = slugify(comment.post.title)
             return redirect(f"/{post_slug}")
 
     context = {"form": form}
@@ -195,11 +144,11 @@ def edit_comment(request, id):
 
 @login_required
 def delete_comment(request, id):
-    comment = Comment.objects.filter(pk=id).first()
+    comment = get_object_or_404(Comment, pk=id)
 
     if request.method == "POST":
         comment.delete()
-        post_slug = slugify(comment.post)
+        post_slug = slugify(comment.post.title)
         return redirect(f"/{post_slug}")
 
     context = {"comment": comment}
@@ -209,8 +158,6 @@ def delete_comment(request, id):
 
 @login_required
 def create_post(request):
-    form = AddPostForm()
-
     if request.method == "POST":
         form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -218,6 +165,8 @@ def create_post(request):
             created_post.user = request.user
             created_post.save()
             return redirect("/")
+        else:
+            form = AddPostForm()
 
     context = {"form": form}
     return render(request, "blog/create_post.html", context)
@@ -225,7 +174,7 @@ def create_post(request):
 
 @login_required
 def delete_post(request, slug):
-    post = Post.objects.filter(slug=slug)
+    post = get_object_or_404(Post, slug=slug)
 
     if request.method == "POST":
         post.delete()
@@ -238,15 +187,14 @@ def delete_post(request, slug):
 
 @login_required
 def edit_post(request, slug):
-    post = Post.objects.filter(slug=slug)[0]
+    post = get_object_or_404(Post, slug=slug)
     form = AddPostForm(instance=post)
 
     if request.method == "POST":
         form = AddPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            post_slug = slugify(post.slug)
-            return redirect(f"/{post_slug}")
+            return redirect(post.get_absolute_url())
 
     context = {"form": form}
     return render(request, "blog/create_post.html", context)
@@ -255,77 +203,74 @@ def edit_post(request, slug):
 # Account verification process
 def verify_email(request, uidb64, token):
     User = get_user_model()
+    # Decode the uid and assign it to the user's primary key
     try:
-        # Decoding uid and assigning to user's primary key
-        uid = force_str(urlsafe_base64_decode(uidb64))
+        uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
+        messages.error(request, "Activation link is invalid or expired.")
+        return redirect("/")
 
-    # Checking if token is valid and if user exists and activating account
-    if user is not None and account_activation_token.check_token(user, token):
+    # Check if the token is valid and if the user exists and activate the account
+    if account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-
         messages.success(
             request,
-            "Thank you for your email confirmation. Now you can login your account.",
+            "Thank you for your email confirmation. You can now log in to your account.",
         )
         return redirect("/login")
     else:
         messages.error(request, "Activation link is invalid or expired.")
-
-    return redirect("/")
+        return redirect("/")
 
 
 # Function is called when user submits the register form with selected parameters
-def send_verify_email(request, user, email_address):
+def send_verification_email(request, user, email_address):
     message_subject = "Activate your account"
     message_content = render_to_string(
         "blog/message_verify_account.html",
         {
             "user": user.username,
             "domain": get_current_site(request).domain,
-            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+            "uid": urlsafe_base64_encode(force_bytes(user.pk)).decode(),
             "token": account_activation_token.make_token(user),
             "protocol": "https" if request.is_secure() else "http",
         },
     )
-    # Specifying parameters for sending an verification email
+    # Specify parameters for sending a verification email
     email = EmailMessage(message_subject, message_content, to=[email_address])
+    success = email.send()
 
-    if email.send():
+    if success:
         messages.success(
             request,
-            f"Success! Dear {user}, we send activation link to the {email_address}. To complete registration please follow the instruction\
-        given in the email message. NOTE: Check the SPAM folder.",
+            f"Success! Dear {user.username}, we have sent an activation link to {email_address}.",
         )
     else:
         messages.error(
-            request, f"There's a problem with sending email to {email_address}."
+            request, f"There was a problem sending an email to {email_address}."
         )
 
 
-def register_user(request):
+def register(request):
     form = UserRegisterForm()
 
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
 
         if form.is_valid():
-            if (
-                User.objects.filter(email=form.cleaned_data.get("email")).exists()
-                is False
-            ):
+            email = form.cleaned_data.get("email")
+
+            if not User.objects.filter(email=email).exists():
                 user = form.save(commit=False)
                 user.username = user.username.lower()
-                # Setting the inactive user in order to set status to active after account verification
                 user.is_active = False
                 user.save()
-                send_verify_email(request, user, form.cleaned_data.get("email"))
+                send_verification_email(request, user, email)
                 return redirect("/")
             else:
-                messages.error(request, "User with that email already exists.")
+                messages.error(request, "A user with that email already exists.")
 
     context = {"form": form}
     return render(request, "blog/register_user.html", context)
@@ -333,28 +278,30 @@ def register_user(request):
 
 def login_user(request):
     if request.method == "POST":
-        username = request.POST["username"].lower()
-        password = request.POST["password"]
+        username = request.POST.get("username", "").lower()
+        password = request.POST.get("password", "")
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
             return redirect("/")
         else:
-            return HttpResponse("Something went wrong.")
+            messages.error(request, "Incorrect username or password.")
 
-    else:
-        return render(request, "blog/login_user.html")
+    return render(request, "blog/login_user.html")
 
 
 @login_required
 def settings_user(request):
-    form = UserSettingsForm(instance=request.user)
-
+    user = request.user
     if request.method == "POST":
-        form = UserSettingsForm(request.POST, instance=request.user)
+        form = UserSettingsForm(request.POST, instance=user)
+
         if form.is_valid():
             form.save()
             return redirect("/")
+        else:
+            form = UserSettingsForm(instance=user)
 
     context = {"form": form}
     return render(request, "blog/settings_user.html", context)
@@ -362,17 +309,12 @@ def settings_user(request):
 
 @login_required
 def profile_settings_user(request):
-    user = ProfileSettings.objects.filter(user=request.user).first()
-
-    # if user enters for the first time to the Profile Settings
-    # this function is automatically creates form for to fill
-    if not user:
-        user = ProfileSettings.objects.create(user=request.user)
-
-    form = ProfileSettingsForm(instance=user)
+    user_profile = ProfileSettings.objects.get_or_create(user=request.user)[0]
+    form = ProfileSettingsForm(instance=user_profile)
 
     if request.method == "POST":
-        form = ProfileSettingsForm(request.POST, request.FILES, instance=user)
+        form = ProfileSettingsForm(request.POST, request.FILES, instance=user_profile)
+
         if form.is_valid():
             form.save()
             return redirect("/")
@@ -392,41 +334,34 @@ def recover_password_request(request):
         form = PasswordResetForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data.get("email")
-            get_user = get_user_model().objects.filter(email=user_email).first()
-            if get_user:
-                message_subject = "Password Reset Request"
-                message_content = render_to_string(
+            user = get_user_model().objects.filter(email=user_email).first()
+            if user:
+                subject = "Password Reset Request"
+                content = render_to_string(
                     "blog/message_recover_password.html",
                     {
-                        "user": get_user,
+                        "user": user,
                         "domain": get_current_site(request).domain,
-                        "uid": urlsafe_base64_encode(force_bytes(get_user.pk)),
-                        "token": account_activation_token.make_token(get_user),
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "token": account_activation_token.make_token(user),
                         "protocol": "https" if request.is_secure() else "http",
                     },
                 )
-                email = EmailMessage(
-                    message_subject, message_content, to=[get_user.email]
-                )
+                email = EmailMessage(subject, content, to=[user.email])
                 if email.send():
                     messages.success(
                         request,
-                        """
-                        Password reset sent
-                        We've emailed you instructions for setting your password, if an account exists with the email you entered.
-                        You should receive them shortly.If you don't receive an email, please make sure you've entered the address
-                        you registered with, and check your spam folder.
-                        """,
+                        "Password reset instructions sent. Please check your email.",
                     )
                 else:
                     messages.error(
                         request,
-                        "Something went wrong, it might be server error.",
+                        "Something went wrong, it might be a server error.",
                     )
             else:
                 messages.error(
                     request,
-                    "Problem with resetting password, email does not exist in our database.",
+                    "No account exists with the given email address.",
                 )
 
         return redirect("/")
@@ -438,21 +373,20 @@ def recover_password_request(request):
 
 def recover_password_confirm(request, uidb64, token):
     User = get_user_model()
-
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, user.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
-    if user is not None and account_activation_token.check_token(user, token):
+    if user and account_activation_token.check_token(user, token):
         if request.method == "POST":
             form = SetNewPasswordForm(user, request.POST)
             if form.is_valid():
                 form.save()
                 messages.success(
                     request,
-                    "Your password has been set. You may go ahead and log in now.",
+                    "Password reset successfully. You can now log in.",
                 )
                 return redirect("/")
             else:
@@ -471,6 +405,7 @@ def recover_password_confirm(request, uidb64, token):
 
 @login_required
 def change_password(request):
+    form = PasswordChangeForm(request.user)
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -479,24 +414,17 @@ def change_password(request):
             messages.success(request, "Your password has been changed")
             return redirect("/")
         else:
-            for error in list(form.errors.values()):
-                messages.error(request, error)
-    else:
-        form = PasswordChangeForm(request.user)
+            messages.error(request, form.errors.values())
 
-    context = {"form": form}
-    return render(request, "blog/change_password.html", context)
+    return render(request, "blog/change_password.html", {"form": form})
 
 
-@login_required
 def notifications(request):
     notifications = Notification.objects.filter(receiver_user=request.user)
 
-    # checking all unread notifiactions as a read after leaving notifications section
+    # checking all unread notifications as a read after leaving notifications section
     if not request.GET.get("notifications"):
-        read_notifications = Notification.objects.filter(
-            receiver_user=request.user
-        ).update(is_seen=True)
+        Notification.objects.filter(receiver_user=request.user).update(is_seen=True)
 
     context = {"notifications": notifications}
     return render(request, "blog/notifications.html", context)
