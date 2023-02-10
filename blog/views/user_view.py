@@ -25,14 +25,13 @@ from ..tokens import account_activation_token
 @login_required
 def settings_user(request):
     user = request.user
+    form = UserSettingsForm(instance=user)
     if request.method == "POST":
         form = UserSettingsForm(request.POST, instance=user)
 
         if form.is_valid():
             form.save()
             return redirect("/")
-        else:
-            form = UserSettingsForm(instance=user)
 
     context = {"form": form}
     return render(request, "blog/settings_user.html", context)

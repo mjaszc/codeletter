@@ -1,9 +1,9 @@
-from ..models import Post, Category
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.cache import cache
+from ..models import Post, Category
 
 
 def homepage(request):

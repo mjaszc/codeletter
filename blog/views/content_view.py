@@ -96,6 +96,7 @@ def delete_comment(request, id):
 
 @login_required
 def create_post(request):
+    form = AddPostForm()
     if request.method == "POST":
         form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -103,8 +104,6 @@ def create_post(request):
             created_post.user = request.user
             created_post.save()
             return redirect("/")
-        else:
-            form = AddPostForm()
 
     context = {"form": form}
     return render(request, "blog/create_post.html", context)
