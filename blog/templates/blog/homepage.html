@@ -25,14 +25,14 @@
         </div>
     </form>
 
-    {% for p in page_obj %}
+    {% for post in page_obj %}
     <article class="py-5">
         <h2 class="font-bold text-3xl pb-5">
-            <a href="{% url 'blog:homepage' %}{{p.title|slugify}}">{{ p.title }}</a>
+            <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
         </h2>
-        <p class="line-clamp-2"> {{ p.content|striptags|safe }}</p>
-        {% if p.image %}
-        <img src="{{ p.image.url }}" alt="" class="w-96 h-46 py-5" />
+        <p class="line-clamp-2"> {{ post.content|striptags|safe }}</p>
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="" class="w-96 h-46 py-5" />
         {% endif %}
     </article>
     {% endfor %}
