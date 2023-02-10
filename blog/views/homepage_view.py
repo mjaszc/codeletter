@@ -36,8 +36,8 @@ def category_details(request, cat):
         category = Category.objects.get(name=cat)
         cache.set(cat, category)
         posts = Post.objects.filter(category=category)
-    if not posts:
-        return HttpResponse("Category does not exist.")
+        if not posts:
+            return HttpResponse("Category does not exist.")
 
     context = {"category": category, "posts": posts}
     return render(request, "blog/category_details.html", context)

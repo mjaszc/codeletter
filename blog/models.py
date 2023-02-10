@@ -3,6 +3,7 @@ import uuid
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 import readtime
+from django.urls import reverse
 from ckeditor.fields import RichTextField
 
 
@@ -66,6 +67,9 @@ class Post(models.Model):
         if not self.slug == self.title:
             self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("blog:post_details", kwargs={"slug": self.slug})
 
 
 class Comment(models.Model):
