@@ -38,6 +38,7 @@ urlpatterns = [
         name="recover_password_confirm",
     ),
     #
+    #
     # CONTENT URLS
     path("create-post/", content_view.create_post, name="create_post"),
     path("<slug:slug>/edit-post/", content_view.edit_post, name="edit_post"),
@@ -45,5 +46,4 @@ urlpatterns = [
     path("<int:id>/edit-comment", content_view.edit_comment, name="edit_comment"),
     path("<int:id>/delete-comment", content_view.delete_comment, name="delete_comment"),
     path("<slug:slug>/", content_view.post_details, name="post_details"),
-    #
 ]

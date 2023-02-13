@@ -32,6 +32,7 @@ def categories_list(request):
 
 def category_details(request, cat):
     category = cache.get(cat)
+    posts = None
     if not category:
         category = Category.objects.get(name=cat)
         cache.set(cat, category)
