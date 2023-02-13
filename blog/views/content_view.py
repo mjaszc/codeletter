@@ -6,6 +6,7 @@ from ..forms import (
     AddPostForm,
 )
 from ..models import Post, Comment, Notification
+from django.urls import reverse
 
 
 def post_details(request, slug):
@@ -13,17 +14,18 @@ def post_details(request, slug):
     comments = post.comments.filter(approve=True, parent__isnull=True)
     comment_form = AddCommentForm()
     liked = False
+    user = request.user
 
     if request.user.is_authenticated:
-        user = request.user
-        if post.like.filter(id=user.id).exists():
-            liked = True
+        liked = post.like.filter(id=user.id).exists()
 
     if request.method == "POST":
         comment_form = AddCommentForm(request.POST)
+
         if comment_form.is_valid():
-            parent_id = request.POST.get("parent_id", None)
+            parent_id = request.POST.get("parent_id")
             parent_obj = None
+
             if parent_id:
                 parent_obj = Comment.objects.get(id=parent_id)
 
@@ -33,23 +35,23 @@ def post_details(request, slug):
             new_comment.parent = parent_obj
             new_comment.save()
             comment_form = AddCommentForm()
+
         else:
-            if request.user.is_authenticated:
-                if post.like.filter(id=user.id).exists():
-                    post.like.remove(user.id)
-                    liked = False
-                    Notification.objects.filter(
-                        provider_user=user, notification_type=Notification.LIKE
-                    ).delete()
-                else:
-                    post.like.add(user.id)
-                    liked = True
-                    Notification.objects.create(
-                        receiver_user=post.user,
-                        provider_user=user,
-                        notification_type=Notification.LIKE,
-                        post_name=post,
-                    )
+            if liked:
+                post.like.remove(user.id)
+                liked = False
+                Notification.objects.filter(
+                    provider_user=user, notification_type=Notification.LIKE
+                ).delete()
+            else:
+                post.like.add(user.id)
+                liked = True
+                Notification.objects.create(
+                    receiver_user=post.user,
+                    provider_user=user,
+                    notification_type=Notification.LIKE,
+                    post_name=post,
+                )
             comment_form = AddCommentForm()
 
     post.views += 1
@@ -74,7 +76,8 @@ def edit_comment(request, id):
         if form.is_valid():
             form.save()
             post_slug = slugify(comment.post.title)
-            return redirect(f"/{post_slug}")
+            url = reverse("blog:post_details", args=[post_slug])
+            return redirect(url)
 
     context = {"form": form}
     return render(request, "blog/edit_comment.html", context)
@@ -87,7 +90,8 @@ def delete_comment(request, id):
     if request.method == "POST":
         comment.delete()
         post_slug = slugify(comment.post.title)
-        return redirect(f"/{post_slug}")
+        url = reverse("blog:post_details", args=[post_slug])
+        return redirect(url)
 
     context = {"comment": comment}
 
@@ -103,7 +107,8 @@ def create_post(request):
             created_post = form.save(commit=False)
             created_post.user = request.user
             created_post.save()
-            return redirect("/")
+            url = reverse("blog:homepage")
+            return redirect(url)
 
     context = {"form": form}
     return render(request, "blog/create_post.html", context)
@@ -115,7 +120,8 @@ def delete_post(request, slug):
 
     if request.method == "POST":
         post.delete()
-        return redirect("/")
+        url = reverse("blog:homepage")
+        return redirect(url)
 
     context = {"post": post}
 
