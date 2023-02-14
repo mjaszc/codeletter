@@ -137,7 +137,9 @@ def edit_post(request, slug):
         form = AddPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return redirect(post.get_absolute_url())
+            post_slug = slugify(post.title)
+            url = reverse("blog:post_details", args=[post_slug])
+            return redirect(url)
 
     context = {"form": form}
     return render(request, "blog/create_post.html", context)
