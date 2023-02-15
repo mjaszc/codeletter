@@ -32,13 +32,12 @@ def categories_list(request):
 
 def category_details(request, cat):
     category = cache.get(cat)
-    posts = None
     if not category:
-        category = Category.objects.get(name=cat)
-        cache.set(cat, category)
-        posts = Post.objects.filter(category=category)
-        if not posts:
+        try:
+            category = Category.objects.get(name=cat)
+        except Category.DoesNotExist:
             return HttpResponse("Category does not exist.")
-
+        cache.set(cat, category)
+    posts = Post.objects.filter(category=category)
     context = {"category": category, "posts": posts}
     return render(request, "blog/category_details.html", context)
