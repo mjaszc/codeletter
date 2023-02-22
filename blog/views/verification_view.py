@@ -14,8 +14,9 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from ..forms import (
     UserRegisterForm,
 )
-from ..tokens import account_activation_token
+from blog.tokens import account_activation_token
 from django.utils.encoding import force_bytes
+from django.urls import reverse
 
 
 # Account verification process
@@ -37,7 +38,7 @@ def verify_email(request, uidb64, token):
             request,
             "Thank you for your email confirmation. You can now log in to your account.",
         )
-        return redirect("/login")
+        return redirect(reverse("blog:login_user"))
     else:
         messages.error(request, "Activation link is invalid or expired.")
         return redirect("/")
@@ -51,7 +52,7 @@ def send_verification_email(request, user, email_address):
         {
             "user": user.username,
             "domain": get_current_site(request).domain,
-            "uid": urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": account_activation_token.make_token(user),
             "protocol": "https" if request.is_secure() else "http",
         },
@@ -102,7 +103,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            return redirect("/")
+            return redirect(reverse("blog:home"))
         else:
             messages.error(request, "Incorrect username or password.")
 
