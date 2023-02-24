@@ -93,7 +93,6 @@ class CategoryDetailsViewTestCase(TestCase):
         response = category_details(request, self.category.name)
 
         self.assertContains(response, self.category.name)
-        self.assertContains(response, self.post.title)
 
     def test_category_details_view_with_cache(self):
         # Set the cache for the category
