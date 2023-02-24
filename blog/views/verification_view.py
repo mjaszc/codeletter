@@ -87,7 +87,7 @@ def register_user(request):
                 user.is_active = False
                 user.save()
                 send_verification_email(request, user, email)
-                return redirect("/")
+                return redirect(reverse("blog:homepage"))
             else:
                 messages.error(request, "A user with that email already exists.")
 
@@ -103,7 +103,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            return redirect(reverse("blog:home"))
+            return redirect(reverse("blog:homepage"))
         else:
             messages.error(request, "Incorrect username or password.")
 

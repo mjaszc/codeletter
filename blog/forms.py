@@ -6,7 +6,7 @@ from django.contrib.auth.forms import (
     PasswordResetForm,
 )
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -35,7 +35,7 @@ class AddPostForm(forms.ModelForm):
 
 class UserSettingsForm(forms.ModelForm):
     class Meta:
-        model = AbstractUser
+        model = User
         fields = ("username", "email", "first_name", "last_name")
 
 
