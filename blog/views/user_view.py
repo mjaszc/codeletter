@@ -20,6 +20,7 @@ from ..forms import (
 )
 from ..models import Comment, Notification, Post, ProfileSettings
 from ..tokens import account_activation_token
+from django.urls import reverse
 
 
 @login_required
@@ -31,7 +32,8 @@ def settings_user(request):
 
         if form.is_valid():
             form.save()
-            return redirect("/")
+            url = reverse("blog:homepage")
+            return redirect(url)
 
     context = {"form": form}
     return render(request, "blog/settings_user.html", context)
@@ -47,13 +49,13 @@ def profile_settings_user(request):
 
         if form.is_valid():
             form.save()
-            return redirect("/")
+            url = reverse("blog:homepage")
+            return redirect(url)
 
     context = {"form": form}
     return render(request, "blog/settings_profile.html", context)
 
 
-@login_required
 def recover_password_request(request):
     if request.method == "POST":
         form = PasswordResetForm(request.POST)
@@ -89,7 +91,8 @@ def recover_password_request(request):
                     "No account exists with the given email address.",
                 )
 
-        return redirect("/")
+        url = reverse("blog:homepage")
+        return redirect(url)
 
     form = PasswordResetForm()
     context = {"form": form}
@@ -98,6 +101,9 @@ def recover_password_request(request):
 
 def recover_password_confirm(request, uidb64, token):
     User = get_user_model()
+
+    home_url = reverse("blog:homepage")
+
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
@@ -113,7 +119,7 @@ def recover_password_confirm(request, uidb64, token):
                     request,
                     "Password reset successfully. You can now log in.",
                 )
-                return redirect("/")
+                return redirect(home_url)
             else:
                 for error in list(form.errors.values()):
                     messages.error(request, error)
@@ -124,8 +130,7 @@ def recover_password_confirm(request, uidb64, token):
     else:
         messages.error(request, "Link is expired.")
 
-    messages.error(request, "Something went wrong")
-    return redirect("/")
+    return redirect(home_url)
 
 
 @login_required
@@ -137,7 +142,8 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request, "Your password has been changed")
-            return redirect("/")
+            url = reverse("blog:homepage")
+            return redirect(url)
         else:
             messages.error(request, form.errors.values())
 
