@@ -165,6 +165,8 @@ def notifications(request):
 def profile_dashboard(request):
     current_user = request.user
 
+    user_profile = ProfileSettings.objects.get_or_create(user=current_user)[0]
+
     # Count the posts written by the logged in user
     posts = Post.objects.filter(user=current_user)
     posts_count = posts.count()
@@ -221,5 +223,6 @@ def profile_dashboard(request):
             "most_liked_posts": most_liked_posts,
             "most_commented_posts": most_commented_posts,
             "most_viewed_posts": most_viewed_posts,
+            "user_profile": user_profile,
         },
     )

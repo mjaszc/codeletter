@@ -5,23 +5,29 @@
 {% block title %}Profile Dashboard{% endblock %}
 
 {% block content %}
-<div class="flex mx-16">
-    <div class="pr-32">
+<div class="flex mx-28">
+    <div class="pr-40">
         <!-- PROFILE  -->
         <div class="pt-10">
-            <h1>Background photo</h1>
-            <h1>Profile image</h1>
+            <img src="{{ user_profile.image.url }}" alt="profile_image" class="rounded-full w-32 h-32 object-cover">
         </div>
 
-
-
-        <!-- PROFILE INFO -->
-
-        <div class="pt-3 pb-10">
-            <h1>Profile info</h1>
+        <div class="pt-3">
+            <h1>Bio: {{ user_profile.bio|striptags }}</h1>
+            <h1>Location: {{ user_profile.location}}</h1>
         </div>
 
+        <div class="pt-3">
+            <h1>{{ user_profile.twitter_url }}</h1>
+            <h1>{{ user_profile.website_url }} </h1>
+        </div>
 
+        <div class="pb-6 pt-3">
+            <a href="{% url 'blog:profile_settings' %}"
+                class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                Edit profile...
+            </a>
+        </div>
 
 
         <!-- POST AND STATISTICS  -->
