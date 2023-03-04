@@ -11,6 +11,8 @@ from blog.tokens import account_activation_token
 from django.contrib.messages import get_messages
 from django.contrib.auth.hashers import make_password, check_password
 from blog.models import Post, Comment, Category
+from django.core.files.uploadedfile import SimpleUploadedFile
+from blog.models import ProfileSettings
 
 
 class SettingsUserTestCase(TestCase):
@@ -265,25 +267,116 @@ class ChangePasswordTestCase(TestCase):
         self.client.logout()
 
 
+# class ProfileDashboardTestCase(TestCase):
+# def setUp(self):
+#     self.client = Client()
+#     self.user = User.objects.create_user(username="testuser", password="testpass")
+#     self.user1 = User.objects.create_user(username="testuser1", password="testpass")
+#     self.client.login(username="testuser", password="testpass")
+#     self.category = Category.objects.create(name="Test Category")
+#     self.post1 = Post.objects.create(
+#         title="Test post 1",
+#         content="Test content 1",
+#         user=self.user,
+#         category=self.category,
+#         views=2,
+#     )
+#     self.post2 = Post.objects.create(
+#         title="Test post 2",
+#         content="Test content 2",
+#         user=self.user,
+#         category=self.category,
+#         views=1,
+#     )
+#     self.post3 = Post.objects.create(
+#         title="Test post 3",
+#         content="Test content 3",
+#         user=self.user,
+#         category=self.category,
+#         views=3,
+#     )
+
+#     self.comment1 = Comment.objects.create(
+#         body="Test comment 1", user=self.user1, post=self.post1, approve=True
+#     )
+#     self.comment2 = Comment.objects.create(
+#         body="Test comment 2", user=self.user1, post=self.post1, approve=True
+#     )
+#     self.comment3 = Comment.objects.create(
+#         body="Test comment 3", user=self.user, post=self.post2, approve=False
+#     )
+#     self.comment4 = Comment.objects.create(
+#         body="Test comment 4", user=self.user, post=self.post2, approve=False
+#     )
+#     self.comment5 = Comment.objects.create(
+#         body="Test comment 5", user=self.user, post=self.post2, approve=False
+#     )
+#     self.comment6 = Comment.objects.create(
+#         body="Test comment 6", user=self.user, post=self.post3, approve=False
+#     )
+
+#     self.post1.like.set([self.user1])
+#     self.post2.like.set([self.user])
+
+#     self.post2.like.set([self.user1])
+
+# def test_profile_dashboard_view(self):
+#     response = self.client.get(reverse("blog:profile_dashboard"))
+
+#     self.assertEqual(response.status_code, 200)
+#     self.assertContains(response, "Test post 1")
+#     self.assertContains(response, "Test post 2")
+#     self.assertContains(response, "Test post 3")
+#     self.assertContains(response, "Posts written by testuser: 3")
+#     self.assertContains(response, "Comments written by other users: 2")
+#     self.assertContains(response, "Likes count from other users: 2")
+
+# def test_profile_dashboard_view_most_liked_posts(self):
+#     response = self.client.get(reverse("blog:profile_dashboard"))
+#     self.assertEqual(response.status_code, 200)
+#     self.assertQuerysetEqual(
+#         response.context["most_liked_posts"],
+#         ["<Post: Test post 2>", "<Post: Test post 1>", "<Post: Test post 3>"],
+#         ordered=False,
+#     )
+
+# def test_profile_dashboard_view_most_viewed_posts(self):
+#     response = self.client.get(reverse("blog:profile_dashboard"))
+#     self.assertEqual(response.status_code, 200)
+#     self.assertQuerysetEqual(
+#         response.context["most_viewed_posts"],
+#         ["<Post: Test post 3>", "<Post: Test post 1>", "<Post: Test post 2>"],
+#         ordered=False,
+#     )
+
+
 class ProfileDashboardTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(
-            username="testuser", password="testpass"
-        )
-        self.user1 = User.objects.create_user(
-            username="testuser1", password="testpass"
-        )
+        self.user = User.objects.create_user(username="testuser", password="testpass")
+        self.user1 = User.objects.create_user(username="testuser1", password="testpass")
         self.client.login(username="testuser", password="testpass")
         self.category = Category.objects.create(name="Test Category")
         self.post1 = Post.objects.create(
-            title="Test post 1", content="Test content 1", user=self.user, category=self.category, views=2
+            title="Test post 1",
+            content="Test content 1",
+            user=self.user,
+            category=self.category,
+            views=2,
         )
         self.post2 = Post.objects.create(
-            title="Test post 2", content="Test content 2", user=self.user, category=self.category, views=1
+            title="Test post 2",
+            content="Test content 2",
+            user=self.user,
+            category=self.category,
+            views=1,
         )
         self.post3 = Post.objects.create(
-            title="Test post 3", content="Test content 3", user=self.user, category=self.category, views=3
+            title="Test post 3",
+            content="Test content 3",
+            user=self.user,
+            category=self.category,
+            views=3,
         )
 
         self.comment1 = Comment.objects.create(
@@ -307,19 +400,30 @@ class ProfileDashboardTestCase(TestCase):
 
         self.post1.like.set([self.user1])
         self.post2.like.set([self.user])
-
         self.post2.like.set([self.user1])
+
+        # create a fake image file
+        image_file = SimpleUploadedFile(
+            "test_image.jpg", b"file_content", content_type="image/jpeg"
+        )
+        # create a ProfileSettings instance for the logged-in user with the image file
+        user_profile = ProfileSettings.objects.get_or_create(user=self.user)[0]
+        user_profile.image = image_file
+        user_profile.save()
 
     def test_profile_dashboard_view(self):
         response = self.client.get(reverse("blog:profile_dashboard"))
         self.assertEqual(response.status_code, 200)
+        # check if the image is present in the response
+        user_profile = ProfileSettings.objects.get(user=self.user)
+        self.assertContains(response, user_profile.image.url)
         self.assertContains(response, "Test post 1")
         self.assertContains(response, "Test post 2")
         self.assertContains(response, "Test post 3")
         self.assertContains(response, "Posts written by testuser: 3")
         self.assertContains(response, "Comments written by other users: 2")
         self.assertContains(response, "Likes count from other users: 2")
-       
+
     def test_profile_dashboard_view_most_liked_posts(self):
         response = self.client.get(reverse("blog:profile_dashboard"))
         self.assertEqual(response.status_code, 200)
@@ -337,5 +441,3 @@ class ProfileDashboardTestCase(TestCase):
             ["<Post: Test post 3>", "<Post: Test post 1>", "<Post: Test post 2>"],
             ordered=False,
         )
-
-    
