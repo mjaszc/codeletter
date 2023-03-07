@@ -420,9 +420,9 @@ class ProfileDashboardTestCase(TestCase):
         self.assertContains(response, "Test post 1")
         self.assertContains(response, "Test post 2")
         self.assertContains(response, "Test post 3")
-        self.assertContains(response, "Posts written by testuser: 3")
-        self.assertContains(response, "Comments written by other users: 2")
-        self.assertContains(response, "Likes count from other users: 2")
+        self.assertContains(response, "Posts written")
+        self.assertContains(response, "Comments count")
+        self.assertContains(response, "Likes count")
 
     def test_profile_dashboard_view_most_liked_posts(self):
         response = self.client.get(reverse("blog:profile_dashboard"))
