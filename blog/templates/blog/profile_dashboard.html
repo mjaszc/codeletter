@@ -5,95 +5,129 @@
 {% block title %}Profile Dashboard{% endblock %}
 
 {% block content %}
-<div class="flex mx-28">
-    <div class="pr-40">
+<div class="flex mx-28 ">
+    <main class="pr-20 pt-10">
         <!-- PROFILE  -->
-        <div class="pt-10">
-            <img src="{{ user_profile.image.url }}" alt="profile_image" class="rounded-full w-32 h-32 object-cover">
-        </div>
+        <section class="border rounded-lg bg-white px-16 py-8">
+            <figure class="mt-10">
+                <img src="{{ user_profile.image.url }}" alt="profile_image" class="rounded-full w-32 h-32 object-cover">
+            </figure>
 
-        <div class="pt-3">
-            <h1>Bio: {{ user_profile.bio|striptags }}</h1>
-            <h1>Location: {{ user_profile.location}}</h1>
-        </div>
-
-        <div class="pt-3">
-            <h1>{{ user_profile.twitter_url }}</h1>
-            <h1>{{ user_profile.website_url }} </h1>
-        </div>
-
-        <div class="pb-6 pt-3">
-            <a href="{% url 'blog:profile_settings' %}"
-                class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
-                Edit profile...
-            </a>
-        </div>
-
-
-        <!-- POST AND STATISTICS  -->
-        <div>
-            <div>
-                <p>Posts written by {{ request.user }}: {{ posts_count }}</p>
-                <p>Comments written by other users: {{ comments_count }}</p>
-                <p>Likes count from other users: {{ likes_count }}</p>
+            <div class="mt-5">
+                <h1 class="text-xl font-extrabold">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+                <p class="text-sm">@{{ request.user.username }}</p>
+                <h2 class="font-extrabold mt-5">About Me:</h2>
+                <p>{{ user_profile.bio|striptags }}</p>
+                <div class="flex mt-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M12 12q.825 0 1.413-.588T14 10q0-.825-.588-1.413T12 8q-.825 0-1.413.588T10 10q0 .825.588 1.413T12 12Zm0 7.35q3.05-2.8 4.525-5.088T18 10.2q0-2.725-1.738-4.462T12 4Q9.475 4 7.737 5.738T6 10.2q0 1.775 1.475 4.063T12 19.35ZM12 22q-4.025-3.425-6.012-6.362T4 10.2q0-3.75 2.413-5.975T12 2q3.175 0 5.588 2.225T20 10.2q0 2.5-1.988 5.438T12 22Zm0-11.8Z" />
+                    </svg>
+                    <span class="pl-1">{{ user_profile.location }}</span>
+                </div>
             </div>
 
-            <div>
-                <h1 class="font-bold text-2xl pt-5">Most Liked Posts:</h1>
+            <!-- SOCIAL URLS -->
+            <div class="mt-5">
+                {% if user_profile.twitter_url is not None %}
+                <h1>{{ user_profile.twitter_url }}</h1>
+                {% endif %}
+                {% if user_profile.website_url is not None %}
+                <h1>{{ user_profile.website_url }} </h1>
+                {% endif %}
+                {% if user_profile.instagram_url is not None %}
+                <h1>{{ user_profile.instagram_url }} </h1>
+                {% endif %}
+                {% if user_profile.linked_in_url is not None %}
+                <h1>{{ user_profile.linked_in_url }} </h1>
+                {% endif %}
+            </div>
 
+            <button class="mb-10">
+                <a href="{% url 'blog:profile_settings' %}"
+                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    Edit profile...
+                </a>
+            </button>
+        </section>
+
+
+        <!-- STATISTICS  -->
+        <section class="mt-5">
+            <div class="border rounded-lg bg-white px-16 py-8">
+                <ul class="flex justify-between">
+                    <li class="text-lg flex flex-col items-center">
+                        Posts written <span class="font-extrabold text-xl pt-3">{{ posts_count}}</span>
+                    </li>
+                    <li class="text-lg flex flex-col items-center">
+                        Comments count <span class="font-extrabold text-xl pt-3">{{ comments_count }}</span>
+                    </li>
+                    <li class="text-lg flex flex-col items-center">
+                        Likes count <span class="font-extrabold text-xl pt-3">{{ likes_count }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- POSTS  -->
+            <div class="pt-5 border rounded-lg bg-white px-16 py-8 mt-5">
+                <h1 class="font-extrabold text-2xl pt-5">Most liked posts:</h1>
                 {% for post in most_liked_posts %}
-                <article class="pt-3">
+                <article class="mt-10">
                     <h2 class="font-bold text-xl">
                         <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
                     </h2>
                     <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
                     {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                    <figure>
+                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                    </figure>
                     {% endif %}
                 </article>
                 {% endfor %}
             </div>
 
-            <div>
-                <h1 class="font-bold text-2xl pt-5">Most Commented Posts:</h1>
-
+            <div class="border rounded-lg bg-white px-16 py-8 mt-5">
+                <h1 class="font-extrabold text-2xl pt-5">Most commented posts:</h1>
                 {% for post in most_commented_posts %}
-                <article class="pt-3">
+                <article class="mt-10">
                     <h2 class="font-bold text-xl">
                         <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
                     </h2>
                     <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
                     {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                    <figure>
+                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                    </figure>
                     {% endif %}
                 </article>
                 {% endfor %}
             </div>
 
-            <div>
-                <h1 class="font-bold text-2xl pt-5">Most Viewed Posts:</h1>
-
+            <div class="border rounded-lg bg-white px-16 py-8 my-5">
+                <h1 class="font-extrabold text-2xl pt-5">Most viewed posts:</h1>
                 {% for post in most_viewed_posts %}
-                <article class="pt-3">
+                <article class="mt-10">
                     <h2 class="font-bold text-xl">
                         <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
                     </h2>
                     <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
                     {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                    <figure>
+                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                    </figure>
                     {% endif %}
                 </article>
                 {% endfor %}
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- SIDEBAR -->
-    <div class="pt-10">
+    <aside class="flex flex-col justify-center mt-10 border rounded-lg bg-white px-16 py-8 max-h-80">
         <div class="px-32">
         </div>
 
-        <div class="py-5">
+        <div>
             <h1>Example header:</h1>
         </div>
 
@@ -106,6 +140,6 @@
             <h1>image</h1>
             <h1>test text test text test text test text test text test text test text </h1>
         </div>
-    </div>
+    </aside>
 </div>
 {% endblock %}
