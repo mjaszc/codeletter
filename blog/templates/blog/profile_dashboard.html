@@ -2,22 +2,31 @@
 
 {% load static %}
 
+{% load custom_tags %}
+
 {% block title %}Profile Dashboard{% endblock %}
 
 {% block content %}
 <div class="flex mx-28 ">
     <main class="pr-20 pt-10">
         <!-- PROFILE  -->
+
         <section class="border rounded-lg bg-white px-16 py-8">
+            {% if get_profile_image is not None%}
             <figure class="mt-10">
                 <img src="{{ user_profile.image.url }}" alt="profile_image" class="rounded-full w-32 h-32 object-cover">
             </figure>
+            {% else %}
+            <div></div>
+            {% endif %}
+
 
             <div class="mt-5">
                 <h1 class="text-xl font-extrabold">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
                 <p class="text-sm">@{{ request.user.username }}</p>
                 <h2 class="font-extrabold mt-5">About Me:</h2>
                 <p>{{ user_profile.bio|striptags }}</p>
+                {% if user_profile.location is not None%}
                 <div class="flex mt-5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path fill="currentColor"
@@ -25,6 +34,7 @@
                     </svg>
                     <span class="pl-1">{{ user_profile.location }}</span>
                 </div>
+                {% endif %}
             </div>
 
             <!-- SOCIAL URLS -->

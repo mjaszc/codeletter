@@ -1,4 +1,7 @@
 {% load static %}
+
+{% load custom_tags %}
+
 <nav class="top-0 left-0 w-full shadow">
     <div class="container m-auto flex justify-between items-center">
 
@@ -35,8 +38,14 @@
             </li>
 
             <li class="py-4 px-6">
-                <a href="{% url 'blog:profile_dashboard' %}"><img src="{{ profile_image }}" alt="profile_image"
-                        class="rounded-full w-10 h-10 object-cover"></a>
+                <a href="{% url 'blog:profile_dashboard' %}">
+                    {% if get_profile_image is not None %}
+                    <img src="{{ request.user | get_profile_image }}" alt="profile_image"
+                        class="rounded-full w-10 h-10 object-cover">
+                    {% else %}
+                    <h1>{{ request.user }}</h1>
+                    {% endif %}
+                </a>
             </li>
 
             <li class="hover:bg-gray-200 py-4 px-6">

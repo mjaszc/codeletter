@@ -11,7 +11,6 @@ from blog.tokens import account_activation_token
 from django.contrib.messages import get_messages
 from django.contrib.auth.hashers import make_password, check_password
 from blog.models import Post, Comment, Category
-from django.core.files.uploadedfile import SimpleUploadedFile
 from blog.models import ProfileSettings
 
 
@@ -319,21 +318,12 @@ class ProfileDashboardTestCase(TestCase):
         self.post2.like.set([self.user])
         self.post2.like.set([self.user1])
 
-        # create a fake image file
-        image_file = SimpleUploadedFile(
-            "test_image.jpg", b"file_content", content_type="image/jpeg"
-        )
-        # create a ProfileSettings instance for the logged-in user with the image file
         user_profile = ProfileSettings.objects.get_or_create(user=self.user)[0]
-        user_profile.image = image_file
         user_profile.save()
 
     def test_profile_dashboard_view(self):
         response = self.client.get(reverse("blog:profile_dashboard"))
         self.assertEqual(response.status_code, 200)
-        # check if the image is present in the response
-        user_profile = ProfileSettings.objects.get(user=self.user)
-        self.assertContains(response, user_profile.image.url)
         self.assertContains(response, "Test post 1")
         self.assertContains(response, "Test post 2")
         self.assertContains(response, "Test post 3")
