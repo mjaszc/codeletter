@@ -924,6 +924,10 @@ html {
   font-weight: 600;
 }
 
+.font-black {
+  font-weight: 900;
+}
+
 .leading-6 {
   line-height: 1.5rem;
 }
