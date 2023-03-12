@@ -53,12 +53,19 @@
                 {% endif %}
             </div>
 
-            <button class="mb-10">
+            <button class="mb-5">
                 <a href="{% url 'blog:profile_settings' %}"
                     class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
-                    Edit profile...
+                    Edit profile
                 </a>
             </button>
+
+            <div class="mt-5 mb-10">
+                <a href="{% url 'blog:settings_user' %}"
+                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    Profile Settings
+                </a>
+            </div>
         </section>
 
 

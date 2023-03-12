@@ -5,7 +5,7 @@
 <nav class="top-0 left-0 w-full shadow">
     <div class="container m-auto flex justify-between items-center">
 
-        <h1 class="py-4 text-2xl font-bold">Codeletter</h1>
+        <a href="{% url 'blog:homepage' %}" class="py-4 text-2xl font-bold">Codeletter</a>
 
         <ul class="flex items-center text-xs font-bold">
             <li class="">
@@ -19,14 +19,7 @@
                 </a>
             </li>
 
-            <!-- <li class=" py-4 px-6">
-                <a href="{% url 'blog:categories_list' %}">Browse categories</a>
-            </li> -->
-
             {% if request.user.is_authenticated %}
-            <!-- <li class=" py-4 px-6">
-                <a href="{% url 'blog:profile_settings' %}">Profile Settings</a>
-            </li> -->
 
             <li class="">
                 <a href="{% url 'blog:create_post' %}"
@@ -79,20 +72,20 @@
                 </a>
             </li>
 
-            <!-- <li class=" py-4 px-6">
-                <a href="{% url 'blog:settings_user' %}">Account Settings</a>
-            </li> -->
-
             {% else %}
 
             <li class=" py-4 px-6">
                 <a href="{% url 'blog:login_user' %}"
-                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">Login</a>
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    Login
+                </a>
             </li>
 
             <li class="hover:bg-gray-201 py-4 px-6">
                 <a href="{% url 'blog:register_user' %}"
-                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer">Register</a>
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer">
+                    Register
+                </a>
             </li>
 
             {% endif %}
