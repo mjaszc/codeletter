@@ -22,13 +22,13 @@ urlpatterns = [
     #
     #
     # USER URLS
-    path("settings/", user_view.settings_user, name="settings_user"),
+    path("settings/", user_view.user_settings, name="settings_user"),
     path(
         "notifications/",
         user_view.notifications,
         name="notifications",
     ),
-    path("profile-settings/", user_view.profile_settings_user, name="profile_settings"),
+    path("profile-settings/", user_view.profile_settings, name="profile_settings"),
     path("dashboard/", user_view.profile_dashboard, name="profile_dashboard"),
     path("change-password/", user_view.change_password, name="change_password"),
     path("recover", user_view.recover_password_request, name="recover_password"),

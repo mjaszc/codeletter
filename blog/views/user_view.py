@@ -24,7 +24,7 @@ from django.urls import reverse
 
 
 @login_required
-def settings_user(request):
+def user_settings(request):
     user = request.user
     form = UserSettingsForm(instance=user)
     if request.method == "POST":
@@ -40,7 +40,7 @@ def settings_user(request):
 
 
 @login_required
-def profile_settings_user(request):
+def profile_settings(request):
     user_profile = ProfileSettings.objects.get_or_create(user=request.user)[0]
     form = ProfileSettingsForm(instance=user_profile)
 

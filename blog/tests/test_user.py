@@ -14,7 +14,7 @@ from blog.models import Post, Comment, Category
 from blog.models import ProfileSettings
 
 
-class SettingsUserTestCase(TestCase):
+class UserSettingsTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
@@ -104,6 +104,41 @@ class SettingsUserTestCase(TestCase):
         self.assertEqual(self.user.first_name, "New")
         self.assertEqual(self.user.last_name, "User")
         self.assertEqual(self.user.username, "Newuser")
+
+
+class ProfileSettingsTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="testuser", password="testpass")
+        self.client.login(username="testuser", password="testpass")
+        self.url = reverse("blog:profile_settings")
+
+    def test_profile_settings_view_uses_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, "blog/settings_profile.html")
+
+    def test_profile_settings_view_post(self):
+        form_data = {
+            "bio": "Test bio",
+            "location": "Test location",
+            "twitter_url": "https://twitter.com/testuser",
+            "website_url": "https://www.testuser.com",
+            "linkedin_url": "https://www.linkedin.com/in/testuser",
+        }
+
+        # Post the form data
+        response = self.client.post(self.url, form_data, follow=True)
+
+        # Check that the form is valid and the user profile is updated
+        user_profile = ProfileSettings.objects.get(user=self.user)
+        self.assertTrue(response.status_code, 302)
+        self.assertEqual(user_profile.bio, "Test bio")
+        self.assertEqual(user_profile.location, "Test location")
+        self.assertEqual(user_profile.twitter_url, "https://twitter.com/testuser")
+        self.assertEqual(user_profile.website_url, "https://www.testuser.com")
+        self.assertEqual(
+            user_profile.linkedin_url, "https://www.linkedin.com/in/testuser"
+        )
 
 
 class RecoverPasswordRequestTestCase(TestCase):
