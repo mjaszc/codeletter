@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load custom_tags %}
+
 {% block title %}Profile Dashboard{% endblock %}
 
 {% block content %}
@@ -9,22 +11,29 @@
     <main class="pr-20 pt-10">
         <!-- PROFILE  -->
         <section class="border rounded-lg bg-white px-16 py-8">
+            {% if request.user|get_profile_image %}
             <figure class="mt-10">
                 <img src="{{ user_profile.image.url }}" alt="profile_image" class="rounded-full w-32 h-32 object-cover">
             </figure>
+            {% else %}
+            <div></div>
+            {% endif %}
+
 
             <div class="mt-5">
                 <h1 class="text-xl font-extrabold">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
                 <p class="text-sm">@{{ request.user.username }}</p>
                 <h2 class="font-extrabold mt-5">About Me:</h2>
                 <p>{{ user_profile.bio|striptags }}</p>
+                {% if user_profile.location is not None%}
                 <div class="flex mt-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path fill="currentColor"
-                            d="M12 12q.825 0 1.413-.588T14 10q0-.825-.588-1.413T12 8q-.825 0-1.413.588T10 10q0 .825.588 1.413T12 12Zm0 7.35q3.05-2.8 4.525-5.088T18 10.2q0-2.725-1.738-4.462T12 4Q9.475 4 7.737 5.738T6 10.2q0 1.775 1.475 4.063T12 19.35ZM12 22q-4.025-3.425-6.012-6.362T4 10.2q0-3.75 2.413-5.975T12 2q3.175 0 5.588 2.225T20 10.2q0 2.5-1.988 5.438T12 22Zm0-11.8Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="m21 3l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1L21 3" />
                     </svg>
                     <span class="pl-1">{{ user_profile.location }}</span>
                 </div>
+                {% endif %}
             </div>
 
             <!-- SOCIAL URLS -->
@@ -43,12 +52,19 @@
                 {% endif %}
             </div>
 
-            <button class="mb-10">
+            <button class="mt-5">
                 <a href="{% url 'blog:profile_settings' %}"
                     class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
-                    Edit profile...
+                    Edit profile
                 </a>
             </button>
+
+            <div class="mt-5 mb-10">
+                <a href="{% url 'blog:settings_user' %}"
+                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    Profile Settings
+                </a>
+            </div>
         </section>
 
 

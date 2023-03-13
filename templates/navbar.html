@@ -1,51 +1,112 @@
 {% load static %}
+
+{% load custom_tags %}
+
 <nav class="top-0 left-0 w-full shadow">
     <div class="container m-auto flex justify-between items-center">
 
-        <h1 class="py-4 text-xl font-bold">Codeletter</h1>
+        <a href="{% url 'blog:homepage' %}" class="py-4 text-2xl font-bold">Codeletter</a>
 
-        <ul class="flex items-center text-xs font-semibold cursor-pointer">
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:homepage' %}">Home</a>
-            </li>
-
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:categories_list' %}">Browse categories</a>
+        <ul class="flex items-center text-xs font-bold">
+            <li class="">
+                <a href="{% url 'blog:homepage' %}"
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2">
+                            <path d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" />
+                            <path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6" />
+                        </g>
+                    </svg>
+                    <span class="ml-2">Home</span>
+                </a>
             </li>
 
             {% if request.user.is_authenticated %}
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:notifications' %}">Notifications</a>
+
+            <li class="">
+                <a href="{% url 'blog:create_post' %}"
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 20L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16v4h4zm5.5-13.5l4 4M16 18h4m-2-2v4" />
+                    </svg>
+                    <span class="ml-2">Write post</span>
+                </a>
             </li>
 
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:profile_settings' %}">Profile Settings</a>
+            <li class="mx-4">
+                {% if request.user|get_profile_image %}
+                <a href=" {% url 'blog:profile_dashboard' %}" class="mx-2">
+                    <img src="{{ request.user|get_profile_image }}" alt="profile_image"
+                        class="rounded-full w-10 h-10 object-cover">
+                </a>
+                {% else %}
+                <a href="{% url 'blog:profile_dashboard' %}"
+                    class="py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                    </svg>
+                    <span class="ml-2">{{ request.user }}</span>
+                </a>
+                {% endif %}
             </li>
 
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:create_post' %}">Add post</a>
+            <li class="">
+                <a href="{% url 'blog:notifications' %}"
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6M9 17v1a3 3 0 0 0 6 0v-1" />
+                    </svg>
+                    <span class="ml-2">Notifications</span>
+                </a>
             </li>
 
-            <li class="py-4 px-6">
-                <a href="{% url 'blog:profile_dashboard' %}">Currently logged as {{ request.user }}</a>
-            </li>
-
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:logout_user' %}">Logout</a>
-            </li>
-
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:settings_user' %}">Account Settings</a>
+            <li class="">
+                <a href="{% url 'blog:logout_user' %}"
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2">
+                            <path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2" />
+                            <path d="M7 12h14l-3-3m0 6l3-3" />
+                        </g>
+                    </svg>
+                    <span class="ml-2">Logout</span>
+                </a>
             </li>
 
             {% else %}
 
-            <li class="hover:bg-gray-200 py-4 px-6">
-                <a href="{% url 'blog:login_user' %}">Login</a>
+            <li class="">
+                <a href="{% url 'blog:login_user' %}"
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2">
+                            <path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2" />
+                            <path d="M20 12H7l3-3m0 6l-3-3" />
+                        </g>
+                    </svg>
+                    <span class="ml-2">Log In</span>
+                </a>
             </li>
 
-            <li class="hover:bg-gray-201 py-4 px-6">
-                <a href="{% url 'blog:register_user' %}">Register</a>
+            <li class="\">
+                <a href="{% url 'blog:register_user' %}"
+                    class="mx-2 py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 9h8V5.414a1 1 0 0 1 1.707-.707l6.586 6.586a1 1 0 0 1 0 1.414l-6.586 6.586A1 1 0 0 1 12 18.586V15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z" />
+                    </svg>
+                    <span class="ml-2">Sign Up</span>
+                </a>
             </li>
 
             {% endif %}

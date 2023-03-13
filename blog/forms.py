@@ -48,8 +48,7 @@ class ProfileSettingsForm(forms.ModelForm):
             "location",
             "twitter_url",
             "website_url",
-            "instagram_url",
-            "linked_in_url",
+            "linkedin_url",
         )
 
 

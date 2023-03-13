@@ -25,8 +25,7 @@ class ProfileSettings(models.Model):
     image = models.FileField(upload_to="images/", null=True, blank=True)
     twitter_url = models.CharField(max_length=255, null=True, blank=True)
     website_url = models.CharField(max_length=255, null=True, blank=True)
-    instagram_url = models.CharField(max_length=255, null=True, blank=True)
-    linked_in_url = models.CharField(max_length=255, null=True, blank=True)
+    linkedin_url = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = "Profile Setting"
