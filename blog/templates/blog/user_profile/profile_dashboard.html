@@ -4,6 +4,8 @@
 
 {% load custom_tags %}
 
+{% load markdown %}
+
 {% block title %}Profile Dashboard{% endblock %}
 
 {% block content %}
@@ -92,7 +94,7 @@
                     <h2 class="font-bold text-xl">
                         <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
                     </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
+                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
                     {% if post.image %}
                     <figure>
                         <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
@@ -109,7 +111,7 @@
                     <h2 class="font-bold text-xl">
                         <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
                     </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
+                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
                     {% if post.image %}
                     <figure>
                         <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
@@ -126,7 +128,7 @@
                     <h2 class="font-bold text-xl">
                         <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
                     </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|striptags|safe }}</p>
+                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
                     {% if post.image %}
                     <figure>
                         <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />

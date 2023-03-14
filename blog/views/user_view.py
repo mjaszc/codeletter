@@ -169,6 +169,7 @@ def profile_dashboard(request):
 
     # Count the posts written by the logged in user
     posts = Post.objects.filter(user=current_user)
+
     posts_count = posts.count()
 
     # Count added comments written by users under
@@ -186,7 +187,6 @@ def profile_dashboard(request):
         likes_count += post.like.count()
 
     # Display most liked posts
-    posts = Post.objects.filter(user=current_user)
     most_liked_posts = (
         posts.annotate(like_count=Count("like"))
         .order_by("-like_count")
@@ -199,8 +199,6 @@ def profile_dashboard(request):
     comments_count = comments.count()
 
     # Display most commented posts
-    posts = Post.objects.filter(user=current_user)
-
     most_commented_posts = (
         posts.annotate(comment_count=Count("comments"))
         .exclude(comments__user=current_user)
