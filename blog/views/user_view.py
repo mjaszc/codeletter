@@ -21,7 +21,6 @@ from ..forms import (
 from ..models import Comment, Notification, Post, ProfileSettings
 from ..tokens import account_activation_token
 from django.urls import reverse
-import markdown
 
 
 @login_required
