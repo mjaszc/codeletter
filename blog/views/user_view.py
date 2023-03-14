@@ -171,10 +171,6 @@ def profile_dashboard(request):
     # Count the posts written by the logged in user
     posts = Post.objects.filter(user=current_user)
 
-    # Loop through each post and apply markdown formatting to their content
-    for post in posts:
-        post.content = markdown.markdown(post.content)
-
     posts_count = posts.count()
 
     # Count added comments written by users under
