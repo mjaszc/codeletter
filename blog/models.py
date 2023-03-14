@@ -4,7 +4,6 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 import readtime
 from django.urls import reverse
-from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -41,7 +40,7 @@ class Post(models.Model):
     )
     post_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=60)
-    content = RichTextField(blank=True, null=True)
+    content = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True, db_index=True)
     slug = models.SlugField(max_length=255, auto_created=True, blank=True)
     image = models.FileField(upload_to="images/", null=True, blank=True)

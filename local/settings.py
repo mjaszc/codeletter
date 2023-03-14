@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_cleanup.apps.CleanupConfig",
     "blog",
-    "ckeditor",
+    "tailwind",
+    "theme",
+    "django_browser_reload",
     "debug_toolbar",
 ]
 
@@ -55,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = "local.urls"
@@ -143,54 +146,6 @@ DEBUG_TOOLBAR_PANELS = [
     "debug_toolbar.panels.profiling.ProfilingPanel",
 ]
 
-
-CKEDITOR_CONFIGS = {
-    "default": {
-        "removePlugins": "exportpdf",
-        "width": "80vw",
-        "height": "500",
-        "toolbar": "Custom",
-        "toolbar_Custom": [
-            ["Bold", "Italic", "Underline"],
-            ["Format"],
-            [
-                "BulletedList",
-                "-",
-                "Outdent",
-                "Indent",
-                "-",
-                "JustifyLeft",
-                "JustifyCenter",
-                "JustifyRight",
-                "JustifyBlock",
-            ],
-            ["Link", "Unlink"],
-            ["Image", "SpecialChar"],
-            ["Source"],
-        ],
-        "format_tags": "h1;h2;h3",
-        "format_h1": {
-            "element": "h1",
-            "attributes": {
-                "class": "text-6xl font-bold",
-            },
-        },
-        "format_h2": {
-            "element": "h2",
-            "attributes": {
-                "class": "text-5xl font-bold",
-            },
-        },
-        "format_h3": {
-            "element": "h3",
-            "attributes": {
-                "class": "text-4xl font-bold",
-            },
-        },
-    }
-}
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -218,6 +173,7 @@ CACHES = {
 
 STATIC_URL = "static/"
 
+TAILWIND_APP_NAME = "theme"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -1,21 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load markdown %}
+
 {% block title %}{{ post.title }}{% endblock %}
 
 <html>
 
 <body>
     {% block content %}
-    <div class="px-24 py-10">
-        <div class="container mx-auto flex items-center flex-col ">
-            <h1 class="font-bold py-16 text-3xl">{{ post.title }}</h1>
+    <div class="">
+        <div class="container mx-auto flex items-center justify-center flex-col prose">
+            <h1 class="font-extrabold py-16 text-5xl">{{ post.title }}</h1>
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="" class="bg-cover object-cover w-auto h-auto" />
             {% endif %}
-            <p class="py-10 mx-0">{{ post.content|safe }}</p>
         </div>
 
-        <div class="container mx-auto py-10">
+        <div class="container prose mx-auto">
+            <article class="">{{ post.content|markdown }}</article>
+        </div>
+
+
+        <div class="container py-10">
             <p>Post created: <span class="font-bold">{{ post.pub_date }}</span></p>
             <p class="slugified-url hidden">{{ post.slug }}</p>
             <p>Author: <span class="font-bold">{{ post.user }}</span></p>
