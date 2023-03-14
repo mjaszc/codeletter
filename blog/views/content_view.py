@@ -63,7 +63,7 @@ def post_details(request, slug):
         "comment_form": comment_form,
         "liked": liked,
     }
-    return render(request, "blog/post_details.html", context)
+    return render(request, "blog/post/post_details.html", context)
 
 
 @login_required
@@ -80,7 +80,7 @@ def edit_comment(request, id):
             return redirect(url)
 
     context = {"form": form}
-    return render(request, "blog/edit_comment.html", context)
+    return render(request, "blog/comment/edit_comment.html", context)
 
 
 @login_required
@@ -95,7 +95,7 @@ def delete_comment(request, id):
 
     context = {"comment": comment}
 
-    return render(request, "blog/delete_comment.html", context)
+    return render(request, "blog/comment/delete_comment.html", context)
 
 
 @login_required
@@ -111,7 +111,7 @@ def create_post(request):
             return redirect(url)
 
     context = {"form": form}
-    return render(request, "blog/create_post.html", context)
+    return render(request, "blog/post/create_post.html", context)
 
 
 @login_required
@@ -125,7 +125,7 @@ def delete_post(request, slug):
 
     context = {"post": post}
 
-    return render(request, "blog/delete_post.html", context)
+    return render(request, "blog/post/delete_post.html", context)
 
 
 @login_required
@@ -142,4 +142,4 @@ def edit_post(request, slug):
             return redirect(url)
 
     context = {"form": form}
-    return render(request, "blog/create_post.html", context)
+    return render(request, "blog/post/create_post.html", context)

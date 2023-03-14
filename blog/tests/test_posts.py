@@ -16,7 +16,7 @@ class CreatePostTestCase(TestCase):
     def test_create_post_view_uses_correct_template(self):
         self.client.login(username="testuser", password="password")
         response = self.client.get(reverse("blog:create_post"))
-        self.assertTemplateUsed(response, "blog/create_post.html")
+        self.assertTemplateUsed(response, "blog/post/create_post.html")
 
     def test_create_post_view_redirect_to_homepage_after_creating_post(self):
         data = {
@@ -53,7 +53,7 @@ class DeletePostTestCase(TestCase):
             reverse("blog:delete_post", kwargs={"slug": self.post.slug})
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/delete_post.html")
+        self.assertTemplateUsed(response, "blog/post/delete_post.html")
 
     def test_delete_post_view_redirect_to_homepage_after_delete(self):
         response = self.client.post(
@@ -82,7 +82,7 @@ class EditPostTestCase(TestCase):
         slug = slugify(self.post.title)
         response = self.client.get(reverse("blog:edit_post", args=[slug]))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/create_post.html")
+        self.assertTemplateUsed(response, "blog/post/create_post.html")
 
     def test_edit_post_view_redirect_to_post_details_after_editing(self):
         data = {

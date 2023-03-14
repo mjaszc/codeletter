@@ -29,7 +29,7 @@ class UserSettingsTestCase(TestCase):
     def test_user_settings_view_uses_correct_template(self):
         response = self.client.get(reverse("blog:settings_user"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/settings_user.html")
+        self.assertTemplateUsed(response, "blog/user_profile/settings_user.html")
 
     def test_change_email(self):
         response = self.client.post(
@@ -115,7 +115,7 @@ class ProfileSettingsTestCase(TestCase):
 
     def test_profile_settings_view_uses_correct_template(self):
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, "blog/settings_profile.html")
+        self.assertTemplateUsed(response, "blog/user_profile/settings_profile.html")
 
     def test_profile_settings_view_post(self):
         form_data = {
@@ -147,7 +147,7 @@ class RecoverPasswordRequestTestCase(TestCase):
 
     def test_recover_password_view_uses_correct_template(self):
         response = self.client.get(reverse("blog:recover_password"))
-        self.assertTemplateUsed(response, "blog/recover_password.html")
+        self.assertTemplateUsed(response, "blog/password/recover_password.html")
 
     def test_recover_password_request_valid_email(self):
         user = get_user_model().objects.create_user(
@@ -266,7 +266,7 @@ class RecoverPasswordConfirmTestCase(TestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/recover_password_confirm.html")
+        self.assertTemplateUsed(response, "blog/password/recover_password_confirm.html")
         self.assertContains(response, "The two password fields didn’t match.")
 
 
@@ -282,7 +282,7 @@ class ChangePasswordTestCase(TestCase):
         self.client.login(username="testuser", password="testpass")
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/change_password.html")
+        self.assertTemplateUsed(response, "blog/password/change_password.html")
         self.assertIsNotNone(response.context["form"])
         self.client.logout()
 

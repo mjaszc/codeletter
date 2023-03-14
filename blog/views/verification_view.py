@@ -48,7 +48,7 @@ def verify_email(request, uidb64, token):
 def send_verification_email(request, user, email_address):
     message_subject = "Activate your account"
     message_content = render_to_string(
-        "blog/message_verify_account.html",
+        "blog/email_message/message_verify_account.html",
         {
             "user": user.username,
             "domain": get_current_site(request).domain,
@@ -92,7 +92,7 @@ def register_user(request):
                 messages.error(request, "A user with that email already exists.")
 
     context = {"form": form}
-    return render(request, "blog/register_user.html", context)
+    return render(request, "blog/homepage/register_user.html", context)
 
 
 def login_user(request):
@@ -107,7 +107,7 @@ def login_user(request):
         else:
             messages.error(request, "Incorrect username or password.")
 
-    return render(request, "blog/login_user.html")
+    return render(request, "blog/homepage/login_user.html")
 
 
 def logout_user(request):
