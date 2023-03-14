@@ -55,7 +55,7 @@ class EditCommentViewTestCase(TestCase):
     def test_edit_comment_view_uses_correct_template(self):
         self.client.login(username="testuser", password="testpassword")
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, "blog/edit_comment.html")
+        self.assertTemplateUsed(response, "blog/comment/edit_comment.html")
 
     def test_edit_comment_view_redirects_to_post_detail_view_on_success(self):
         self.client.login(username="testuser", password="testpassword")
@@ -93,7 +93,7 @@ class DeleteCommentViewTestCase(TestCase):
     def test_delete_comment_view_uses_correct_template(self):
         self.client.login(username="testuser", password="testpassword")
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, "blog/delete_comment.html")
+        self.assertTemplateUsed(response, "blog/comment/delete_comment.html")
 
     def test_delete_comment_view_redirects_to_post_detail_view_on_success(self):
         self.client.login(username="testuser", password="testpassword")

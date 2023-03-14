@@ -36,7 +36,7 @@ class HomepageTests(TestCase):
     def test_homepage_view(self):
         response = self.client.get(reverse("blog:homepage"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/homepage.html")
+        self.assertTemplateUsed(response, "blog/homepage/homepage.html")
 
     def test_search_title(self):
         response = self.client.post(reverse("blog:homepage"), {"q": "Test Post 1"})
@@ -60,7 +60,7 @@ class CategoriesListViewTestCase(TestCase):
 
     def test_view_uses_correct_template(self):
         response = self.client.get(reverse("blog:categories_list"))
-        self.assertTemplateUsed(response, "blog/categories_list.html")
+        self.assertTemplateUsed(response, "blog/category/categories_list.html")
 
     def test_view_displays_categories_in_id_order(self):
         response = self.client.get(reverse("blog:categories_list"))

@@ -21,13 +21,15 @@ def homepage(request):
     page_obj = paginator.get_page(request.GET.get("page"))
 
     context = {"page_obj": page_obj}
-    return render(request, "blog/homepage.html", context)
+    return render(request, "blog/homepage/homepage.html", context)
 
 
 def categories_list(request):
     categories = Category.objects.select_related().order_by("id")[:20]
 
-    return render(request, "blog/categories_list.html", {"categories": categories})
+    return render(
+        request, "blog/category/categories_list.html", {"categories": categories}
+    )
 
 
 def category_details(request, cat):
@@ -40,4 +42,4 @@ def category_details(request, cat):
         cache.set(cat, category)
     posts = Post.objects.filter(category=category)
     context = {"category": category, "posts": posts}
-    return render(request, "blog/category_details.html", context)
+    return render(request, "blog/category/category_details.html", context)

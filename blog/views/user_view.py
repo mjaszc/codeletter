@@ -36,7 +36,7 @@ def user_settings(request):
             return redirect(url)
 
     context = {"form": form}
-    return render(request, "blog/settings_user.html", context)
+    return render(request, "blog/user_profile/settings_user.html", context)
 
 
 @login_required
@@ -53,7 +53,7 @@ def profile_settings(request):
             return redirect(url)
 
     context = {"form": form}
-    return render(request, "blog/settings_profile.html", context)
+    return render(request, "blog/user_profile/settings_profile.html", context)
 
 
 def recover_password_request(request):
@@ -65,7 +65,7 @@ def recover_password_request(request):
             if user:
                 subject = "Password Reset Request"
                 content = render_to_string(
-                    "blog/message_recover_password.html",
+                    "blog/email_message/message_recover_password.html",
                     {
                         "user": user,
                         "domain": get_current_site(request).domain,
@@ -96,7 +96,7 @@ def recover_password_request(request):
 
     form = PasswordResetForm()
     context = {"form": form}
-    return render(request, "blog/recover_password.html", context)
+    return render(request, "blog/password/recover_password.html", context)
 
 
 def recover_password_confirm(request, uidb64, token):
@@ -126,7 +126,7 @@ def recover_password_confirm(request, uidb64, token):
 
         form = SetNewPasswordForm(user)
         context = {"form": form}
-        return render(request, "blog/recover_password_confirm.html", context)
+        return render(request, "blog/password/recover_password_confirm.html", context)
     else:
         messages.error(request, "Link is expired.")
 
@@ -147,7 +147,7 @@ def change_password(request):
         else:
             messages.error(request, form.errors.values())
 
-    return render(request, "blog/change_password.html", {"form": form})
+    return render(request, "blog/password/change_password.html", {"form": form})
 
 
 def notifications(request):
@@ -158,7 +158,7 @@ def notifications(request):
         Notification.objects.filter(receiver_user=request.user).update(is_seen=True)
 
     context = {"notifications": notifications}
-    return render(request, "blog/notifications.html", context)
+    return render(request, "blog/user_profile/notifications.html", context)
 
 
 @login_required
@@ -215,7 +215,7 @@ def profile_dashboard(request):
 
     return render(
         request,
-        "blog/profile_dashboard.html",
+        "blog/user_profile/profile_dashboard.html",
         {
             "posts_count": posts_count,
             "comments_count": comments_count,
