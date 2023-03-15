@@ -9,15 +9,21 @@
 <body>
     {% block content %}
     <div class="">
-        <div class="container mx-auto flex items-center justify-center flex-col prose">
-            <h1 class="font-extrabold py-16 text-5xl">{{ post.title }}</h1>
+        <div class="container mx-auto flex items-center justify-center flex-col prose prose-lg">
+            <h1 class="max-w-5xl font-extrabold my-10 text-5xl px-5">{{ post.title }}</h1>
             {% if post.image %}
-            <img src="{{ post.image.url }}" alt="" class="bg-cover object-cover w-auto h-auto" />
+            <img src="{{ post.image.url }}" alt="" class="bg-cover object-cover w-auto h-auto px-5" />
             {% endif %}
         </div>
 
-        <div class="container prose mx-auto">
-            <article class="">{{ post.content|markdown }}</article>
+        <!-- TABLE OF CONTENTS  -->
+        <div
+            class="max-w-4xl border rounded-lg bg-white container mx-auto flex flex-col justify-center text-lg p-10 my-16 leading-loose font-bold">
+            {{ toc|safe }}
+        </div>
+
+        <div class="container prose mx-auto leading-loose">
+            <article class="">{{ post_content|safe }}</article>
         </div>
 
 

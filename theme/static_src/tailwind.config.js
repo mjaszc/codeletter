@@ -48,7 +48,7 @@ module.exports = {
         DEFAULT: {
           css: {
             maxWidth: "85ch",
-            fontSize: "22px",
+            fontSize: "21px",
           },
         },
       },
