@@ -8,7 +8,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.db.models import Count
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -150,15 +150,27 @@ def change_password(request):
     return render(request, "blog/password/change_password.html", {"form": form})
 
 
-def notifications(request):
+def get_notifications(request):
     notifications = Notification.objects.filter(receiver_user=request.user)
-
-    # checking all unread notifications as a read after leaving notifications section
-    if not request.GET.get("notifications"):
-        Notification.objects.filter(receiver_user=request.user).update(is_seen=True)
 
     context = {"notifications": notifications}
     return render(request, "blog/user_profile/notifications.html", context)
+
+
+def mark_notification_as_read(request, notification_id):
+    notification = get_object_or_404(Notification, notification_id=notification_id)
+
+    # Check if the notification is for the current user and the post exists
+    if notification.receiver_user == request.user and notification.post_name:
+        # Update the status of the notification to is_read=True
+        notification.is_seen = True
+        notification.save()
+        return redirect("blog:notifications")
+    else:
+        return messages.error(
+            request,
+            "Notification does not exist or you are not authorized to access it.",
+        )
 
 
 @login_required
