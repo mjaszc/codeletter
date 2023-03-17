@@ -21,6 +21,7 @@ from ..forms import (
 from ..models import Comment, Notification, Post, ProfileSettings
 from ..tokens import account_activation_token
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 @login_required
@@ -173,52 +174,33 @@ def mark_notification_as_read(request, notification_id):
         )
 
 
-@login_required
-def profile_dashboard(request):
-    current_user = request.user
+def profile_dashboard(request, username):
+    viewed_user = get_object_or_404(User, username=username)
 
-    user_profile = ProfileSettings.objects.get_or_create(user=current_user)[0]
+    user_profile = ProfileSettings.objects.get_or_create(user=viewed_user)[0]
 
-    # Count the posts written by the logged in user
-    posts = Post.objects.filter(user=current_user)
-
+    posts = Post.objects.filter(user=viewed_user)
     posts_count = posts.count()
 
-    # Count added comments written by users under
-    # the posts that were created by currently logged in user
-    comments = (
-        Comment.objects.filter(post__in=posts)
-        .exclude(user=current_user)
-        .filter(approve=True)
-    )
+    comments = Comment.objects.filter(post__in=posts).filter(approve=True)
     comments_count = comments.count()
 
-    # Count all of the likes under the posts that were created by currently logged in user
     likes_count = 0
     for post in posts:
         likes_count += post.like.count()
 
-    # Display most liked posts
     most_liked_posts = (
         posts.annotate(like_count=Count("like"))
         .order_by("-like_count")
         .prefetch_related("like")[:3]
     )
 
-    # Count added comments written by other users on
-    # the posts created by the currently logged in user
-    comments = Comment.objects.filter(post__in=posts).exclude(user=current_user)
-    comments_count = comments.count()
-
-    # Display most commented posts
     most_commented_posts = (
         posts.annotate(comment_count=Count("comments"))
-        .exclude(comments__user=current_user)
         .order_by("-comment_count")
         .prefetch_related("comments")[:3]
     )
 
-    # Display most viewed posts
     most_viewed_posts = posts.annotate(view_count=Count("views")).order_by(
         "-view_count"
     )[:3]
@@ -227,12 +209,12 @@ def profile_dashboard(request):
         request,
         "blog/user_profile/profile_dashboard.html",
         {
+            "user_profile": user_profile,
             "posts_count": posts_count,
             "comments_count": comments_count,
             "likes_count": likes_count,
             "most_liked_posts": most_liked_posts,
             "most_commented_posts": most_commented_posts,
             "most_viewed_posts": most_viewed_posts,
-            "user_profile": user_profile,
         },
     )
