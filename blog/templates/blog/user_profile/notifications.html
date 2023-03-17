@@ -3,25 +3,26 @@
 
 {% block content %}
 
-<h2>Notification list </h2>
-{% for notification in notifications %}
-<div>
-    <p>
+<section class="container mx-auto pt-10 prose prose-a:no-underline">
+    <h1>Notification list</h1>
+    {% for notification in notifications %}
+    <article>
         {% if notification.notification_type == "like" %}
         <a href="{% url 'blog:post_details' notification.post_name.slug %}">
-            {{notification.provider_user}} liked your post {{notification.post_name}}
+            <p><strong>@{{notification.provider_user}}</strong> liked your post <em>{{notification.post_name}}</em></p>
         </a>
         {% elif notification.notification_type == "comment" %}
         <a href="{% url 'blog:post_details' notification.post_name.slug %}">
-            {{notification.provider_user}} commented on your post {{notification.post_name}}
+            <p>{{notification.provider_user}} commented on your post <em>{{notification.post_name}}</em></p>
         </a>
         {% endif %}
-
         {% if not notification.is_seen %}
         <a href="{% url 'blog:mark_notification_as_read' notification.notification_id %}">(Mark as read)</a>
         {% endif %}
-    </p>
-</div>
-{% endfor %}
+        <hr>
+    </article>
+    {% endfor %}
+</section>
+
 
 {% endblock %}
