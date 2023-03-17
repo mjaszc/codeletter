@@ -357,7 +357,9 @@ class ProfileDashboardTestCase(TestCase):
         user_profile.save()
 
     def test_profile_dashboard_view(self):
-        response = self.client.get(reverse("blog:profile_dashboard"))
+        response = self.client.get(
+            reverse("blog:profile_dashboard", args=[self.user.username])
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test post 1")
         self.assertContains(response, "Test post 2")
@@ -367,7 +369,9 @@ class ProfileDashboardTestCase(TestCase):
         self.assertContains(response, "Likes count")
 
     def test_profile_dashboard_view_most_liked_posts(self):
-        response = self.client.get(reverse("blog:profile_dashboard"))
+        response = self.client.get(
+            reverse("blog:profile_dashboard", args=[self.user.username])
+        )
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context["most_liked_posts"],
@@ -376,7 +380,9 @@ class ProfileDashboardTestCase(TestCase):
         )
 
     def test_profile_dashboard_view_most_viewed_posts(self):
-        response = self.client.get(reverse("blog:profile_dashboard"))
+        response = self.client.get(
+            reverse("blog:profile_dashboard", args=[self.user.username])
+        )
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context["most_viewed_posts"],
