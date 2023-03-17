@@ -25,8 +25,13 @@ urlpatterns = [
     path("settings/", user_view.user_settings, name="settings_user"),
     path(
         "notifications/",
-        user_view.notifications,
+        user_view.get_notifications,
         name="notifications",
+    ),
+    path(
+        "notifications/mark-as-read/<uuid:notification_id>/",
+        user_view.mark_notification_as_read,
+        name="mark_notification_as_read",
     ),
     path("profile-settings/", user_view.profile_settings, name="profile_settings"),
     path("dashboard/", user_view.profile_dashboard, name="profile_dashboard"),

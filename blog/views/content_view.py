@@ -36,6 +36,15 @@ def post_details(request, slug):
             new_comment.user = user
             new_comment.parent = parent_obj
             new_comment.save()
+
+            if user != post.user:
+                Notification.objects.create(
+                    receiver_user=post.user,
+                    provider_user=user,
+                    notification_type=Notification.COMMENT,
+                    post_name=post,
+                )
+
             comment_form = AddCommentForm()
 
         else:
