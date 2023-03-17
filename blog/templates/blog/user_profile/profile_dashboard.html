@@ -13,7 +13,7 @@
     <main class="pr-20 pt-10">
         <!-- PROFILE  -->
         <section class="border rounded-lg bg-white px-16 py-8">
-            {% if request.user|get_profile_image %}
+            {% if user_profile.user|get_profile_image %}
             <figure class="mt-10">
                 <img src="{{ user_profile.image.url }}" alt="profile_image" class="rounded-full w-32 h-32 object-cover">
             </figure>
@@ -23,8 +23,9 @@
 
 
             <div class="mt-5">
-                <h1 class="text-xl font-extrabold">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
-                <p class="text-sm">@{{ request.user.username }}</p>
+                <h1 class="text-xl font-extrabold">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}
+                </h1>
+                <p class="text-sm">@{{ user_profile.user.username }}</p>
                 <h2 class="font-extrabold mt-5">About Me:</h2>
                 <p>{{ user_profile.bio|striptags }}</p>
                 {% if user_profile.location is not None%}

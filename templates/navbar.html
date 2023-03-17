@@ -38,12 +38,12 @@
 
             <li class="mx-4">
                 {% if request.user|get_profile_image %}
-                <a href=" {% url 'blog:profile_dashboard' %}" class="mx-2">
+                <a href=" {% url 'blog:profile_dashboard' request.user %}" class="mx-2">
                     <img src="{{ request.user|get_profile_image }}" alt="profile_image"
                         class="rounded-full w-10 h-10 object-cover">
                 </a>
                 {% else %}
-                <a href="{% url 'blog:profile_dashboard' %}"
+                <a href="{% url 'blog:profile_dashboard' request.user %}"
                     class="py-2 px-4 rounded-md hover:text-stone-50 flex justify-center items-center cursor-pointer hover:bg-neutral-900">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

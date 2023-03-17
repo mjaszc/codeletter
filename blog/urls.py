@@ -22,9 +22,9 @@ urlpatterns = [
     #
     #
     # USER URLS
-    path("settings/", user_view.user_settings, name="settings_user"),
+    path("profile/settings/", user_view.user_settings, name="settings_user"),
     path(
-        "notifications/",
+        "profile/notifications/",
         user_view.get_notifications,
         name="notifications",
     ),
@@ -33,9 +33,15 @@ urlpatterns = [
         user_view.mark_notification_as_read,
         name="mark_notification_as_read",
     ),
-    path("profile-settings/", user_view.profile_settings, name="profile_settings"),
-    path("dashboard/", user_view.profile_dashboard, name="profile_dashboard"),
-    path("change-password/", user_view.change_password, name="change_password"),
+    path(
+        "profile/profile-settings/", user_view.profile_settings, name="profile_settings"
+    ),
+    path(
+        "profile/<username>/dashboard/",
+        user_view.profile_dashboard,
+        name="profile_dashboard",
+    ),
+    path("profile/change-password/", user_view.change_password, name="change_password"),
     path("recover", user_view.recover_password_request, name="recover_password"),
     path(
         "recover/<uidb64>/<token>",
