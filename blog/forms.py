@@ -31,6 +31,23 @@ class AddPostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ("title", "content", "image", "category")
+        widgets = {
+            "title": forms.TextInput(
+                attrs={
+                    "class": "rounded-md block w-96",
+                }
+            ),
+            "content": forms.Textarea(
+                attrs={
+                    "class": "rounded-md resize w-full",
+                }
+            ),
+            "category": forms.Select(
+                attrs={
+                    "class": "rounded-md",
+                }
+            ),
+        }
 
 
 class UserSettingsForm(forms.ModelForm):
