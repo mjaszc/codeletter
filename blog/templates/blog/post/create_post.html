@@ -3,9 +3,43 @@
 {% block title %}Create post{% endblock %}
 
 {% block content %}
-<form method="post" action="" enctype="multipart/form-data" class="flex items-center flex-col">
+<form method="post" action="" enctype="multipart/form-data"
+    class="container flex flex-col mx-auto mt-5 prose prose-a:no-underline">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
+    <div>
+        <label for="title">
+            <h3>Title</h3>
+            <div>{{ form.title }}</div>
+        </label>
+    </div>
+
+    <div>
+        <label for="content">
+            <h3>Content</h3>
+            <div class="resize">{{ form.content }}</div>
+            <a href="https://www.markdownguide.org/basic-syntax/" target=”_blank”><small
+                    class="text-neutral-800 hover:text-neutral-600">
+                    This site has Markdown Styling support, here's the guide.</small></a>
+        </label>
+    </div>
+
+    <div>
+        <label for="image">
+            <h3>Select an Image</h3>
+            <div>{{ form.image }}</div>
+        </label>
+    </div>
+
+    <div>
+        <label for="category">
+            <h3>Select Category</h3>
+            <div>{{ form.category }}</div>
+        </label>
+    </div>
+
+    <div>
+        <input type="submit" value="Submit"
+            class="my-8 py-2 px-6 text-stone-50 rounded-md cursor-pointer bg-neutral-700 hover:bg-neutral-800 drop-shadow-md" />
+    </div>
 </form>
 {% endblock %}
