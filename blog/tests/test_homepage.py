@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.core.cache import cache
 from blog.views.homepage_view import category_details
-
+from urllib.parse import urlencode
 from blog.models import Post, Category
 
 
@@ -39,13 +39,61 @@ class HomepageTests(TestCase):
         self.assertTemplateUsed(response, "blog/homepage/homepage.html")
 
     def test_search_title(self):
-        response = self.client.post(reverse("blog:homepage"), {"q": "Test Post 1"})
+        query_params = {"q": "Test Post 1"}
+        query_string = urlencode(query_params)
+
+        response = self.client.get(reverse("blog:homepage") + "?" + query_string)
+
+        self.assertIsNotNone(response.context["page_obj"])
         self.assertEqual(len(response.context["page_obj"]), 1)
         self.assertEqual(response.context["page_obj"][0], self.post1)
 
+    def test_search_content(self):
+        query_params = {"q": "another test"}
+        query_string = urlencode(query_params)
+
+        response = self.client.get(reverse("blog:homepage") + "?" + query_string)
+
+        self.assertIsNotNone(response.context["page_obj"])
+        self.assertEqual(len(response.context["page_obj"]), 2)
+        self.assertEqual(response.context["page_obj"][0], self.post3)
+
+    def test_search_category(self):
+        query_params = {"q": "Test category"}
+        query_string = urlencode(query_params)
+
+        response = self.client.get(reverse("blog:homepage") + "?" + query_string)
+
+        self.assertIsNotNone(response.context["page_obj"])
+        self.assertEqual(len(response.context["page_obj"]), 3)
+        self.assertQuerysetEqual(
+            response.context["page_obj"],
+            [repr(self.post1), repr(self.post2), repr(self.post3)],
+            ordered=False,
+        )
+
     def test_search_no_results(self):
-        response = self.client.post(reverse("blog:homepage"), {"q": "no results"})
+        query_params = {"q": "no results"}
+        query_string = urlencode(query_params)
+
+        response = self.client.get(reverse("blog:homepage") + "?" + query_string)
+
+        self.assertIsNotNone(response.context["page_obj"])
         self.assertEqual(len(response.context["page_obj"]), 0)
+
+    def test_search_multiple_terms(self):
+        query_params = {"q": "another test"}
+        query_string = urlencode(query_params)
+
+        response = self.client.get(reverse("blog:homepage") + "?" + query_string)
+
+        self.assertIsNotNone(response.context["page_obj"])
+        self.assertEqual(len(response.context["page_obj"]), 2)
+        self.assertQuerysetEqual(
+            response.context["page_obj"],
+            [repr(self.post2), repr(self.post3)],
+            ordered=False,
+        )
 
     # Add tests for the pagination and search by tags
 

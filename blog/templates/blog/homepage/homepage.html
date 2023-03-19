@@ -15,69 +15,130 @@
 </ul>
 {% endif %}
 
-<div class="container m-auto flex justify-between items-center flex-col">
+<div class="container m-auto flex justify-between items-center flex-col prose prose-a:no-underline prose-ul:list-none prose-ul:p-0">
 
-    <form method="post" action="{% url 'blog:homepage' %}" class="py-10">
+    <!-- SEARCH FORM -->
+    <form method="post" action="{% url 'blog:homepage' %}" class="my-10">
         {% csrf_token %}
         <div>
-            <input type="text" name="q" placeholder="Search post.."
-                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5" />
+            <input value="{{ q }}" type="text" name="q" placeholder="Search for post, category..."
+                class="drop-shadow-md bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg px-3.5 py-2.5 w-96 mx-2" />
             <button type="submit"
-                class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Search</button>
+                class="mx-2 py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800">Search</button>
         </div>
     </form>
 
+    <!-- BLOG POST  -->
     {% for post in page_obj %}
-    <article class="py-5">
-        <h2 class="font-bold text-3xl pb-5">
-            <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
-        </h2>
-        <p class="line-clamp-2"> {{ post.content|markdown|striptags }}</p>
-        {% if post.image %}
-        <img src="{{ post.image.url }}" alt="" class="w-96 h-46 py-5" />
-        {% endif %}
-    </article>
+    <a href="{% url 'blog:homepage' %}{{post.title|slugify}}" class="my-5">
+        <article class="flex justify-center border rounded-lg bg-white px-16 drop-shadow-lg hover:bg-neutral-50">
+            <div>
+                <h2 class="font-bold">
+                    <h3>{{ post.title }}</h3>
+                </h2>
+                <p class="line-clamp-1 text-sm"> {{ post.content|markdown|striptags }}</p>
+            </div>
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="" class="w-32 h-32 pl-5" />
+            {% endif %}
+        </article>
+    </a>
     {% endfor %}
 
-    <ul>
-        <span class="flex">
-            {% if page_obj.has_previous %}
-            <li class="px-3">
-                <a href="?page=1">first</a>
-            </li>
-            <li class="px-3">
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            </li>
-            {% endif %}
+    <!-- PAGINATION -->
+    <ul class="flex justify-center items-center">
+        {% if page_obj.has_previous %}
+        <!-- FIRST PAGE BUTTON-->
+        <li>
+            <a href="?page=1&q={{ q }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path d="m15 15l-3-3l3-3m-4 6l-3-3l3-3" />
+                        <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    </g>
+                </svg>
+            </a>
+        </li>
+        <!-- PREVIOUS PAGE BUTTON-->
+        <li>
+            <a href="?page={{ page_obj.previous_page_number }}&q={{ q }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path d="m13 15l-3-3l3-3" />
+                        <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    </g>
+                </svg>
+            </a>
+        </li>
+        {% endif %}
 
-            {% if page_obj.number|add:'-1' > 1 %}
-            <li><a href="?page={{ page_obj.number|add:'-2' }}">...</a></li>
+        <!-- PAGINATION NUMBER OF PAGES -->
+        {% if page_obj.paginator.num_pages > 1 %}
+            {% if page_obj.number > 3 %}
+                <!-- FIRST PAGE LINK-->
+                <li>
+                    <a href="?page=1&q={{ q }}">1</a>
+                </li>
+                <!-- ELLIPSIS -->
+                <li>
+                    <span>...</span>
+                </li>
             {% endif %}
-
-            {% for i in page_obj.paginator.page_range %}
-            {% if page_obj.number == i %}
+        {% for i in page_obj.paginator.page_range %}
+            {% if i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                <li>
+                    {% if i == page_obj.number %}
+                        <!-- ACTIVE PAGE -->
+                        <a href="?page={{ i }}&q={{ q }}" class="font-bold">{{ i }}</a>
+                    {% else %}
+                        <!-- RANGE OF PAGES -->
+                        <a href="?page={{ i }}&q={{ q }}">{{ i }}</a>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+            <!-- ELLIPSIS -->
             <li>
-                <span class="font-bold px-3">{{ i }}</span>
+                <span>...</span>
             </li>
-            {% elif i > page_obj.number|add:'-2' and i < page_obj.number|add:'2' %} <li class="px-3"><a
-                    href="?page={{ i }}">{{ i }}</a></li>
-                {% endif %}
-                {% endfor %}
+            <!-- LAST PAGE LINK-->
+            <li>
+                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">{{ page_obj.paginator.num_pages }}</a>
+            </li>
+        {% endif %}
+        {% endif %}
 
-                {% if page_obj.paginator.num_pages > page_obj.number|add:'1' %}
-                <li><a href="?page={{ page_obj.number|add:'2' }}">...</a></li>
-                {% endif %}
+        {% if page_obj.has_next %}
+        <!-- NEXT PAGE BUTTON-->
+            <li>
+                <a href="?page={{ page_obj.next_page_number }}&q={{ q }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2">
+                            <path d="m11 9l3 3l-3 3" />
+                            <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        </g>
+                    </svg>
 
-                {% if page_obj.has_next %}
-                <li class="px-3">
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
-                </li>
-                <li class="px-3">
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last</a>
-                </li>
-                {% endif %}
-        </span>
+                </a>
+            </li>
+            <!-- LAST PAGE BUTTON-->
+            <li>
+                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2">
+                            <path d="m9 9l3 3l-3 3m4-6l3 3l-3 3" />
+                            <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        </g>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
     </ul>
-    {% endblock %}
 
 </div>
+{% endblock %}
