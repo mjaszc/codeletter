@@ -35,7 +35,7 @@ def homepage(request):
     )
 
     # Create a paginator object using the post_list and the number of items to display per page
-    paginator = Paginator(post_list, 2)
+    paginator = Paginator(post_list, 3)
 
     # Retrieve the current page of search results to display to the user
     page_num = request.GET.get("page", 1)
