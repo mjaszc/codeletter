@@ -7,27 +7,43 @@
 {% if messages %}
 <ul>
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
 </ul>
 {% endif %}
 
-<div>
+<section class="prose-lg prose-a:no-underline flex flex-col justify-center items-center h-auto mt-32">
+
+    <div>
+        <h1>Log in</h1>
+    </div>
+
+
     <form action="" method="post">
         {% csrf_token %}
-        <div class="login-form">
-            <label for="username">Username:</label>
-            <input type="text" name="username" placeholder="Username" />
+        <div class="flex flex-col mt-5">
+            <label for="username" class="font-bold">Username</label>
+            <input type="text" name="username" placeholder="Username" class="rounded-lg" />
         </div>
-        <div class="login-form">
-            <label for="password">Password:</label>
-            <input type="password" name="password" placeholder="Password" />
-        </div>
-        <input type="submit" value="Submit" />
 
-        <a href="{% url 'blog:register_user' %}">Register</a>
-        <a href="{% url 'blog:recover_password' %}">Forgot your password?</a>
+        <div class="flex flex-col mt-5">
+            <label for="password" class="font-bold">Password</label>
+            <input type="password" name="password" placeholder="Password" class="rounded-lg" />
+        </div>
+
+        <div class="mt-5">
+            <input type="submit" value="Submit"
+                class=" py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer" />
+        </div>
+
+        <div class="mt-10">
+            <a href="{% url 'blog:register_user' %}" class="text-neutral-500 text-sm">Don't have an account? <span
+                    class="text-neutral-800">Sign Up</span></a>
+        </div>
+
+        <div class="mt-2">
+            <a href="{% url 'blog:recover_password' %}" class="text-neutral-500 text-sm">Forgot your password?</a>
+        </div>
     </form>
-</div>
+</section>
 {% endblock %}
-
