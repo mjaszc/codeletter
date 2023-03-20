@@ -11,9 +11,39 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField()
-    first_name = forms.CharField(max_length=25)
-    last_name = forms.CharField(max_length=25)
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "rounded-md bg-white border",
+                "placeholder": "Enter your username",
+            }
+        )
+    )
+    first_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "rounded-md", "placeholder": "Enter your first name"}
+        )
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "rounded-md", "placeholder": "Enter your last name"}
+        )
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={"class": "rounded-md", "placeholder": "user@example.com"}
+        )
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={"class": "rounded-md", "placeholder": "Create a password"}
+        )
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={"class": "rounded-md", "placeholder": "Confirm your password"}
+        )
+    )
 
     class Meta:
         model = User

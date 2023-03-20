@@ -7,16 +7,54 @@
 {% if messages %}
 <ul>
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
 </ul>
 {% endif %}
 
-<form method="post" action="">
-    <div class="form">
-        {% csrf_token %}
-        {{ form.as_p }}
+<section class="prose-lg flex flex-col justify-center items-center h-auto mt-10">
+
+    <div>
+        <h1>Sign Up</h1>
     </div>
-    <input type="submit" value="Submit" />
-</form>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="flex flex-col">
+            <label for="username" class="font-bold">Username</label>
+            {{ form.username }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="first_name" class="font-bold">First Name</label>
+            {{ form.first_name }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="last_name" class="font-bold">Last Name</label>
+            {{ form.last_name }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="email" class="font-bold">Email Address</label>
+            {{ form.email }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="password1" class="font-bold">Password</label>
+            {{ form.password1 }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="last_name" class="font-bold">Confirm Password</label>
+            {{ form.password2 }}
+        </div>
+
+        <div class="my-10">
+            <input type="submit" value="Submit"
+                class=" py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer" />
+        </div>
+    </form>
+</section>
+
 {% endblock %}
