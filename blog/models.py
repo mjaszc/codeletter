@@ -77,7 +77,6 @@ class Comment(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="comment_user"
     )
-    approve = models.BooleanField(default=False)
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -92,7 +91,8 @@ class Comment(models.Model):
         ordering = ["created_on"]
 
     def __str__(self):
-        return f"Comment: {self.body} by {self.user}"
+        created_on_formatted = self.created_on.strftime("%B %d, %I:%M %p")
+        return f"Comment: {self.body} by {self.user} on {created_on_formatted}"
 
 
 class Notification(models.Model):

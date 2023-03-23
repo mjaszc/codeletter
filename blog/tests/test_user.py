@@ -331,22 +331,34 @@ class ProfileDashboardTestCase(TestCase):
         )
 
         self.comment1 = Comment.objects.create(
-            body="Test comment 1", user=self.user1, post=self.post1, approve=True
+            body="Test comment 1",
+            user=self.user1,
+            post=self.post1,
         )
         self.comment2 = Comment.objects.create(
-            body="Test comment 2", user=self.user1, post=self.post1, approve=True
+            body="Test comment 2",
+            user=self.user1,
+            post=self.post1,
         )
         self.comment3 = Comment.objects.create(
-            body="Test comment 3", user=self.user, post=self.post2, approve=False
+            body="Test comment 3",
+            user=self.user,
+            post=self.post2,
         )
         self.comment4 = Comment.objects.create(
-            body="Test comment 4", user=self.user, post=self.post2, approve=False
+            body="Test comment 4",
+            user=self.user,
+            post=self.post2,
         )
         self.comment5 = Comment.objects.create(
-            body="Test comment 5", user=self.user, post=self.post2, approve=False
+            body="Test comment 5",
+            user=self.user,
+            post=self.post2,
         )
         self.comment6 = Comment.objects.create(
-            body="Test comment 6", user=self.user, post=self.post3, approve=False
+            body="Test comment 6",
+            user=self.user,
+            post=self.post3,
         )
 
         self.post1.like.set([self.user1])
