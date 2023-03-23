@@ -85,7 +85,7 @@
                 <div class="pt-10">
                     <p>
                         {{ comment.user }}
-                        <span> {{ comment.created_on }} </span>
+                        <span> {{ comment.created_on|date:"F d, Y \a\\t g:i A" }} </span>
                     </p>
 
                     {{ comment.body }}

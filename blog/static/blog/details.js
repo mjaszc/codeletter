@@ -53,12 +53,12 @@ likeForm.addEventListener("submit", (event) => {
 const commentForm = document.querySelector("#comment-form");
 const commentSection = document.querySelector("#comments-section");
 
-function htmlContent(currentUser, commentContent, commentId) {
+function htmlContent(commentDate, currentUser, commentContent, commentId) {
   const htmlComment = `
       <div class="pt-10">
         <p>
             ${currentUser}
-            <span> {{ comment.created_on }} </span>
+            <span> ${commentDate} </span>
         </p>
 
         ${commentContent}
@@ -97,13 +97,28 @@ commentForm.addEventListener("submit", (event) => {
       const parser = new DOMParser();
       const parsedDoc = parser.parseFromString(html, "text/html");
 
+      const time = new Date();
+      const commentDate = time.toLocaleString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
       const commentContent = form.get("body");
       const currentUser = document.querySelector(
         "#request-user-comment-form"
       ).textContent;
       const commentId = parsedDoc.querySelector("#parent-comment-id").value;
 
-      const htmlComment = htmlContent(currentUser, commentContent, commentId);
+      const htmlComment = htmlContent(
+        commentDate,
+        currentUser,
+        commentContent,
+        commentId
+      );
 
       commentSection.insertAdjacentHTML("afterbegin", htmlComment);
       commentForm.reset();
