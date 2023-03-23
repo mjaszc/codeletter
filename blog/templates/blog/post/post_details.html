@@ -50,7 +50,7 @@
 
 
             <div>
-                <form action="" method="post" class="like-form">
+                <form method="post" class="like-form">
                     {% csrf_token %}
                     <p class="py-2">Likes: <span class="like-count-num">{{ post.like.count }}</span></p>
                     {% if request.user.is_authenticated %}
@@ -68,65 +68,65 @@
             {% if request.user.is_authenticated %}
             <div class="pt-14">
                 <h3>Add a comment:</h3>
-                <h4>Currently logged as <span class="font-bold">{{ request.user }}</span></h4>
-                <form action="" method="post">
+                <h4>Currently logged as <span class="font-bold" id="request-user-comment-form">{{ request.user }}</span>
+                </h4>
+                <form id="comment-form" method="post">
                     {% csrf_token %}
                     {{ comment_form.as_p }}
                     <button type="submit"
-                        class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Submit</button>
+                        class="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Submit</button>
                 </form>
                 {% endif %}
             </div>
 
             <h1 class="font-bold py-5">Comments section</h1>
-            {% for comment in comments reversed %}
-            <div class="pt-10">
-                <p>
-                    {{ comment.user }}
-                    <span> {{ comment.created_on }} </span>
-                </p>
-                {{ comment.body }}
+            <div id="comments-section">
+                {% for comment in comments reversed %}
+                <div class="pt-10">
+                    <p>
+                        {{ comment.user }}
+                        <span> {{ comment.created_on }} </span>
+                    </p>
 
-                <div class="py-4">
-                    {% if request.user == comment.user %}
-                    <a href="{% url 'blog:edit_comment' comment.id %}"
-                        class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
-                        Edit
-                    </a>
+                    {{ comment.body }}
 
-                    <a href="{% url 'blog:delete_comment' comment.id %}"
-                        class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
-                        Delete
-                    </a>
-                    {% endif %}
-                    <button onclick="commentReplyToggle('{{ comment.id }}')" type="submit"
-                        class="like-btn inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Reply</button>
+                    <div class="py-4">
+                        {% if request.user == comment.user %}
+                        <a href="{% url 'blog:edit_comment' comment.id %}"
+                            class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'blog:delete_comment' comment.id %}"
+                            class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                            Delete
+                        </a>
+                        {% endif %}
+                        <button onclick="commentReplyToggle('{{ comment.id }}')" type="submit"
+                            data-parent-id="{{ comment.id }}">Reply</button>
+                    </div>
                 </div>
 
+                <div class="reply-form hidden" id="{{ comment.id }}">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <!-- Hidden input for parent comment.id -->
+                        <input type="hidden" id="parent-comment-id" name="parent-comment-id" value="{{ comment.id }}" />
+                        <input type="submit" value="Reply" name="Reply" />
+                    </form>
+                </div>
+
+                {% for reply in comment.replies.all %}
+                <div class="ml-10">
+                    <p><span class="font-bold">{{ reply.user }}</span> replied:</p>
+                    <p class="py-2">{{ reply.body }}</p>
+                </div>
+                {% endfor %}
+
+                {% endfor %}
             </div>
 
-
-
-            <div class="reply-form hidden" id="{{ comment.id }}">
-                <form action="" method="post">
-                    {{ comment_form.as_p }}
-                    {% csrf_token %}
-                    <!-- Hidden input for parent comment.id -->
-                    <input type="hidden" name="parent_id" value="{{ comment.id }}" />
-                    <input type="submit" value="Reply" name="Reply" />
-                </form>
-            </div>
-
-            {% for reply in comment.replies.all %}
-            {% if reply.approve == True %}
-            <div class="ml-10">
-                <p><span class="font-bold">{{ reply.user }}</span> replied:</p>
-                <p class="py-2">{{ reply.body }}</p>
-            </div>
-            {% endif %}
-            {% endfor %}
-
-            {% endfor %}
 
         </div>
     </div>

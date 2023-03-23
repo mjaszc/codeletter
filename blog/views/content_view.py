@@ -13,7 +13,7 @@ from markdown.extensions.toc import TocExtension
 
 def post_details(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    comments = post.comments.filter(approve=True, parent__isnull=True)
+    comments = post.comments.filter(parent__isnull=True)
     comment_form = AddCommentForm()
     liked = False
     user = request.user

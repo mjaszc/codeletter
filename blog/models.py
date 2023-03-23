@@ -77,7 +77,6 @@ class Comment(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="comment_user"
     )
-    approve = models.BooleanField(default=False)
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,

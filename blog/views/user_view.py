@@ -182,7 +182,7 @@ def profile_dashboard(request, username):
     posts = Post.objects.filter(user=viewed_user)
     posts_count = posts.count()
 
-    comments = Comment.objects.filter(post__in=posts).filter(approve=True)
+    comments = Comment.objects.filter(post__in=posts)
     comments_count = comments.count()
 
     likes_count = 0
