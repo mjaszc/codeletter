@@ -25,7 +25,7 @@ class AddCommentViewTestCase(TestCase):
     def test_adding_comment(self):
         self.client.login(username="testuser", password="testpassword")
         response = self.client.post(self.url, {"body": "Test comment content"})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(Comment.objects.count(), 1)
         comment = Comment.objects.first()
         self.assertEqual(comment.body, "Test comment content")

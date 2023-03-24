@@ -73,6 +73,7 @@
                 <form id="comment-form" method="post">
                     {% csrf_token %}
                     {{ comment_form.as_p }}
+                    <input type="hidden" name="redirect_url" value="{{ redirect_url }}">
                     <button type="submit"
                         class="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">Submit</button>
                 </form>
@@ -101,9 +102,10 @@
                             class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
                             Delete
                         </a>
-                        {% endif %}
+                        {% else %}
                         <button onclick="commentReplyToggle('{{ comment.id }}')" type="submit"
                             data-parent-id="{{ comment.id }}">Reply</button>
+                        {% endif %}
                     </div>
                 </div>
 

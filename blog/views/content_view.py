@@ -25,7 +25,7 @@ def post_details(request, slug):
         comment_form = AddCommentForm(request.POST)
 
         if comment_form.is_valid():
-            parent_id = request.POST.get("parent_id")
+            parent_id = request.POST.get("parent-comment-id")
             parent_obj = None
 
             if parent_id:
@@ -65,6 +65,8 @@ def post_details(request, slug):
                 )
             comment_form = AddCommentForm()
 
+        return redirect(reverse("blog:post_details", kwargs={"slug": post.slug}))
+
     # create a Markdown instance with the table of contents extension
     md = markdown.Markdown(extensions=[TocExtension()])
     # convert the post content to HTML with the 'toc' extension
@@ -82,6 +84,7 @@ def post_details(request, slug):
         "liked": liked,
         "post_content": post_content,
         "toc": toc,
+        "redirect_url": reverse("blog:post_details", kwargs={"slug": post.slug}),
     }
     return render(request, "blog/post/post_details.html", context)
 
