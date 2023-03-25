@@ -130,7 +130,7 @@ class AddCommentForm(forms.ModelForm):
         widgets = {
             "body": forms.Textarea(
                 attrs={
-                    "class": "w-full h-32 text-lg border border-gray-400 p-4 resize-none overflow-auto md:w-3/4 lg:h-48",
+                    "class": "w-full h-32 text-lg rounded-md p-4 resize-y overflow-auto md:w-3/4 lg:h-48",
                     "placeholder": "Write a comment...",
                 }
             )

@@ -55,25 +55,30 @@ const commentSection = document.querySelector("#comments-section");
 
 function htmlContent(commentDate, currentUser, commentContent, commentId) {
   const htmlComment = `
-      <div class="pt-10">
-        <p>
-            ${currentUser}
-            <span> ${commentDate} </span>
-        </p>
+  <div>
+    <hr>
+    <div>
+        <span class="font-bold">${currentUser}</span>
+        <span>${commentDate}</span>
+    </div>
 
-        ${commentContent}
+    <div class="my-2">
+      ${commentContent}
+    </div>
 
-        <div class="py-4">
-          <a href="/edit-comment/${commentId}"
-            class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+
+    <div class="pt-2 pb-6">
+        <a href="/edit-comment/${commentId}"
+            class="py-2 px-3 rounded-md text-stone-50 justify-center items-center cursor-pointer bg-neutral-900 hover:bg-neutral-800">
             Edit
-          </a>
-          <a href="/delete-comment/${commentId}"
-            class="ml-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+        </a>
+
+        <a href="/delete-comment/${commentId}"
+            class="py-2 px-3 ml-2 rounded-md text-stone-50 justify-center items-center cursor-pointer bg-neutral-900 hover:bg-neutral-800">
             Delete
-          </a>
-      </div>
-      `;
+        </a>
+    </div>
+  </div>`;
 
   return htmlComment;
 }
