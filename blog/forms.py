@@ -77,6 +77,11 @@ class AddPostForm(forms.ModelForm):
                     "class": "rounded-md",
                 }
             ),
+            "image": forms.FileInput(
+                attrs={
+                    "class": "bg-white border ",
+                }
+            ),
         }
 
 
@@ -111,6 +116,53 @@ class UserSettingsForm(forms.ModelForm):
 
 
 class ProfileSettingsForm(forms.ModelForm):
+    image = forms.ImageField(
+        widget=forms.FileInput(
+            attrs={
+                "class": "bg-white border mt-2",
+            }
+        ),
+        required=False,
+    )
+
+    bio = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "rounded-md mt-2",
+                "placeholder": "Enter your profile description",
+            }
+        ),
+        required=False,
+    )
+
+    location = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your location"}
+        ),
+        required=False,
+    )
+
+    twitter_url = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your Twitter URL"}
+        ),
+        required=False,
+    )
+
+    website_url = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your Website URL"}
+        ),
+        required=False,
+    )
+
+    linkedin_url = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your LinkedIn URL"}
+        ),
+        required=False,
+    )
+
     class Meta:
         model = ProfileSettings
         fields = (

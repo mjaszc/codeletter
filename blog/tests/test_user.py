@@ -119,7 +119,7 @@ class ProfileSettingsTestCase(TestCase):
 
     def test_profile_settings_view_post(self):
         form_data = {
-            "bio": "Test bio",
+            "bio": "",
             "location": "Test location",
             "twitter_url": "https://twitter.com/testuser",
             "website_url": "https://www.testuser.com",
@@ -132,7 +132,7 @@ class ProfileSettingsTestCase(TestCase):
         # Check that the form is valid and the user profile is updated
         user_profile = ProfileSettings.objects.get(user=self.user)
         self.assertTrue(response.status_code, 302)
-        self.assertEqual(user_profile.bio, "Test bio")
+        self.assertEqual(user_profile.bio, "")
         self.assertEqual(user_profile.location, "Test location")
         self.assertEqual(user_profile.twitter_url, "https://twitter.com/testuser")
         self.assertEqual(user_profile.website_url, "https://www.testuser.com")
