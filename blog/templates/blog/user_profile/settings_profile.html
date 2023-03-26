@@ -4,12 +4,104 @@
 
 {% block content %}
 
-<form method="post" action="" enctype="multipart/form-data">
-    <div class="form">
-        {% csrf_token %}
-        {{ form.as_p }}
+<section class="prose-lg flex flex-col justify-center items-center h-auto mt-20">
+
+    <div>
+        <h1>Your Profile Settings</h1>
     </div>
-    <input type="submit" value="Submit" />
-    <a href="{% url 'blog:homepage' %}">Go to the homepage</a>
-</form>
+
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="flex flex-col">
+            <label for="image" class="font-bold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path d="M15 8h.01M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6z" />
+                        <path d="m3 16l5-5c.928-.893 2.072-.893 3 0l5 5" />
+                        <path d="m14 14l1-1c.928-.893 2.072-.893 3 0l3 3" />
+                    </g>
+                </svg>
+                <span class="ml-2">Image</span>
+            </label>
+            {{ form.image }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="bio" class="font-bold flex items-center ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6v13m9-13v13m9-13v13" />
+                </svg>
+                <span class="ml-2">Bio</span>
+            </label>
+            {{ form.bio }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="location" class="font-bold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" d="m21 3l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1L21 3" />
+                </svg>
+                <span class="ml-2">Location</span>
+            </label>
+            {{ form.location }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="twitter_url" class="font-bold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M22 4.01c-1 .49-1.98.689-3 .99c-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4c0 0-4.182 7.433 4 11c-1.872 1.247-3.739 2.088-6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84 0 0 0 .497-3.753c0-.249 1.51-2.772 1.818-4.013z" />
+                </svg>
+                <span class="ml-2">Twitter URL</span>
+            </label>
+            {{ form.twitter_url }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="website_url" class="font-bold flex items-center"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="28" height="28" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0m.6-3h16.8M3.6 15h16.8" />
+                        <path d="M11.5 3a17 17 0 0 0 0 18m1-18a17 17 0 0 1 0 18" />
+                    </g>
+                </svg>
+                <span class="ml-2">Website URL</span>
+            </label>
+            {{ form.website_url }}
+        </div>
+
+        <div class="flex flex-col mt-5">
+            <label for="linkedin_url" class="font-bold flex items-center"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="28" height="28" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path
+                            d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm4 5v5m0-8v.01M12 16v-5" />
+                        <path d="M16 16v-3a2 2 0 0 0-4 0" />
+                    </g>
+                </svg>
+                <span class="ml-2">Linked URL</span>
+            </label>
+            {{ form.linkedin_url }}
+        </div>
+
+        <div class="mt-8">
+            <input type="submit" value="Submit"
+                class=" py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer" />
+        </div>
+
+        <div class="mt-10 mb-5">
+            <a href="{% url 'blog:homepage' %}" class="text-neutral-500 text-sm">Back to the homepage</a>
+        </div>
+
+    </form>
+
+</section>
 {% endblock %}
