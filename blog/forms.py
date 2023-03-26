@@ -77,6 +77,11 @@ class AddPostForm(forms.ModelForm):
                     "class": "rounded-md",
                 }
             ),
+            "image": forms.FileInput(
+                attrs={
+                    "class": "bg-white border ",
+                }
+            ),
         }
 
 
