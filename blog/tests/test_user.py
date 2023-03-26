@@ -119,7 +119,7 @@ class ProfileSettingsTestCase(TestCase):
 
     def test_profile_settings_view_post(self):
         form_data = {
-            "bio": "Test bio",
+            "bio": "",
             "location": "Test location",
             "twitter_url": "https://twitter.com/testuser",
             "website_url": "https://www.testuser.com",

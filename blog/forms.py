@@ -121,7 +121,8 @@ class ProfileSettingsForm(forms.ModelForm):
             attrs={
                 "class": "bg-white border mt-2",
             }
-        )
+        ),
+        required=False,
     )
 
     bio = forms.CharField(
@@ -130,31 +131,36 @@ class ProfileSettingsForm(forms.ModelForm):
                 "class": "rounded-md mt-2",
                 "placeholder": "Enter your profile description",
             }
-        )
+        ),
+        required=False,
     )
 
     location = forms.CharField(
         widget=forms.TextInput(
             attrs={"class": "rounded-md mt-2", "placeholder": "Enter your location"}
-        )
+        ),
+        required=False,
     )
 
     twitter_url = forms.CharField(
         widget=forms.TextInput(
             attrs={"class": "rounded-md mt-2", "placeholder": "Enter your Twitter URL"}
-        )
+        ),
+        required=False,
     )
 
     website_url = forms.CharField(
         widget=forms.TextInput(
             attrs={"class": "rounded-md mt-2", "placeholder": "Enter your Website URL"}
-        )
+        ),
+        required=False,
     )
 
     linkedin_url = forms.CharField(
         widget=forms.TextInput(
             attrs={"class": "rounded-md mt-2", "placeholder": "Enter your LinkedIn URL"}
-        )
+        ),
+        required=False,
     )
 
     class Meta:
