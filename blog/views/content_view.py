@@ -120,7 +120,19 @@ def delete_comment(request, id):
     comment = get_object_or_404(Comment, pk=id)
 
     if request.method == "POST":
+        # Looking for the notification that refers to the deleted comment
+        notification = Notification.objects.filter(
+            provider_user=request.user,
+            notification_type=Notification.COMMENT,
+            post_name=comment.post,
+        ).first()
+
+        # Checking if selected notification exists, then remove
+        if notification:
+            notification.delete()
+
         comment.delete()
+
         post_slug = slugify(comment.post.title)
         url = reverse("blog:post_details", args=[post_slug])
         return redirect(url)
