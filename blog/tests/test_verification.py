@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase, Client
 from django.contrib import auth
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.core import mail
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
