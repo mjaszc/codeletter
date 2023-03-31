@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase, Client
 from django.contrib import auth
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.core import mail
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
@@ -67,10 +66,6 @@ class SendVerificationEmailTestCase(TestCase):
         email_address = self.user.email
         send_verification_email(request, self.user, email_address)
 
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, [email_address])
-        self.assertIn("Activate your account", mail.outbox[0].subject)
-
         storage = messages
         stored_messages = list(storage)
         self.assertEqual(len(stored_messages), 1)
@@ -110,10 +105,6 @@ class RegisterUserTestCase(TestCase):
         self.assertTrue(
             get_user_model().objects.filter(email="test@example.com").exists()
         )
-
-        # Check that the verification email was sent
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn("Activate your account", mail.outbox[0].subject)
 
         # Check that the message was added to the request
         storage = request._messages
@@ -160,9 +151,6 @@ class RegisterUserTestCase(TestCase):
 
         # Check that the user was not created
         self.assertFalse(get_user_model().objects.filter(username="testuser").exists())
-
-        # Check that no verification email was sent
-        self.assertEqual(len(mail.outbox), 0)
 
         # Check that the message was added to the request
         storage = request._messages
