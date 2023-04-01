@@ -15,7 +15,8 @@
 </ul>
 {% endif %}
 
-<div class="container m-auto flex justify-between items-center flex-col prose prose-a:no-underline prose-ul:list-none prose-ul:p-0">
+<div
+    class="container m-auto flex justify-between items-center flex-col prose prose-a:no-underline prose-ul:list-none prose-ul:p-0">
 
     <!-- SEARCH FORM -->
     <form method="post" action="{% url 'blog:homepage' %}" class="my-10">
@@ -39,7 +40,7 @@
                 <p class="line-clamp-1 text-sm"> {{ post.content|markdown|striptags }}</p>
             </div>
             {% if post.image %}
-            <img src="{{ post.image.url }}" alt="" class="w-32 h-32 pl-5" />
+            <img src="{{ post.image.url }}" alt="" class="w-72 h-32 pl-5 object-cover" />
             {% endif %}
         </article>
     </a>
@@ -76,68 +77,66 @@
 
         <!-- PAGINATION NUMBER OF PAGES -->
         {% if page_obj.paginator.num_pages > 1 %}
-            {% if page_obj.number > 3 %}
-                <!-- FIRST PAGE LINK-->
-                <li>
-                    <a href="?page=1&q={{ q }}">1</a>
-                </li>
-                <!-- ELLIPSIS -->
+        {% if page_obj.number > 3 %}
+        <!-- FIRST PAGE LINK-->
+        <li>
+            <a href="?page=1&q={{ q }}">1</a>
+        </li>
+        <!-- ELLIPSIS -->
+        <li>
+            <span>...</span>
+        </li>
+        {% endif %}
+        {% for i in page_obj.paginator.page_range %}
+        {% if i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <li>
+            {% if i == page_obj.number %}
+            <!-- ACTIVE PAGE -->
+            <a href="?page={{ i }}&q={{ q }}" class="font-bold">{{ i }}</a>
+            {% else %}
+            <!-- RANGE OF PAGES -->
+            <a href="?page={{ i }}&q={{ q }}">{{ i }}</a>
+            {% endif %}
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %} <!-- ELLIPSIS -->
                 <li>
                     <span>...</span>
                 </li>
-            {% endif %}
-        {% for i in page_obj.paginator.page_range %}
-            {% if i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                <!-- LAST PAGE LINK-->
                 <li>
-                    {% if i == page_obj.number %}
-                        <!-- ACTIVE PAGE -->
-                        <a href="?page={{ i }}&q={{ q }}" class="font-bold">{{ i }}</a>
-                    {% else %}
-                        <!-- RANGE OF PAGES -->
-                        <a href="?page={{ i }}&q={{ q }}">{{ i }}</a>
-                    {% endif %}
+                    <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">{{ page_obj.paginator.num_pages }}</a>
                 </li>
-            {% endif %}
-        {% endfor %}
-        {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
-            <!-- ELLIPSIS -->
-            <li>
-                <span>...</span>
-            </li>
-            <!-- LAST PAGE LINK-->
-            <li>
-                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">{{ page_obj.paginator.num_pages }}</a>
-            </li>
-        {% endif %}
-        {% endif %}
+                {% endif %}
+                {% endif %}
 
-        {% if page_obj.has_next %}
-        <!-- NEXT PAGE BUTTON-->
-            <li>
-                <a href="?page={{ page_obj.next_page_number }}&q={{ q }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
-                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2">
-                            <path d="m11 9l3 3l-3 3" />
-                            <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        </g>
-                    </svg>
+                {% if page_obj.has_next %}
+                <!-- NEXT PAGE BUTTON-->
+                <li>
+                    <a href="?page={{ page_obj.next_page_number }}&q={{ q }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2">
+                                <path d="m11 9l3 3l-3 3" />
+                                <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            </g>
+                        </svg>
 
-                </a>
-            </li>
-            <!-- LAST PAGE BUTTON-->
-            <li>
-                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
-                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2">
-                            <path d="m9 9l3 3l-3 3m4-6l3 3l-3 3" />
-                            <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        </g>
-                    </svg>
-                </a>
-            </li>
-        {% endif %}
+                    </a>
+                </li>
+                <!-- LAST PAGE BUTTON-->
+                <li>
+                    <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2">
+                                <path d="m9 9l3 3l-3 3m4-6l3 3l-3 3" />
+                                <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            </g>
+                        </svg>
+                    </a>
+                </li>
+                {% endif %}
     </ul>
 
 </div>
