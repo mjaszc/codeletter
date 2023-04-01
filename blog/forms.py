@@ -116,7 +116,7 @@ class UserSettingsForm(forms.ModelForm):
 
 
 class ProfileSettingsForm(forms.ModelForm):
-    image = forms.ImageField(
+    image = forms.FileField(
         widget=forms.FileInput(
             attrs={
                 "class": "bg-white border mt-2",
