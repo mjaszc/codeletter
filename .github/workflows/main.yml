@@ -13,31 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      DEBUG: ${{ secrets.DEBUG }}
       SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-      POSTGRES_USER: marceli
-      POSTGRES_DB: blog
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_PORT: 5432
-      POSTGRES_HOST: 127.0.0.1
+
+      EXTERNAL_DATABASE_URL: ${{ secrets.EXTERNAL_DATABASE_URL }}
 
       EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
       EMAIL_POST: ${{ secrets.EMAIL_POST }}
       EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
-    services:
-      postgres_main:
-        image: postgres:14.5
-        env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
-          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5   
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10.7
@@ -59,12 +43,7 @@ jobs:
     - name: Coverage report
       env:
         DEBUG: "0"
-        SECRET_KEY: ${{ env.SECRET_KEY }}  
-        DB_NAME: ${{ env.POSTGRES_USER }}
-        DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-        DB_HOST: ${{ env.POSTGRES_HOST }}
-        DB_DATABASE: ${{ env.POSTGRES_DB }}
-        DB_PORT: ${{ env.POSTGRES_PORT }}
+        SECRET_KEY: ${{ env.SECRET_KEY }}
         EMAIL_HOST_PASSWORD: ${{ env.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ env.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ env.EMAIL_USE_TLS }}
@@ -76,11 +55,6 @@ jobs:
       env:
         DEBUG: "0"
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-        DB_NAME: ${{ env.POSTGRES_USER }}
-        DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-        DB_HOST: ${{ env.POSTGRES_HOST }}
-        DB_DATABASE: ${{ env.POSTGRES_DB }}
-        DB_PORT: ${{ env.POSTGRES_PORT }}
         EMAIL_HOST_PASSWORD: ${{ env.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ env.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ env.EMAIL_USE_TLS }}
