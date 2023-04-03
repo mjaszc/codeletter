@@ -49,6 +49,7 @@ jobs:
       env:
         DEBUG: ${{ secrets.DEBUG }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}  
+        EXTERNAL_DATABASE_URL: ${{ secrets.EXTERNAL_DATABASE_URL }}
         EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ secrets.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
@@ -60,7 +61,7 @@ jobs:
       env:
         DEBUG: "0"
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-        DATABASE_URL: ${{ secrets.EXTERNAL_DATABASE_URL }}
+        EXTERNAL_DATABASE_URL: ${{ secrets.EXTERNAL_DATABASE_URL }}
         EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ secrets.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
