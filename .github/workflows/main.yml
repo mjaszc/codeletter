@@ -11,7 +11,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     services:
       postgres_main:
         image: postgres:latest
@@ -54,7 +54,7 @@ jobs:
         EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
       run: |
         pip install coverage
-        coverage run --source='.' manage.py test blog
+        coverage run --source='.' manage.py test
         coverage report
     - name: Django test
       env:
