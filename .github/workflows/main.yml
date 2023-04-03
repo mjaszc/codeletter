@@ -20,8 +20,7 @@ jobs:
 
       EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
       EMAIL_POST: ${{ secrets.EMAIL_POST }}
-      EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
-
+      EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}  
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10.7
@@ -40,10 +39,15 @@ jobs:
         python3 -m venv env
         source env/bin/activate
         cd local/
+    - name: run database migrations
+      env:
+          DATABASE_URL: ${{ env.EXTERNAL_DATABASE_URL }}
+      run: |
+        python3 manage.py migrate
     - name: Coverage report
       env:
         DEBUG: "0"
-        SECRET_KEY: ${{ env.SECRET_KEY }}
+        SECRET_KEY: ${{ env.SECRET_KEY }}  
         EMAIL_HOST_PASSWORD: ${{ env.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ env.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ env.EMAIL_USE_TLS }}
