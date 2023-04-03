@@ -20,9 +20,6 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
       POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-
-      EXTERNAL_DATABASE_URL: ${{ secrets.EXTERNAL_DATABASE_URL }}
-
       EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
       EMAIL_POST: ${{ secrets.EMAIL_POST }}
       EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
@@ -60,8 +57,6 @@ jobs:
         source env/bin/activate
         cd local/
     - name: run database migrations
-      env:
-          DATABASE_URL: ${{ env.EXTERNAL_DATABASE_URL }}
       run: |
         python3 manage.py migrate
     - name: Coverage report
@@ -73,6 +68,7 @@ jobs:
         DB_HOST: ${{ env.POSTGRES_HOST }}
         DB_DATABASE: ${{ env.POSTGRES_DB }}
         DB_PORT: ${{ env.POSTGRES_PORT }}
+        DATABASE_URL: ${{ env.EXTERNAL_DATABASE_URL }}
         EMAIL_HOST_PASSWORD: ${{ env.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ env.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ env.EMAIL_USE_TLS }}
