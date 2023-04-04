@@ -55,7 +55,7 @@ jobs:
         EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
       run: |
         pip install coverage
-        coverage run --source='.' manage.py test
+        coverage run --source='.' manage.py test blog
         coverage report
     - name: Django test
       env:
