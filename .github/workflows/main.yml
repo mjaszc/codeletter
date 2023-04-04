@@ -46,7 +46,7 @@ jobs:
     - name: Coverage report
       env:
         DEBUG: ${{ secrets.DEBUG }}
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}  
+        SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}  
         EXTERNAL_DATABASE_URL: ${{ secrets.EXTERNAL_DATABASE_URL }}
         EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ secrets.EMAIL_POST }}
