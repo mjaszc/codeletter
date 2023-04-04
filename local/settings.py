@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from decouple import config
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,13 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
 SECRET_KEY = config("SECRET_KEY", default="insecure")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
 
 # Application definition
@@ -84,17 +85,7 @@ WSGI_APPLICATION = "local.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "blog",
-        "USER": "marceli",
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-    }
-}
+DATABASES = {"default": dj_database_url.parse(config("EXTERNAL_DATABASE_URL"))}
 
 # Deployment settings
 SESSION_COOKIE_SECURE = True
