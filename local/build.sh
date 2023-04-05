@@ -8,8 +8,5 @@ python -m pip install --upgrade pip
 echo "Collecting staticfiles"
 python3 manage.py collectstatic
 
-echo "Building Tailwind CSS"
-python3 manage.py tailwind build
-
 echo "Running database migrations"
 python3 manage.py migrate
