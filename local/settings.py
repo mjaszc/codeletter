@@ -178,7 +178,7 @@ CACHES = {
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # URL prefix for static files.
-STATIC_URL = "static/"
+STATIC_URL = "staticfiles/"
 
 TAILWIND_APP_NAME = "theme"
 
