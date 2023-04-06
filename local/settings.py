@@ -35,6 +35,7 @@ DEBUG = False
 # Application definition
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -178,7 +179,6 @@ CACHES = {
 # Your project's static files will be served from here
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# URL prefix for static files.
 STATIC_URL = "static/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
