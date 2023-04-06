@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware"
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -179,7 +179,7 @@ CACHES = {
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # URL prefix for static files.
-STATIC_URL = "/local/staticfiles/css/dist/styles.css"
+STATIC_URL = "static/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
