@@ -176,9 +176,6 @@ CACHES = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-# Your project's static files will be served from here
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
 STATIC_URL = "staticfiles/"
 
 if not DEBUG:  # Tell Django to copy statics to the `staticfiles` directory
