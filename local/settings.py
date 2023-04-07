@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY", default="insecure")
 ALLOWED_HOSTS = ["*"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config("DEBUG")
 
 
 # Application definition
