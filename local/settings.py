@@ -179,7 +179,7 @@ CACHES = {
 # Your project's static files will be served from here
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATIC_URL = "static/"
+STATIC_URL = "staticfiles/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
