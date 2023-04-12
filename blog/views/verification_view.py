@@ -8,13 +8,15 @@ from django.contrib.auth import (
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
-from django.utils.http import urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from ..forms import (
     UserRegisterForm,
 )
 from blog.tokens import account_activation_token
 from django.urls import reverse
-from blog.tasks import send_verification_email_task
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes
 
 
 # Account verification process
@@ -44,15 +46,30 @@ def verify_email(request, uidb64, token):
 
 # Function is called when user submits the register form with selected parameters
 def send_verification_email(request, user, email_address):
-    domain = get_current_site(request).domain
-    protocol = "https" if request.is_secure() else "http"
-
-    send_verification_email_task.delay(user.id, email_address, domain, protocol)
-
-    messages.success(
-        request,
-        f"Success! Dear {user.username}, we have sent an activation link to {email_address}.",
+    message_subject = "Activate your account"
+    message_content = render_to_string(
+        "blog/email_message/message_verify_account.html",
+        {
+            "user": user.username,
+            "domain": get_current_site(request).domain,
+            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+            "token": account_activation_token.make_token(user),
+            "protocol": "https" if request.is_secure() else "http",
+        },
     )
+    # Specify parameters for sending a verification email
+    email = EmailMessage(message_subject, message_content, to=[email_address])
+    success = email.send()
+
+    if success:
+        messages.success(
+            request,
+            f"Success! Dear {user.username}, we have sent an activation link to {email_address}.",
+        )
+    else:
+        messages.error(
+            request, f"There was a problem sending an email to {email_address}."
+        )
 
 
 def register_user(request):

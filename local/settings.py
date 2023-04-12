@@ -62,11 +62,9 @@ MIDDLEWARE = [
 if DEBUG:
     INSTALLED_APPS += [
         "debug_toolbar",
-        "django_browser_reload",
     ]
     MIDDLEWARE += [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
-        "django_browser_reload.middleware.BrowserReloadMiddleware",
     ]
 
     DEBUG_TOOLBAR_PANELS = [
@@ -107,6 +105,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "local.wsgi.application"
 
+CSRF_TRUSTED_ORIGINS = ["https://codeletter.fly.dev"]
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -120,15 +119,11 @@ SECURE_HSTS_SECONDS = 60
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-# Celery settings
-CELERY_BROKER_URL = "redis://localhost:6379/0"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
-
 # Email Verification Setting
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_FROM = "codeletterapp@gmail.com"
-EMAIL_HOST_USER = "codeletterapp@gmail.com"
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_FROM = config("EMAIL_FROM")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 EMAIL_POST = config("EMAIL_POST")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS")
@@ -171,7 +166,7 @@ USE_TZ = True
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": config("REDIS_LOCATION_CACHE"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
