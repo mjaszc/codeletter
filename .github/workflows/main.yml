@@ -54,7 +54,6 @@ jobs:
         EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ secrets.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
-        REDIS_LOCATION_CACHE: ${{ secrets.REDIS_LOCATION_CACHE }}
       run: |
         pip install coverage
         coverage run --source='.' manage.py test blog
@@ -70,6 +69,5 @@ jobs:
         EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }} 
         EMAIL_POST: ${{ secrets.EMAIL_POST }}
         EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
-        REDIS_LOCATION_CACHE: ${{ secrets.REDIS_LOCATION_CACHE }}
       run: |
         python3 manage.py test
