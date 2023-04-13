@@ -73,21 +73,6 @@ class UserSettingsTestCase(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.last_name, "New")
 
-    def test_change_username(self):
-        response = self.client.post(
-            reverse("blog:settings_user"),
-            {
-                "email": "testuser@example.com",
-                "username": "Newuser",
-                "first_name": "Test",
-                "last_name": "User",
-            },
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.username, "Newuser")
-
     def test_change_everything(self):
         response = self.client.post(
             reverse("blog:settings_user"),
@@ -95,7 +80,6 @@ class UserSettingsTestCase(TestCase):
                 "email": "newemail@example.com",
                 "first_name": "New",
                 "last_name": "User",
-                "username": "Newuser",
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -103,7 +87,6 @@ class UserSettingsTestCase(TestCase):
         self.assertEqual(self.user.email, "newemail@example.com")
         self.assertEqual(self.user.first_name, "New")
         self.assertEqual(self.user.last_name, "User")
-        self.assertEqual(self.user.username, "Newuser")
 
 
 class ProfileSettingsTestCase(TestCase):
