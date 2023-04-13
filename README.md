@@ -1,1 +1,16 @@
-# Codeletter App
+# Codeletter - IT Blogging Platform
+
+# About
+
+**Codeletter** is a web-based platform designed for creating and publishing blog posts. This application provides a simple and intuitive interface for users to write, edit, and publish their blog posts. The application is built using Python, Django, and a number of other open-source libraries and frameworks.
+
+# Features
+
+- **User registration and authentication**
+- **Blog post management**
+- **Search functionality**
+- **Commenting and replying**
+- **Like or dislike blog posts**
+- **Manage notifications**
+- **Edit profile information**
+- **View user profiles**
