@@ -86,14 +86,6 @@ class AddPostForm(forms.ModelForm):
 
 
 class UserSettingsForm(forms.ModelForm):
-    username = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "rounded-md bg-white border",
-                "placeholder": "Enter your username",
-            }
-        )
-    )
     first_name = forms.CharField(
         widget=forms.TextInput(
             attrs={"class": "rounded-md", "placeholder": "Enter your first name"}
@@ -112,7 +104,7 @@ class UserSettingsForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "first_name", "last_name")
+        fields = ("email", "first_name", "last_name")
 
 
 class ProfileSettingsForm(forms.ModelForm):
