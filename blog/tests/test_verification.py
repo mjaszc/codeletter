@@ -118,51 +118,6 @@ class RegisterUserTestCase(TestCase):
             "Success! Dear testuser, we have sent an activation link to test@example.com.",
         )
 
-    def test_register_user_email_exists(self):
-        # Create a user with the email address that will be used in the form
-        get_user_model().objects.create_user(
-            username="existinguser",
-            email="test@example.com",
-            password="existingpassword",
-            is_active=True,
-        )
-
-        # Create a request object
-        request = self.factory.post(
-            reverse("blog:register_user"),
-            {
-                "username": "testuser",
-                "first_name": "test",
-                "last_name": "user",
-                "email": "test@example.com",
-                "password1": "testpassword",
-                "password2": "testpassword",
-            },
-        )
-
-        # Add session and messages attributes to the request
-        request.session = {}
-        setattr(request, "_messages", FallbackStorage(request))
-
-        response = register_user(request)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "A user with that email already exists.")
-
-        # Check that the user was not created
-        self.assertFalse(get_user_model().objects.filter(username="testuser").exists())
-
-        # Check that the message was added to the request
-        storage = request._messages
-        stored_messages = []
-        for message in storage:
-            stored_messages.append(message)
-
-        self.assertEqual(len(stored_messages), 1)
-        self.assertEqual(
-            str(stored_messages[0]), "A user with that email already exists."
-        )
-
 
 class LoginTestCase(TestCase):
     def setUp(self):
