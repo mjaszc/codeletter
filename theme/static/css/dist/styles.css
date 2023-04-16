@@ -2005,6 +2005,14 @@ html {
   padding: 0px;
 }
 
+.prose-ul\:pl-0 :is(:where(ul):not(:where([class~="not-prose"] *))) {
+  padding-left: 0px;
+}
+
+.prose-li\:pl-0 :is(:where(li):not(:where([class~="not-prose"] *))) {
+  padding-left: 0px;
+}
+
 .prose-hr\:p-0 :is(:where(hr):not(:where([class~="not-prose"] *))) {
   padding: 0px;
 }
