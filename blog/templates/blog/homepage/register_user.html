@@ -4,14 +4,6 @@
 
 {% block content %}
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-        {% endfor %}
-</ul>
-{% endif %}
-
 <section class="prose-lg flex flex-col justify-center items-center h-auto mt-10">
 
     <div>
@@ -20,7 +12,18 @@
 
     <form method="post" action="">
         {% csrf_token %}
-        <div class="flex flex-col">
+
+        {% if form.errors %}
+        {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+        <div class="flex items-center justify-center m-auto prose-lg my-2">
+            <p>Error: {{ error }}</p>
+        </div>
+        {% endfor %}
+        {% endfor %}
+        {% endif %}
+
+        <div class="flex flex-col pt-5">
             <label for="username" class="font-bold">Username</label>
             {{ form.username }}
         </div>

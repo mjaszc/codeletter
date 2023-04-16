@@ -1405,6 +1405,10 @@ html {
   margin: auto;
 }
 
+.m-16 {
+  margin: 4rem;
+}
+
 .mx-10 {
   margin-left: 2.5rem;
   margin-right: 2.5rem;
@@ -1536,6 +1540,18 @@ html {
 
 .mt-8 {
   margin-top: 2rem;
+}
+
+.mt-16 {
+  margin-top: 4rem;
+}
+
+.mb-16 {
+  margin-bottom: 4rem;
+}
+
+.mt-24 {
+  margin-top: 6rem;
 }
 
 .block {
@@ -1686,11 +1702,6 @@ html {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-red-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 
 .bg-cover {
@@ -1992,6 +2003,14 @@ html {
 
 .prose-ul\:p-0 :is(:where(ul):not(:where([class~="not-prose"] *))) {
   padding: 0px;
+}
+
+.prose-ul\:pl-0 :is(:where(ul):not(:where([class~="not-prose"] *))) {
+  padding-left: 0px;
+}
+
+.prose-li\:pl-0 :is(:where(li):not(:where([class~="not-prose"] *))) {
+  padding-left: 0px;
 }
 
 .prose-hr\:p-0 :is(:where(hr):not(:where([class~="not-prose"] *))) {

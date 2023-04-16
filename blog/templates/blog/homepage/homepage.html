@@ -8,9 +8,9 @@
 
 
 {% if messages %}
-<ul>
+<ul class="container flex items-center justify-center prose m-auto mt-8">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    <li{% if message.tags %} class="{{ message.tags }} font-bold" {% endif %}>{{ message }}</li>
         {% endfor %}
 </ul>
 {% endif %}
