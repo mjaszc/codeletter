@@ -12,14 +12,14 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from ..forms import (
-    PasswordResetForm,
+from blog.forms import (
+    UserPasswordResetForm,
     ProfileSettingsForm,
     SetNewPasswordForm,
     UserSettingsForm,
 )
-from ..models import Comment, Notification, Post, ProfileSettings
-from ..tokens import account_activation_token
+from blog.models import Comment, Notification, Post, ProfileSettings
+from blog.tokens import account_activation_token
 from django.urls import reverse
 from django.contrib.auth.models import User
 
@@ -59,7 +59,7 @@ def profile_settings(request):
 
 def recover_password_request(request):
     if request.method == "POST":
-        form = PasswordResetForm(request.POST)
+        form = UserPasswordResetForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data.get("email")
             user = get_user_model().objects.filter(email=user_email).first()
@@ -95,7 +95,7 @@ def recover_password_request(request):
         url = reverse("blog:homepage")
         return redirect(url)
 
-    form = PasswordResetForm()
+    form = UserPasswordResetForm()
     context = {"form": form}
     return render(request, "blog/password/recover_password.html", context)
 

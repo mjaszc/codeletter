@@ -188,3 +188,11 @@ class SetNewPasswordForm(SetPasswordForm):
             "new_password1",
             "new_password2",
         )
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={"class": "rounded-md", "placeholder": "user@example.com"}
+        )
+    )
