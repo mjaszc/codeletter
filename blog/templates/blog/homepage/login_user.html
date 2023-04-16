@@ -4,19 +4,21 @@
 
 {% block content %}
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-        {% endfor %}
-</ul>
-{% endif %}
 
-<section class="prose-lg prose-a:no-underline flex flex-col justify-center items-center h-auto mt-32">
+
+<section class="prose-lg prose-a:no-underline flex flex-col justify-center items-center h-auto mt-24">
 
     <div>
         <h1>Log in</h1>
     </div>
+
+    {% if messages %}
+    <ul class="container flex items-center justify-center m-auto">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }} font-bold" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
 
 
     <form action="" method="post">

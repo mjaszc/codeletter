@@ -88,8 +88,6 @@ def register_user(request):
                 user.save()
                 send_verification_email(request, user, email)
                 return redirect(reverse("blog:homepage"))
-            else:
-                messages.error(request, "A user with that email already exists.")
 
     context = {"form": form}
     return render(request, "blog/homepage/register_user.html", context)
