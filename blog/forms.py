@@ -21,7 +21,8 @@ class UserRegisterForm(UserCreationForm):
     )
     first_name = forms.CharField(
         widget=forms.TextInput(
-            attrs={"class": "rounded-md", "placeholder": "Enter your first name"}
+            attrs={"class": "rounded-md",
+                   "placeholder": "Enter your first name"}
         )
     )
     last_name = forms.CharField(
@@ -41,7 +42,8 @@ class UserRegisterForm(UserCreationForm):
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput(
-            attrs={"class": "rounded-md", "placeholder": "Confirm your password"}
+            attrs={"class": "rounded-md",
+                   "placeholder": "Confirm your password"}
         )
     )
 
@@ -88,7 +90,8 @@ class AddPostForm(forms.ModelForm):
 class UserSettingsForm(forms.ModelForm):
     first_name = forms.CharField(
         widget=forms.TextInput(
-            attrs={"class": "rounded-md", "placeholder": "Enter your first name"}
+            attrs={"class": "rounded-md",
+                   "placeholder": "Enter your first name"}
         )
     )
     last_name = forms.CharField(
@@ -129,28 +132,32 @@ class ProfileSettingsForm(forms.ModelForm):
 
     location = forms.CharField(
         widget=forms.TextInput(
-            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your location"}
+            attrs={"class": "rounded-md mt-2",
+                   "placeholder": "Enter your location"}
         ),
         required=False,
     )
 
     twitter_url = forms.CharField(
         widget=forms.TextInput(
-            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your Twitter URL"}
+            attrs={"class": "rounded-md mt-2",
+                   "placeholder": "Enter your Twitter URL"}
         ),
         required=False,
     )
 
     website_url = forms.CharField(
         widget=forms.TextInput(
-            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your Website URL"}
+            attrs={"class": "rounded-md mt-2",
+                   "placeholder": "Enter your Website URL"}
         ),
         required=False,
     )
 
     linkedin_url = forms.CharField(
         widget=forms.TextInput(
-            attrs={"class": "rounded-md mt-2", "placeholder": "Enter your LinkedIn URL"}
+            attrs={"class": "rounded-md mt-2",
+                   "placeholder": "Enter your LinkedIn URL"}
         ),
         required=False,
     )
@@ -182,6 +189,15 @@ class AddCommentForm(forms.ModelForm):
 
 
 class SetNewPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={"class": "rounded-md", "placeholder": "Type your password...", })
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={"class": "rounded-md", "placeholder": "Confirm your password", })
+    )
+
     class Meta:
         model = get_user_model()
         fields = (
