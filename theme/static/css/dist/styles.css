@@ -1610,6 +1610,14 @@ html {
   width: 100%;
 }
 
+.w-2\/3 {
+  width: 66.666667%;
+}
+
+.w-1\/4 {
+  width: 25%;
+}
+
 .max-w-4xl {
   max-width: 56rem;
 }
@@ -1644,6 +1652,10 @@ html {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
 }
 
 .scroll-smooth {
