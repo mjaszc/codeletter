@@ -1646,6 +1646,10 @@ html {
   justify-content: space-between;
 }
 
+.justify-around {
+  justify-content: space-around;
+}
+
 .scroll-smooth {
   scroll-behavior: smooth;
 }
