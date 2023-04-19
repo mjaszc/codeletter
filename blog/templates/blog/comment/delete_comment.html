@@ -3,15 +3,15 @@
 {% block title %}Delete comment{% endblock %}
 
 {% block content %}
-<section
-    class="prose-lg prose-a:no-underline flex flex-col justify-center items-center h-auto mt-24 prose-h1:mb-1 prose-ul:pl-0 prose-li:pl-0">
-    <form method="post" action="">
+<section class="prose-lg prose-a:no-underline h-auto mt-24 prose-h1:mb-1">
+    <form method="post" action="" class="flex items-center flex-col justify-center">
         {% csrf_token %}
         <div>
             <h1>Deleting comment</h1>
         </div>
+
         <p>Are you sure you want to delete selected comment?</p>
-        <div class="flex justify-around items-center">
+        <div class="flex justify-around items-center w-1/4">
             <div>
                 <button class="py-1.5 px-4">
                     <a href="{% url 'blog:post_details' comment.post|slugify %}">Go back</a>
@@ -20,10 +20,9 @@
 
             <div>
                 <input type="submit" value="Delete"
-                    class=" py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer" />
+                    class="py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer" />
             </div>
         </div>
-
     </form>
 </section>
 {% endblock %}
