@@ -10,7 +10,7 @@
 
 {% block content %}
 <div
-    class="container flex prose items-center justify-center m-auto prose-h1:mb-0 prose-h2:mb-0 prose-p:m-0 prose-a:no-underline">
+    class="container flex prose items-center justify-center m-auto prose-h1:mb-0 prose-h2:mb-0 prose-p:m-0 prose-a:no-underline prose-ul:pl-0">
     <main class="pt-10">
         <!-- PROFILE  -->
         <section class="border rounded-lg bg-white px-16 py-8">
@@ -80,25 +80,25 @@
                             </g>
                         </svg>
 
-                        <span class="ml-2 hover:text-neutral-600"">{{ user_profile.linkedin_url }}</span>
+                        <span class="ml-2 hover:text-neutral-600">{{ user_profile.linkedin_url }}</span>
                     </div>
                 </a>
                 {% endif %}
             </div>
 
             <button class=" mt-5">
-                            <a href="{% url 'blog:profile_settings' %}"
-                                class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
-                                Edit profile
-                            </a>
-                            </button>
+                <a href="{% url 'blog:profile_settings' %}"
+                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    Edit profile
+                </a>
+            </button>
 
-                            <div class="mt-5 mb-10">
-                                <a href="{% url 'blog:settings_user' %}"
-                                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
-                                    User Settings
-                                </a>
-                            </div>
+            <div class="mt-5 mb-10">
+                <a href="{% url 'blog:settings_user' %}"
+                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    User Settings
+                </a>
+            </div>
         </section>
 
 
