@@ -1542,6 +1542,10 @@ html {
   margin-top: 2rem;
 }
 
+.mt-4 {
+  margin-top: 1rem;
+}
+
 .block {
   display: block;
 }
@@ -1997,8 +2001,26 @@ html {
   margin-bottom: 0.25rem;
 }
 
+.prose-h1\:mb-0 :is(:where(h1):not(:where([class~="not-prose"] *))) {
+  margin-bottom: 0px;
+}
+
+.prose-h2\:mb-0 :is(:where(h2):not(:where([class~="not-prose"] *))) {
+  margin-bottom: 0px;
+}
+
 .prose-p\:m-0 :is(:where(p):not(:where([class~="not-prose"] *))) {
   margin: 0px;
+}
+
+.prose-p\:mx-0 :is(:where(p):not(:where([class~="not-prose"] *))) {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.prose-p\:my-0 :is(:where(p):not(:where([class~="not-prose"] *))) {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .prose-a\:no-underline :is(:where(a):not(:where([class~="not-prose"] *))) {
