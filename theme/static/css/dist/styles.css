@@ -2000,6 +2000,11 @@ html {
   text-decoration-line: none;
 }
 
+.prose-figure\:my-0 :is(:where(figure):not(:where([class~="not-prose"] *))) {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 .prose-ul\:list-none :is(:where(ul):not(:where([class~="not-prose"] *))) {
   list-style-type: none;
 }

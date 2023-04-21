@@ -10,7 +10,7 @@
 
 {% block content %}
 <div
-    class="container flex prose items-center justify-center m-auto prose-h1:mb-0 prose-h2:mb-0 prose-p:m-0 prose-a:no-underline prose-ul:pl-0">
+    class="container flex prose items-center justify-center m-auto prose-h1:mb-0 prose-h2:mb-0 prose-p:m-0 prose-a:no-underline prose-ul:pl-0 prose-figure:my-0">
     <main class="pt-10">
         <!-- PROFILE  -->
         <section class="border rounded-lg bg-white px-16 py-8">
@@ -122,74 +122,60 @@
             <div class="pt-5 border rounded-lg bg-white px-16 py-8 mt-5">
                 <h1 class="font-extrabold text-2xl pt-5">Most liked posts:</h1>
                 {% for post in most_liked_posts %}
-                <article class="mt-10">
-                    <h2 class="font-bold text-xl">
-                        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
-                    </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
-                    {% if post.image %}
-                    <figure>
-                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
-                    </figure>
-                    {% endif %}
-                </article>
+                <a href="{% url 'blog:post_details' post.slug %}">
+                    <article>
+                        <h2 class="font-bold text-xl">
+                            {{ post.title }}
+                        </h2>
+                        <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
+                        {% if post.image %}
+                        <figure>
+                            <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                        </figure>
+                        {% endif %}
+                    </article>
+                </a>
                 {% endfor %}
             </div>
 
             <div class="border rounded-lg bg-white px-16 py-8 mt-5">
                 <h1 class="font-extrabold text-2xl pt-5">Most commented posts:</h1>
                 {% for post in most_commented_posts %}
-                <article class="mt-10">
-                    <h2 class="font-bold text-xl">
-                        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
-                    </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
-                    {% if post.image %}
-                    <figure>
-                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
-                    </figure>
-                    {% endif %}
-                </article>
+                <a href="{% url 'blog:post_details' post.slug %}">
+                    <article>
+                        <h2 class="font-bold text-xl">
+                            {{ post.title }}
+                        </h2>
+                        <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
+                        {% if post.image %}
+                        <figure>
+                            <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                        </figure>
+                        {% endif %}
+                    </article>
+                </a>
                 {% endfor %}
             </div>
 
             <div class="border rounded-lg bg-white px-16 py-8 my-5">
                 <h1 class="font-extrabold text-2xl pt-5">Most viewed posts:</h1>
                 {% for post in most_viewed_posts %}
-                <article class="mt-10">
-                    <h2 class="font-bold text-xl">
-                        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
-                    </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
-                    {% if post.image %}
-                    <figure>
-                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
-                    </figure>
-                    {% endif %}
-                </article>
+                <a href="{% url 'blog:post_details' post.slug %}">
+                    <article>
+                        <h2 class="font-bold text-xl">
+                            {{ post.title }}
+                        </h2>
+                        <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
+                        {% if post.image %}
+                        <figure>
+                            <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                        </figure>
+                        {% endif %}
+                    </article>
+                </a>
                 {% endfor %}
             </div>
         </section>
     </main>
-
-    <!-- SIDEBAR -->
-    <!-- <aside class="flex flex-col justify-center mt-10 border rounded-lg bg-white px-16 py-8 max-h-80">
-        <div class="px-32">
-        </div>
-
-        <div>
-            <h1>Example header:</h1>
-        </div>
-
-        <div class="py-2">
-            <h1>image</h1>
-            <h1>test text test text test text test text test text test text test text</h1>
-        </div>
-
-        <div class="py-2">
-            <h1>image</h1>
-            <h1>test text test text test text test text test text test text test text </h1>
-        </div>
-    </aside> -->
 </div>
 {% endblock %}
