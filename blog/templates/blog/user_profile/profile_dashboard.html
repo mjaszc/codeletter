@@ -27,9 +27,11 @@
                 <h1 class="text-xl font-extrabold">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}
                 </h1>
                 <p class="text-sm">@{{ user_profile.user.username }}</p>
+                {% if user_profile.bio %}
                 <h2 class="text-xl font-extrabold mt-5">About Me:</h2>
                 <p class="mt-4">{{ user_profile.bio|striptags }}</p>
-                {% if user_profile.location is not None%}
+                {% endif %}
+                {% if user_profile.location %}
                 <div class="flex mt-5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -41,7 +43,7 @@
             </div>
 
             <!-- SOCIAL URLS -->
-            <div class="mt-5">
+            <div class="">
                 {% if user_profile.twitter_url %}
                 <a href="{{ user_profile.twitter_url }}" target="_blank">
                     <div class="flex items-center mt-2">
@@ -88,14 +90,14 @@
 
             <button class=" mt-5">
                 <a href="{% url 'blog:profile_settings' %}"
-                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    class="py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer">
                     Edit profile
                 </a>
             </button>
 
             <div class="mt-5 mb-10">
                 <a href="{% url 'blog:settings_user' %}"
-                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    class="py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer">
                     User Settings
                 </a>
             </div>
