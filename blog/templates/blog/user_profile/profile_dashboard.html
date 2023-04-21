@@ -9,8 +9,9 @@
 {% block title %}Profile Dashboard{% endblock %}
 
 {% block content %}
-<div class="flex mx-28 ">
-    <main class="pr-20 pt-10">
+<div
+    class="container flex prose items-center justify-center m-auto prose-h1:mb-0 prose-h2:mb-0 prose-p:m-0 prose-a:no-underline prose-ul:pl-0 prose-figure:my-0">
+    <main class="pt-10">
         <!-- PROFILE  -->
         <section class="border rounded-lg bg-white px-16 py-8">
             {% if user_profile.user|get_profile_image %}
@@ -26,45 +27,77 @@
                 <h1 class="text-xl font-extrabold">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}
                 </h1>
                 <p class="text-sm">@{{ user_profile.user.username }}</p>
-                <h2 class="font-extrabold mt-5">About Me:</h2>
-                <p>{{ user_profile.bio|striptags }}</p>
-                {% if user_profile.location is not None%}
+                {% if user_profile.bio %}
+                <h2 class="text-xl font-extrabold mt-5">About Me:</h2>
+                <p class="mt-4">{{ user_profile.bio|striptags }}</p>
+                {% endif %}
+                {% if user_profile.location %}
                 <div class="flex mt-5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2" d="m21 3l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1L21 3" />
                     </svg>
-                    <span class="pl-1">{{ user_profile.location }}</span>
+                    <span class="ml-2">{{ user_profile.location }}</span>
                 </div>
                 {% endif %}
             </div>
 
             <!-- SOCIAL URLS -->
-            <div class="mt-5">
-                {% if user_profile.twitter_url is not None %}
-                <h1>{{ user_profile.twitter_url }}</h1>
+            <div class="">
+                {% if user_profile.twitter_url %}
+                <a href="{{ user_profile.twitter_url }}" target="_blank">
+                    <div class="flex items-center mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M22 4.01c-1 .49-1.98.689-3 .99c-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4c0 0-4.182 7.433 4 11c-1.872 1.247-3.739 2.088-6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84 0 0 0 .497-3.753c0-.249 1.51-2.772 1.818-4.013z" />
+                        </svg>
+                        <span class="ml-2 hover:text-neutral-600"">{{ user_profile.twitter_url }}</span>
+                    </div>
+                </a>
                 {% endif %}
-                {% if user_profile.website_url is not None %}
-                <h1>{{ user_profile.website_url }} </h1>
+                {% if user_profile.website_url %}
+                <a href=" {{ user_profile.website_url }}" target="_blank" class="">
+                            <div class="flex items-center mt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2">
+                                        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0m.6-3h16.8M3.6 15h16.8" />
+                                        <path d="M11.5 3a17 17 0 0 0 0 18m1-18a17 17 0 0 1 0 18" />
+                                    </g>
+                                </svg>
+                                <span class="ml-2 hover:text-neutral-600">{{ user_profile.website_url }}</span>
+                            </div>
+                </a>
                 {% endif %}
-                {% if user_profile.instagram_url is not None %}
-                <h1>{{ user_profile.instagram_url }} </h1>
-                {% endif %}
-                {% if user_profile.linked_in_url is not None %}
-                <h1>{{ user_profile.linked_in_url }} </h1>
+                {% if user_profile.linkedin_url %}
+                <a href="{{ user_profile.linked_in_url }}" target="_blank">
+                    <div class="flex items-center mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2">
+                                <path
+                                    d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm4 5v5m0-8v.01M12 16v-5" />
+                                <path d="M16 16v-3a2 2 0 0 0-4 0" />
+                            </g>
+                        </svg>
+
+                        <span class="ml-2 hover:text-neutral-600">{{ user_profile.linkedin_url }}</span>
+                    </div>
+                </a>
                 {% endif %}
             </div>
 
-            <button class="mt-5">
+            <button class=" mt-5">
                 <a href="{% url 'blog:profile_settings' %}"
-                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    class="py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer">
                     Edit profile
                 </a>
             </button>
 
             <div class="mt-5 mb-10">
                 <a href="{% url 'blog:settings_user' %}"
-                    class="mr-1 inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-gray-600 whitespace-no-wrap bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:shadow-none">
+                    class="py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer">
                     User Settings
                 </a>
             </div>
@@ -91,74 +124,60 @@
             <div class="pt-5 border rounded-lg bg-white px-16 py-8 mt-5">
                 <h1 class="font-extrabold text-2xl pt-5">Most liked posts:</h1>
                 {% for post in most_liked_posts %}
-                <article class="mt-10">
-                    <h2 class="font-bold text-xl">
-                        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
-                    </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
-                    {% if post.image %}
-                    <figure>
-                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
-                    </figure>
-                    {% endif %}
-                </article>
+                <a href="{% url 'blog:post_details' post.slug %}">
+                    <article>
+                        <h2 class="font-bold text-xl">
+                            {{ post.title }}
+                        </h2>
+                        <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
+                        {% if post.image %}
+                        <figure>
+                            <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                        </figure>
+                        {% endif %}
+                    </article>
+                </a>
                 {% endfor %}
             </div>
 
             <div class="border rounded-lg bg-white px-16 py-8 mt-5">
                 <h1 class="font-extrabold text-2xl pt-5">Most commented posts:</h1>
                 {% for post in most_commented_posts %}
-                <article class="mt-10">
-                    <h2 class="font-bold text-xl">
-                        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
-                    </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
-                    {% if post.image %}
-                    <figure>
-                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
-                    </figure>
-                    {% endif %}
-                </article>
+                <a href="{% url 'blog:post_details' post.slug %}">
+                    <article>
+                        <h2 class="font-bold text-xl">
+                            {{ post.title }}
+                        </h2>
+                        <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
+                        {% if post.image %}
+                        <figure>
+                            <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                        </figure>
+                        {% endif %}
+                    </article>
+                </a>
                 {% endfor %}
             </div>
 
             <div class="border rounded-lg bg-white px-16 py-8 my-5">
                 <h1 class="font-extrabold text-2xl pt-5">Most viewed posts:</h1>
                 {% for post in most_viewed_posts %}
-                <article class="mt-10">
-                    <h2 class="font-bold text-xl">
-                        <a href="{% url 'blog:homepage' %}{{post.title|slugify}}">{{ post.title }}</a>
-                    </h2>
-                    <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
-                    {% if post.image %}
-                    <figure>
-                        <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
-                    </figure>
-                    {% endif %}
-                </article>
+                <a href="{% url 'blog:post_details' post.slug %}">
+                    <article>
+                        <h2 class="font-bold text-xl">
+                            {{ post.title }}
+                        </h2>
+                        <p class="text-sm line-clamp-2"> {{ post.content|markdown|striptags }}</p>
+                        {% if post.image %}
+                        <figure>
+                            <img src="{{ post.image.url }}" alt="" class="w-60 h-40 py-5" />
+                        </figure>
+                        {% endif %}
+                    </article>
+                </a>
                 {% endfor %}
             </div>
         </section>
     </main>
-
-    <!-- SIDEBAR -->
-    <!-- <aside class="flex flex-col justify-center mt-10 border rounded-lg bg-white px-16 py-8 max-h-80">
-        <div class="px-32">
-        </div>
-
-        <div>
-            <h1>Example header:</h1>
-        </div>
-
-        <div class="py-2">
-            <h1>image</h1>
-            <h1>test text test text test text test text test text test text test text</h1>
-        </div>
-
-        <div class="py-2">
-            <h1>image</h1>
-            <h1>test text test text test text test text test text test text test text </h1>
-        </div>
-    </aside> -->
 </div>
 {% endblock %}

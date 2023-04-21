@@ -1415,11 +1415,6 @@ html {
   margin-right: 0.5rem;
 }
 
-.mx-28 {
-  margin-left: 7rem;
-  margin-right: 7rem;
-}
-
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -1534,6 +1529,10 @@ html {
   margin-top: 0.75rem;
 }
 
+.mt-4 {
+  margin-top: 1rem;
+}
+
 .mt-5 {
   margin-top: 1.25rem;
 }
@@ -1582,6 +1581,10 @@ html {
   width: 33.333333%;
 }
 
+.w-1\/4 {
+  width: 25%;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -1608,14 +1611,6 @@ html {
 
 .w-full {
   width: 100%;
-}
-
-.w-2\/3 {
-  width: 66.666667%;
-}
-
-.w-1\/4 {
-  width: 25%;
 }
 
 .max-w-4xl {
@@ -1800,16 +1795,8 @@ html {
   padding-bottom: 1.5rem;
 }
 
-.pl-1 {
-  padding-left: 0.25rem;
-}
-
 .pl-5 {
   padding-left: 1.25rem;
-}
-
-.pr-20 {
-  padding-right: 5rem;
 }
 
 .pt-10 {
@@ -1993,8 +1980,16 @@ html {
   outline-offset: 2px;
 }
 
+.prose-h1\:mb-0 :is(:where(h1):not(:where([class~="not-prose"] *))) {
+  margin-bottom: 0px;
+}
+
 .prose-h1\:mb-1 :is(:where(h1):not(:where([class~="not-prose"] *))) {
   margin-bottom: 0.25rem;
+}
+
+.prose-h2\:mb-0 :is(:where(h2):not(:where([class~="not-prose"] *))) {
+  margin-bottom: 0px;
 }
 
 .prose-p\:m-0 :is(:where(p):not(:where([class~="not-prose"] *))) {
@@ -2003,6 +1998,11 @@ html {
 
 .prose-a\:no-underline :is(:where(a):not(:where([class~="not-prose"] *))) {
   text-decoration-line: none;
+}
+
+.prose-figure\:my-0 :is(:where(figure):not(:where([class~="not-prose"] *))) {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .prose-ul\:list-none :is(:where(ul):not(:where([class~="not-prose"] *))) {

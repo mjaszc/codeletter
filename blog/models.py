@@ -20,11 +20,16 @@ class Category(models.Model):
 class ProfileSettings(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField()
-    location = models.CharField(max_length=60, null=True, blank=True)
-    image = models.FileField(upload_to="images/", null=True, blank=True)
-    twitter_url = models.CharField(max_length=255, null=True, blank=True)
-    website_url = models.CharField(max_length=255, null=True, blank=True)
-    linkedin_url = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(
+        max_length=60, null=True, blank=True, default=None)
+    image = models.FileField(
+        upload_to="images/", null=True, blank=True, default=None)
+    twitter_url = models.CharField(
+        max_length=255, null=True, blank=True, default=None)
+    website_url = models.CharField(
+        max_length=255, null=True, blank=True, default=None)
+    linkedin_url = models.CharField(
+        max_length=255, null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = "Profile Setting"
@@ -71,7 +76,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="comments")
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
