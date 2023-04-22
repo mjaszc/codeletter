@@ -153,7 +153,11 @@ def change_password(request):
 
 
 def get_notifications(request):
-    notifications = Notification.objects.filter(receiver_user=request.user)
+    unread_notifications = Notification.objects.filter(
+        receiver_user=request.user, is_seen=False)
+    read_notifications = Notification.objects.filter(
+        receiver_user=request.user, is_seen=True)
+    notifications = list(unread_notifications) + list(read_notifications)
 
     context = {"notifications": notifications}
     return render(request, "blog/user_profile/notifications.html", context)
