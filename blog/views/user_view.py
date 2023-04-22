@@ -46,7 +46,8 @@ def profile_settings(request):
     form = ProfileSettingsForm(instance=user_profile)
 
     if request.method == "POST":
-        form = ProfileSettingsForm(request.POST, request.FILES, instance=user_profile)
+        form = ProfileSettingsForm(
+            request.POST, request.FILES, instance=user_profile)
 
         if form.is_valid():
             form.save()
@@ -159,7 +160,8 @@ def get_notifications(request):
 
 
 def mark_notification_as_read(request, notification_id):
-    notification = get_object_or_404(Notification, notification_id=notification_id)
+    notification = get_object_or_404(
+        Notification, notification_id=notification_id)
 
     # Check if the notification is for the current user and the post exists
     if notification.receiver_user == request.user and notification.post_name:
