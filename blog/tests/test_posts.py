@@ -4,14 +4,19 @@ from django.test import Client, TestCase
 from django.template.defaultfilters import slugify
 
 from blog.models import Post, Category
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class CreatePostTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = User.objects.create_user(
+            username="testuser", password="password")
         self.client.login(username="testuser", password="password")
         self.category = Category.objects.create(name="Test Category")
+        image_content = b"test image content"
+        self.test_image = SimpleUploadedFile(
+            "test_image.png", image_content, content_type="image/png")
 
     def test_create_post_view_uses_correct_template(self):
         self.client.login(username="testuser", password="password")
@@ -23,6 +28,7 @@ class CreatePostTestCase(TestCase):
             "title": "Test Post",
             "content": "This is a test post",
             "category": self.category.id,
+            "image": self.test_image
         }
 
         response = self.client.post(reverse("blog:create_post"), data)
@@ -38,7 +44,8 @@ class CreatePostTestCase(TestCase):
 class DeletePostTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = User.objects.create_user(
+            username="testuser", password="password")
         self.client.login(username="testuser", password="password")
         self.category = Category.objects.create(name="Test Category")
         self.post = Post.objects.create(
@@ -67,7 +74,8 @@ class DeletePostTestCase(TestCase):
 class EditPostTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = User.objects.create_user(
+            username="testuser", password="password")
         self.category = Category.objects.create(name="Test Category")
         self.client.login(username="testuser", password="password")
         self.edit_category = Category.objects.create(name="Edited Category")
@@ -77,6 +85,9 @@ class EditPostTestCase(TestCase):
             category=self.category,
             user=self.user,
         )
+        image_content = b"test image content"
+        self.test_image = SimpleUploadedFile(
+            "test_image.png", image_content, content_type="image/png")
 
     def test_edit_post_view_uses_correct_template(self):
         slug = slugify(self.post.title)
@@ -89,10 +100,12 @@ class EditPostTestCase(TestCase):
             "title": "Edited Test Post",
             "content": "This is an edited test post",
             "category": self.edit_category.id,
+            "image": self.test_image
         }
 
         post_slug = slugify(self.post.title)
-        response = self.client.post(reverse("blog:edit_post", args=[post_slug]), data)
+        response = self.client.post(
+            reverse("blog:edit_post", args=[post_slug]), data)
 
         post = Post.objects.get(title=data["title"])
         new_post_slug = slugify(post.title)

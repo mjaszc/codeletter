@@ -46,7 +46,8 @@ def profile_settings(request):
     form = ProfileSettingsForm(instance=user_profile)
 
     if request.method == "POST":
-        form = ProfileSettingsForm(request.POST, request.FILES, instance=user_profile)
+        form = ProfileSettingsForm(
+            request.POST, request.FILES, instance=user_profile)
 
         if form.is_valid():
             form.save()
@@ -152,14 +153,19 @@ def change_password(request):
 
 
 def get_notifications(request):
-    notifications = Notification.objects.filter(receiver_user=request.user)
+    unread_notifications = Notification.objects.filter(
+        receiver_user=request.user, is_seen=False)
+    read_notifications = Notification.objects.filter(
+        receiver_user=request.user, is_seen=True)
+    notifications = list(unread_notifications) + list(read_notifications)
 
     context = {"notifications": notifications}
     return render(request, "blog/user_profile/notifications.html", context)
 
 
 def mark_notification_as_read(request, notification_id):
-    notification = get_object_or_404(Notification, notification_id=notification_id)
+    notification = get_object_or_404(
+        Notification, notification_id=notification_id)
 
     # Check if the notification is for the current user and the post exists
     if notification.receiver_user == request.user and notification.post_name:

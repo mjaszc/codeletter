@@ -6,21 +6,28 @@
 <section class="container mx-auto pt-10 prose prose-a:no-underline">
     <h1>Notification list</h1>
     {% for notification in notifications %}
-    <article>
-        {% if notification.notification_type == "like" %}
-        <a href="{% url 'blog:post_details' notification.post_name.slug %}">
-            <p><strong>@{{notification.provider_user}}</strong> liked your post <em>{{notification.post_name}}</em></p>
-        </a>
-        {% elif notification.notification_type == "comment" %}
-        <a href="{% url 'blog:post_details' notification.post_name.slug %}">
+    <a href="{% url 'blog:post_details' notification.post_name.slug %}">
+        <article class=" flex justify-between items-center my-5">
+            {% if notification.notification_type == "like" %}
+            <p><strong>@{{notification.provider_user}}</strong> liked your post <em>{{notification.post_name}}</em>
+            </p>
+            {% elif notification.notification_type == "comment" %}
             <p>{{notification.provider_user}} commented on your post <em>{{notification.post_name}}</em></p>
-        </a>
-        {% endif %}
-        {% if not notification.is_seen %}
-        <a href="{% url 'blog:mark_notification_as_read' notification.notification_id %}">(Mark as read)</a>
-        {% endif %}
-        <hr>
-    </article>
+            {% endif %}
+
+            <div class="flex items-center">
+                <figure>
+                    <img src="{{ notification.post_name.image.url }}" alt="" class="w-48 h-24">
+                </figure>
+
+                {% if not notification.is_seen %}
+                <a href="{% url 'blog:mark_notification_as_read' notification.notification_id %}"
+                    class="ml-4 py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer">Mark
+                    as read</a>
+                {% endif %}
+            </div>
+        </article>
+    </a>
     {% endfor %}
 </section>
 
