@@ -12,7 +12,9 @@
             <p><strong>@{{notification.provider_user}}</strong> liked your post <em>{{notification.post_name}}</em>
             </p>
             {% elif notification.notification_type == "comment" %}
-            <p>{{notification.provider_user}} commented on your post <em>{{notification.post_name}}</em></p>
+            <p><strong>@{{notification.provider_user}}</strong> commented on your post
+                <em>{{notification.post_name}}</em>
+            </p>
             {% endif %}
 
             <div class="flex items-center">
@@ -22,8 +24,7 @@
 
                 {% if not notification.is_seen %}
                 <a href="{% url 'blog:mark_notification_as_read' notification.notification_id %}"
-                    class="ml-4 py-1.5 px-4 rounded-md text-stone-50 inline-flex bg-neutral-900 hover:bg-neutral-800 cursor-pointer">Mark
-                    as read</a>
+                    class="ml-4 py-1.5 px-4 rounded-md text-stone-50 bg-neutral-900 hover:bg-neutral-800 cursor-pointer">Seen</a>
                 {% endif %}
             </div>
         </article>

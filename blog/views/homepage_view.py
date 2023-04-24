@@ -35,7 +35,7 @@ def homepage(request):
     )
 
     # Create a paginator object using the post_list and the number of items to display per page
-    paginator = Paginator(post_list, 3)
+    paginator = Paginator(post_list, 15)
 
     # Retrieve the current page of search results to display to the user
     page_num = request.GET.get("page", 1)
@@ -62,7 +62,8 @@ def categories_list(request):
     categories = Category.objects.select_related().order_by("id")[:20]
 
     return render(
-        request, "blog/category/categories_list.html", {"categories": categories}
+        request, "blog/category/categories_list.html", {
+            "categories": categories}
     )
 
 
