@@ -2,7 +2,8 @@
 
 **Codeletter** is a web-based platform designed for creating and publishing blog posts. This application provides a simple and intuitive interface for users to write, edit, and publish their blog posts. The application is built using Python, Django, and a number of other open-source libraries and frameworks.
 
-## Features
+![screencapture-codeletter-fly-dev-2023-04-24-19_37_47](https://user-images.githubusercontent.com/111734497/234094401-f502aeb4-768a-4fba-814d-6d599bbecb00.png)
+
 
 - 96% Coverage
 - Markdown Support
