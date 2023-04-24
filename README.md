@@ -18,7 +18,7 @@
 - Post read time
 - Pagination
 - Edit profile information
-- Profile Dashboard
+- Profile dashboard
 - Like/Dislike system
 
 ## Technologies
