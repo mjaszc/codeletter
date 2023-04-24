@@ -1,10 +1,12 @@
 # Codeletter - IT Blogging Platform
 
-**Codeletter** is a web-based platform designed for creating and publishing blog posts. This application provides a simple and intuitive interface for users to write, edit, and publish their blog posts. The application is built using Python, Django, and a number of other open-source libraries and frameworks.
+[Codeletter](https://codeletter.fly.dev/) is a web-based platform designed for creating and publishing blog posts. This application provides a simple and intuitive interface for users to write, edit, and publish their blog posts. The application is built using Python, Django, and a number of other open-source libraries and frameworks.
 
 | Landing Page |
 |:--:|
 | ![screencapture-codeletter-fly-dev-2023-04-24-19_37_47](https://user-images.githubusercontent.com/111734497/234094401-f502aeb4-768a-4fba-814d-6d599bbecb00.png) |
+
+## Responsive design is not made yet.
 
 ## Features 
 
@@ -43,4 +45,8 @@
 
 | Profile Dashboard Section |
 |:--:|
-| ![screencapture-codeletter-fly-dev-profile-test-user-dashboard-2023-04-24-19_48_29](https://user-images.githubusercontent.com/111734497/234095427-a29c06c8-31a9-4cec-9c63-d21cadcd92f4.png) | 
+| ![screencapture-codeletter-fly-dev-profile-test-user-dashboard-2023-04-24-19_48_29](https://user-images.githubusercontent.com/111734497/234095427-a29c06c8-31a9-4cec-9c63-d21cadcd92f4.png) |
+
+| Notifications Section |
+|:--:|
+| ![screencapture-codeletter-fly-dev-profile-test-user-dashboard-2023-04-24-19_48_29](https://user-images.githubusercontent.com/111734497/234097151-446e3ba0-5888-42db-ba5c-51a0b2750cbc.png) |
