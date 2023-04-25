@@ -49,4 +49,5 @@
 
 | Notifications Section |
 |:--:|
-| ![screencapture-codeletter-fly-dev-profile-test-user-dashboard-2023-04-24-19_48_29](https://user-images.githubusercontent.com/111734497/234097151-446e3ba0-5888-42db-ba5c-51a0b2750cbc.png) |
+| ![screencapture-codeletter-fly-dev-profile-notifications-2023-04-24-21_30_59](https://user-images.githubusercontent.com/111734497/234307605-5a8ff913-ed2d-4d9b-bec6-445b88d2f846.png) |
+
